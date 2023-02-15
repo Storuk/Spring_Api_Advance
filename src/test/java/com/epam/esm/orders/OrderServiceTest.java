@@ -5,8 +5,6 @@ import com.epam.esm.giftcertificate.GiftCertificate;
 import com.epam.esm.giftcertificate.GiftCertificateService;
 import com.epam.esm.user.User;
 import com.epam.esm.user.UserService;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
@@ -19,9 +17,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
-import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 @RunWith(SpringRunner.class)
 @ExtendWith(MockitoExtension.class)

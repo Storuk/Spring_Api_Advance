@@ -4,7 +4,6 @@ import com.epam.esm.exceptions.ItemNotFoundException;
 import com.epam.esm.giftcertificate.GiftCertificate;
 import com.epam.esm.giftcertificate.GiftCertificateService;
 import com.epam.esm.tag.TagRepo;
-import com.epam.esm.user.User;
 import com.epam.esm.user.UserService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

@@ -4,7 +4,6 @@ package com.epam.esm.tag;
 import com.epam.esm.utils.SqlQueries;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 /**
