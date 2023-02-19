@@ -31,20 +31,11 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
     }
 
     /**
-     * Method for handling NullPointerException, SQLSyntaxErrorException, InvalidDataException*/
-    @ExceptionHandler(value = {NullPointerException.class, SQLSyntaxErrorException.class, InvalidDataException.class})
-    protected ResponseEntity<?> handleServerException(RuntimeException ex, WebRequest request) {
+     * Method for handling NullPointerException, SQLSyntaxErrorException, InvalidDataException, ConstraintViolationException*/
+    @ExceptionHandler(value = {ConstraintViolationException.class, NullPointerException.class, SQLSyntaxErrorException.class, InvalidDataException.class})
+    protected ResponseEntity<?> handleInvalidDataException(RuntimeException ex, WebRequest request) {
         return handleExceptionInternal(ex,
-                Map.of("HTTP Status", HttpStatus.INTERNAL_SERVER_ERROR, "response body", Map.of("message", ex.getLocalizedMessage())),
-                new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR, request);
-    }
-
-    /**
-     * Method for handling ConstraintViolationException*/
-    @ExceptionHandler(value = {ConstraintViolationException.class})
-    protected ResponseEntity<?> handleConstraintViolationExceptionExceptionForId(ConstraintViolationException e, WebRequest request) {
-            return handleExceptionInternal(e,
-                    Map.of("HTTP Status", HttpStatus.BAD_REQUEST, "response body", Map.of("message", e.getLocalizedMessage())),
-                    new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+                Map.of("HTTP Status", HttpStatus.BAD_REQUEST, "response body", Map.of("message", ex.getLocalizedMessage())),
+                new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
     }
 }
