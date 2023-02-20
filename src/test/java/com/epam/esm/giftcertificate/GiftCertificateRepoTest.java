@@ -42,7 +42,7 @@ class GiftCertificateRepoTest {
         GiftCertificate giftCertificate = GiftCertificate.builder()
                 .name("giftCertificate").description("giftCertificate").price(1).duration(1).tags(tagSet).build();
         giftCertificateRepo.save(giftCertificate);
-        assertEquals(expected, giftCertificateRepo.giftCertificateExists(name));
+        assertEquals(expected, giftCertificateRepo.existsByName(name));
     }
 
     @Test

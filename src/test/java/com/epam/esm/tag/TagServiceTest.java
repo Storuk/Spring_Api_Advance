@@ -33,7 +33,7 @@ class TagServiceTest {
     @Test
     void createTagTest_TrueWhenTagWithSuchNameAlreadyExist() {
         Tag tag = Tag.builder().name("tag").build();
-        when(tagRepoMock.tagExists(tag.getName())).thenReturn(false);
+        when(tagRepoMock.existsByName(tag.getName())).thenReturn(false);
         when(tagRepoMock.save(tag)).thenReturn(tag);
         assertEquals(tag, tagServiceMock.createTag(tag));
     }
@@ -41,7 +41,7 @@ class TagServiceTest {
     @Test
     void createTagTest_FalseWhenTagWithSuchNameNotExist() {
         Tag tag = Tag.builder().name("tag").build();
-        when(tagRepoMock.tagExists(tag.getName())).thenReturn(true);
+        when(tagRepoMock.existsByName(tag.getName())).thenReturn(true);
         InvalidDataException exception = assertThrows(InvalidDataException.class,
                 () -> tagServiceMock.createTag(tag));
 
@@ -95,14 +95,14 @@ class TagServiceTest {
     @Test
     void tagExistsTest_TrueWhenTagWithSuchNameAlreadyExist() {
         Tag tag = Tag.builder().name("tag").build();
-        when(tagRepoMock.tagExists(tag.getName())).thenReturn(true);
+        when(tagRepoMock.existsByName(tag.getName())).thenReturn(true);
         assertTrue(tagServiceMock.tagExists(tag.getName()));
     }
 
     @Test
     void tagExists_FalseWhenTagWithSuchNameNotExist() {
         Tag tag = Tag.builder().name("tag").build();
-        when(tagRepoMock.tagExists(tag.getName())).thenReturn(false);
+        when(tagRepoMock.existsByName(tag.getName())).thenReturn(false);
         assertFalse(tagServiceMock.tagExists(tag.getName()));
     }
 
@@ -116,7 +116,7 @@ class TagServiceTest {
     @Test
     void saveAllTagsTest() {
         Set<Tag> tags = Set.of(Tag.builder().name("tag").build());
-        when(tagRepoMock.tagExists("tag")).thenReturn(true);
+        when(tagRepoMock.existsByName("tag")).thenReturn(true);
         when(tagRepoMock.saveAllAndFlush(tags)).thenReturn(tags.stream().toList());
         when(tagRepoMock.getTagIdByTagName("tag")).thenReturn(1L);
 

@@ -22,12 +22,10 @@ public interface TagRepo extends JpaRepository<Tag, Long> {
 
     /**
      * A repository method for checking if tag exists in database
-     * calling a query from {@link SqlQueries} class
      *
      * @return boolean
      */
-    @Query(SqlQueries.TagsQueries.IS_TAG_EXISTS)
-    boolean tagExists(String tagName);
+    boolean existsByName(String tagName);
 
     /**
      * A repository method for getting mostly used tag of user orders with the highest sum of orders

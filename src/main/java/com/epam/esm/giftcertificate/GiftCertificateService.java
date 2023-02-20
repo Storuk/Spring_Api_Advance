@@ -35,13 +35,13 @@ public class GiftCertificateService {
      *
      * @param giftCertificate the GiftCertificate object that will be created in database
      * @return saved GiftCertificate
-     * @see GiftCertificateRepo#giftCertificateExists(String) for checking if GiftCertificate already exists
+     * @see GiftCertificateRepo#existsByName(String) for checking if GiftCertificate already exists
      * @see TagService#saveAllTags(Set) for saving all Tags
      * @see GiftCertificateRepo#save(Object) for saving GiftCertificate
      */
     @Transactional
     public GiftCertificate createGiftCertificate(GiftCertificate giftCertificate) {
-        if (!giftCertificateRepo.giftCertificateExists(giftCertificate.getName())) {
+        if (!giftCertificateRepo.existsByName(giftCertificate.getName())) {
             if (giftCertificate.getTags() != null) {
                 tagService.saveAllTags(giftCertificate.getTags());
             }
@@ -80,7 +80,7 @@ public class GiftCertificateService {
      *
      * @param id - GiftCertificateId (min value 1)
      * @return true
-     * @see GiftCertificateRepo#giftCertificateExists(String) for checking if GiftCertificate already exists
+     * @see GiftCertificateRepo#existsByName(String) for checking if GiftCertificate already exists
      * @see GiftCertificateRepo#deleteById(Object) for deleting GiftCertificate by id
      */
     public boolean deleteGiftCertificate(long id) {
@@ -97,13 +97,13 @@ public class GiftCertificateService {
      * @param id              - GiftCertificateId (min value 1)
      * @param giftCertificate the GiftCertificate object for updating GiftCertificate
      * @return true
-     * @see GiftCertificateRepo#giftCertificateExists(String) for checking if GiftCertificate already exists
+     * @see GiftCertificateRepo#existsByName(String) for checking if GiftCertificate already exists
      * @see GiftCertificateRepo#save(Object)
      */
     @Transactional
     @Modifying
     public GiftCertificate updateGiftCertificate(long id, GiftCertificate giftCertificate) {
-        if (giftCertificateRepo.giftCertificateExists(giftCertificate.getName())
+        if (giftCertificateRepo.existsByName(giftCertificate.getName())
                 && !giftCertificate.getName().equals(getGiftCertificateById(id).getName())) {
             throw new ItemNotFoundException("Gift certificate with such name already exists " + giftCertificate.getName());
         } else {

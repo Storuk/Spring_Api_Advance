@@ -38,7 +38,7 @@ public class Modules3Application {
 
             for (int i = 0; i < 1000; i++) {
                 String name = faker.name().fullName();
-                if (tagRepo.tagExists(name)) {
+                if (tagRepo.existsByName(name)) {
                     i--;
                 } else {
                     tagRepo.save(Tag.builder().name(name).build());
@@ -47,7 +47,7 @@ public class Modules3Application {
 
             for (int i = 0; i < 10000; i++) {
                 String name = faker.name().fullName();
-                if (giftCertificateRepo.giftCertificateExists(name)) {
+                if (giftCertificateRepo.existsByName(name)) {
                     i--;
                 } else {
                     long firstTagId = faker.number().numberBetween(1L, 1000L);

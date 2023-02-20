@@ -49,7 +49,7 @@ class TagRepoTest {
     void tagExists_Tests(String name, boolean expected) {
         Tag tag = Tag.builder().name("cheap").build();
         tagRepo.save(tag);
-        assertEquals(expected, tagRepo.tagExists(name));
+        assertEquals(expected, tagRepo.existsByName(name));
     }
 
     @Test

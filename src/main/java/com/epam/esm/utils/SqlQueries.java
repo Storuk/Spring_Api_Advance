@@ -25,14 +25,12 @@ public class SqlQueries {
                 order by count(t.id) desc
                 LIMIT 0, 1""";
         public static final String GET_TAG_ID_BY_TAG_NAME = "SELECT t.id FROM Tag t WHERE t.name = ?1";
-        public static final String IS_TAG_EXISTS = "select (count(t)> 0) from Tag t where t.name = ?1";
     }
 
     /**
      * Class with queries for GiftCertificate repository
      */
     public static class GiftCertificatesQueries {
-        public static final String IS_GIFT_CERTIFICATE_EXIST = "select (count(g) > 0) from GiftCertificate g where g.name = ?1";
         public static final String GET_GIFT_CERTIFICATE_BY_PART_OF_DESCRIPTION = "SELECT * FROM gift_certificate WHERE description LIKE ?1 LIMIT ?2,?3";
         public static final String GET_GIFT_CERTIFICATE_BY_TAG_NAME = "" +
                 "SELECT gc.id , gc.name , gc.description, gc.price, gc.duration ,gc.create_date ,gc.last_update_date " +

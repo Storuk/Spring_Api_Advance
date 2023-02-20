@@ -16,12 +16,10 @@ import java.util.Set;
 public interface GiftCertificateRepo extends JpaRepository<GiftCertificate, Long> {
     /**
      * A repository method for checking if GiftCertificate exists in database
-     * calling a query from {@link SqlQueries} class
      *
      * @return boolean
      */
-    @Query(SqlQueries.GiftCertificatesQueries.IS_GIFT_CERTIFICATE_EXIST)
-    boolean giftCertificateExists(@Param("name") String name);
+    boolean existsByName(@Param("name") String name);
 
     /**
      * A repository method for getting all GiftCertificates by Tag Name

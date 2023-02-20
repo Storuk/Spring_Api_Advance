@@ -39,10 +39,10 @@ public class TagService {
      *
      * @param name Tag name
      * @return boolean
-     * @see TagRepo#tagExists(String) (Object) for checking if Tag already exists
+     * @see TagRepo#existsByName(String) (Object) for checking if Tag already exists
      */
     public boolean tagExists(String name) {
-        return tagRepo.tagExists(name);
+        return tagRepo.existsByName(name);
     }
 
     /**
@@ -84,7 +84,7 @@ public class TagService {
      *
      * @param id Tag id
      * @return boolean
-     * @see TagRepo#tagExists(String) (Object) for checking if Tag already exists
+     * @see TagRepo#existsByName(String) (Object) for checking if Tag already exists
      * @see TagRepo#deleteById(Object) (String) for getting Tag id
      */
     public boolean deleteTag(long id) {
