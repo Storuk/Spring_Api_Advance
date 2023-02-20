@@ -7,6 +7,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 class Modules3ApplicationTests {
     @Test
     void contextLoads() {
-        Modules3Application.main(new String[] {});
+        Modules3Application.main(new String[]{});
     }
 }

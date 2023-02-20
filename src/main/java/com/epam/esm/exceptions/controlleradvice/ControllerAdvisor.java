@@ -1,7 +1,7 @@
 package com.epam.esm.exceptions.controlleradvice;
 
-import com.epam.esm.exceptions.ItemNotFoundException;
 import com.epam.esm.exceptions.InvalidDataException;
+import com.epam.esm.exceptions.ItemNotFoundException;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -16,13 +16,15 @@ import java.util.Map;
 
 /**
  * Class ControllerAdvisor for handling exceptions
+ *
  * @author Vlad Storoshchuk
- * */
+ */
 @ControllerAdvice
 public class ControllerAdvisor extends ResponseEntityExceptionHandler {
 
     /**
-     * Method for handling ItemNotFoundException*/
+     * Method for handling ItemNotFoundException
+     */
     @ExceptionHandler(value = ItemNotFoundException.class)
     protected ResponseEntity<?> handleNotFoundException(ItemNotFoundException ex, WebRequest request) {
         return handleExceptionInternal(ex,
@@ -31,7 +33,8 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
     }
 
     /**
-     * Method for handling NullPointerException, SQLSyntaxErrorException, InvalidDataException, ConstraintViolationException*/
+     * Method for handling NullPointerException, SQLSyntaxErrorException, InvalidDataException, ConstraintViolationException
+     */
     @ExceptionHandler(value = {ConstraintViolationException.class, NullPointerException.class, SQLSyntaxErrorException.class, InvalidDataException.class})
     protected ResponseEntity<?> handleInvalidDataException(RuntimeException ex, WebRequest request) {
         return handleExceptionInternal(ex,

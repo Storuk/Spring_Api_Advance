@@ -2,6 +2,7 @@ package com.epam.esm.giftcertificate;
 
 import com.epam.esm.tag.Tag;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -13,7 +14,7 @@ import java.util.Set;
 
 /**
  * @author Vlad Storoshchuk
- * */
+ */
 @EqualsAndHashCode(callSuper = false)
 @Entity
 @Data
@@ -28,7 +29,9 @@ public class GiftCertificate extends RepresentationModel<GiftCertificate> {
     @Column(nullable = false, unique = true)
     private String name;
     private String description;
+    @Min(value = 1, message = "Price should not be less than 1")
     private Integer price;
+    @Min(value = 1, message = "Price should not be less than 1")
     private Integer duration;
     @CreatedDate
     private Date createDate;

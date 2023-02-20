@@ -11,14 +11,16 @@ import java.io.IOException;
 
 /**
  * Class RequestResponseLoggingFilter
+ *
  * @author Vlad Storoshchuk
- * */
+ */
 @Slf4j
 @Component
 @Order(2)
 public class RequestResponseLoggingFilter implements Filter {
     /**
-     * Method to log requests and responses */
+     * Method to log requests and responses
+     */
     @Override
     public void doFilter(
             ServletRequest request,

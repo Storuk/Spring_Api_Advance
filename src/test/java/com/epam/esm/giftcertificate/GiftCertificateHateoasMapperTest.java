@@ -20,10 +20,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.util.List;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.times;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
@@ -36,6 +35,7 @@ class GiftCertificateHateoasMapperTest {
     ArgumentCaptor<Link> argumentCaptor;
     @InjectMocks
     private GiftCertificateHateoasMapper giftCertificateHateoasMapper;
+
     @Test
     void getGiftCertificateByIdHateoasMapper() {
         GiftCertificate giftCertificate = GiftCertificate.builder()
@@ -64,13 +64,14 @@ class GiftCertificateHateoasMapperTest {
                         .updateDuration(giftCertificate.getId(), 0))
                         .withRel(() -> "update duration in gift certificate"));
 
-        for(Tag tag: giftCertificate.getTags()) { tag
-                .add(linkTo(methodOn(TagController.class)
-                        .deleteTag(tag.getId()))
-                        .withRel(() -> "delete tag by id"))
-                .add(linkTo(methodOn(TagController.class)
-                        .getTagById(tag.getId()))
-                        .withRel(() -> "get tag by id"));
+        for (Tag tag : giftCertificate.getTags()) {
+            tag
+                    .add(linkTo(methodOn(TagController.class)
+                            .deleteTag(tag.getId()))
+                            .withRel(() -> "delete tag by id"))
+                    .add(linkTo(methodOn(TagController.class)
+                            .getTagById(tag.getId()))
+                            .withRel(() -> "get tag by id"));
         }
 
         giftCertificateByIdModel
@@ -138,13 +139,14 @@ class GiftCertificateHateoasMapperTest {
                         .updateDuration(giftCertificate.getId(), 0))
                         .withRel(() -> "update duration in gift certificate"));
 
-        for(Tag tag: giftCertificate.getTags()) { tag
-                .add(linkTo(methodOn(TagController.class)
-                        .deleteTag(tag.getId()))
-                        .withRel(() -> "delete tag by id"))
-                .add(linkTo(methodOn(TagController.class)
-                        .getTagById(tag.getId()))
-                        .withRel(() -> "get tag by id"));
+        for (Tag tag : giftCertificate.getTags()) {
+            tag
+                    .add(linkTo(methodOn(TagController.class)
+                            .deleteTag(tag.getId()))
+                            .withRel(() -> "delete tag by id"))
+                    .add(linkTo(methodOn(TagController.class)
+                            .getTagById(tag.getId()))
+                            .withRel(() -> "get tag by id"));
         }
 
         giftCertificateByIdModel
@@ -212,13 +214,14 @@ class GiftCertificateHateoasMapperTest {
                         .updateDuration(giftCertificate.getId(), 0))
                         .withRel(() -> "update duration in gift certificate"));
 
-        for(Tag tag: giftCertificate.getTags()) { tag
-                .add(linkTo(methodOn(TagController.class)
-                        .deleteTag(tag.getId()))
-                        .withRel(() -> "delete tag by id"))
-                .add(linkTo(methodOn(TagController.class)
-                        .getTagById(tag.getId()))
-                        .withRel(() -> "get tag by id"));
+        for (Tag tag : giftCertificate.getTags()) {
+            tag
+                    .add(linkTo(methodOn(TagController.class)
+                            .deleteTag(tag.getId()))
+                            .withRel(() -> "delete tag by id"))
+                    .add(linkTo(methodOn(TagController.class)
+                            .getTagById(tag.getId()))
+                            .withRel(() -> "get tag by id"));
         }
 
         giftCertificateByIdModel
@@ -286,13 +289,14 @@ class GiftCertificateHateoasMapperTest {
                         .deleteGiftCertificate(giftCertificate.getId()))
                         .withRel(() -> "delete gift certificate"));
 
-        for(Tag tag: giftCertificate.getTags()) { tag
-                .add(linkTo(methodOn(TagController.class)
-                        .deleteTag(tag.getId()))
-                        .withRel(() -> "delete tag by id"))
-                .add(linkTo(methodOn(TagController.class)
-                        .getTagById(tag.getId()))
-                        .withRel(() -> "get tag by id"));
+        for (Tag tag : giftCertificate.getTags()) {
+            tag
+                    .add(linkTo(methodOn(TagController.class)
+                            .deleteTag(tag.getId()))
+                            .withRel(() -> "delete tag by id"))
+                    .add(linkTo(methodOn(TagController.class)
+                            .getTagById(tag.getId()))
+                            .withRel(() -> "get tag by id"));
         }
 
         giftCertificateByIdModel
@@ -363,13 +367,14 @@ class GiftCertificateHateoasMapperTest {
                         .updateDuration(giftCertificate.getId(), 0))
                         .withRel(() -> "update duration in gift certificate"));
 
-        for(Tag tag: giftCertificate.getTags()) { tag
-                .add(linkTo(methodOn(TagController.class)
-                        .deleteTag(tag.getId()))
-                        .withRel(() -> "delete tag by id"))
-                .add(linkTo(methodOn(TagController.class)
-                        .getTagById(tag.getId()))
-                        .withRel(() -> "get tag by id"));
+        for (Tag tag : giftCertificate.getTags()) {
+            tag
+                    .add(linkTo(methodOn(TagController.class)
+                            .deleteTag(tag.getId()))
+                            .withRel(() -> "delete tag by id"))
+                    .add(linkTo(methodOn(TagController.class)
+                            .getTagById(tag.getId()))
+                            .withRel(() -> "get tag by id"));
         }
 
         giftCertificateByIdModel

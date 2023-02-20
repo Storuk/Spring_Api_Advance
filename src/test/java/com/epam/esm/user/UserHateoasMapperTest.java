@@ -17,10 +17,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.times;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
@@ -45,7 +44,7 @@ class UserHateoasMapperTest {
 
         assertEquals(userPagedModel, result);
         verify(result, times(1)).add(argumentCaptor.capture());
-        assertEquals(argumentCaptor.getAllValues().get(0).getRel().value(),"get all orders");
+        assertEquals(argumentCaptor.getAllValues().get(0).getRel().value(), "get all orders");
     }
 
     @Test
@@ -55,7 +54,7 @@ class UserHateoasMapperTest {
 
         CollectionModel<User> collectionModelUser = CollectionModel.of(List.of(user));
         user.add(linkTo(methodOn(OrderController.class)
-                .getOrdersByUserId((user.getId()),0,10))
+                .getOrdersByUserId((user.getId()), 0, 10))
                 .withRel(() -> "get user orders"));
         user.add(linkTo(methodOn(OrderController.class)
                 .createOrder(user.getId(), 0))

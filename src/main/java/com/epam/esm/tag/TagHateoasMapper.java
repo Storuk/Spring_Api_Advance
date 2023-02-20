@@ -17,7 +17,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 /**
  * @author Vlad Storoshchuk
- * */
+ */
 @Component
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class TagHateoasMapper {
@@ -25,9 +25,10 @@ public class TagHateoasMapper {
 
     /**
      * A component method for adding links to created Tag
+     *
      * @param tag created Tag
      * @return CollectionModel of Tag with links
-     * */
+     */
     public CollectionModel<Tag> createTagHateoas(Tag tag) {
         return CollectionModel.of(List.of(tag
                         .add(linkTo(methodOn(TagController.class)
@@ -53,9 +54,10 @@ public class TagHateoasMapper {
 
     /**
      * A component method for adding links to the mostly used Tag
+     *
      * @param tag created Tag
      * @return CollectionModel of Tag with links
-     * */
+     */
     public CollectionModel<Tag> getMostlyUsedTagHateoas(Tag tag) {
         return CollectionModel.of(List.of(tag
                         .add(linkTo(methodOn(TagController.class)
@@ -81,9 +83,10 @@ public class TagHateoasMapper {
 
     /**
      * A component method for adding links to Tag
+     *
      * @param tag created Tag
      * @return CollectionModel of Tag with links
-     * */
+     */
     public CollectionModel<Tag> getTagByIdHateoas(Tag tag) {
         return CollectionModel.of(List.of(tag
                         .add(linkTo(methodOn(TagController.class)
@@ -109,9 +112,10 @@ public class TagHateoasMapper {
 
     /**
      * A component method for adding links to all Tags
+     *
      * @param tags Page of Tags
      * @return PagedModel of Tag with links
-     * */
+     */
     public PagedModel<Tag> getAllTagHateoas(Page<Tag> tags) {
         PagedModel<Tag> tagsPagedModel = pagedResourcesAssembler
                 .toModel(tags, tag -> tag

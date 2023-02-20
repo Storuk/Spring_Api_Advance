@@ -9,7 +9,9 @@ import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -24,10 +26,10 @@ class VerificationOfRequestsDataTest {
         assertTrue(VerificationOfRequestsData.isStringValuesCorrect("string"));
         assertEquals(expected, VerificationOfRequestsData.isStringValuesCorrect(value));
     }
-    
+
     @ParameterizedTest
     @NullAndEmptySource
-    @ValueSource(strings = {"  ","123"})
+    @ValueSource(strings = {"  ", "123"})
     void isStringCorrectTest_False(String value) {
         assertFalse(VerificationOfRequestsData.isStringValuesCorrect(value));
     }
@@ -40,7 +42,7 @@ class VerificationOfRequestsDataTest {
 
     @Test
     void isSetOfStringsCorrectTest_False() {
-        Set<String> value = new HashSet<>(Arrays.asList(null,"", "   ", "123"));
+        Set<String> value = new HashSet<>(Arrays.asList(null, "", "   ", "123"));
         assertFalse(VerificationOfRequestsData.isSetOfStringsCorrect(value));
     }
 
@@ -51,7 +53,7 @@ class VerificationOfRequestsDataTest {
 
     @ParameterizedTest
     @NullAndEmptySource
-    @ValueSource(strings = {" ","123"})
+    @ValueSource(strings = {" ", "123"})
     void isTagCorrectTest_FalseWhenEmptyOrBlankOrNullOrNumeric(String value) {
         assertFalse(VerificationOfRequestsData.isTagCorrect(Tag.builder().name(value).build()));
     }
@@ -65,18 +67,18 @@ class VerificationOfRequestsDataTest {
             "123, false",
     })
     void isSortingTypeCorrectTest(String value, boolean expected) {
-        assertEquals(expected,VerificationOfRequestsData.isSortingTypeCorrect(value));
+        assertEquals(expected, VerificationOfRequestsData.isSortingTypeCorrect(value));
     }
 
     @Test
     void isSetOfSortingTypesCorrectTrue() {
-        Set<String> sortingTypesSet = Set.of("AsC", "DesC","asc","desc","ASC","DESC");
+        Set<String> sortingTypesSet = Set.of("AsC", "DesC", "asc", "desc", "ASC", "DESC");
         assertTrue(VerificationOfRequestsData.isSetOfSortingTypesCorrect(sortingTypesSet));
     }
 
     @Test
     void isSetOfSortingTypesCorrectFalse() {
-        Set<String> sortingTypesSet = Set.of("AsC1", "Des1C","123","");
+        Set<String> sortingTypesSet = Set.of("AsC1", "Des1C", "123", "");
         assertFalse(VerificationOfRequestsData.isSetOfSortingTypesCorrect(sortingTypesSet));
     }
 
@@ -151,7 +153,7 @@ class VerificationOfRequestsDataTest {
         GiftCertificate giftCertificate = GiftCertificate.builder().name("123").build();
         InvalidDataException message = assertThrows(InvalidDataException.class,
                 () -> VerificationOfRequestsData.isGiftCertificateValidForUpdate(giftCertificate));
-        assertEquals("Invalid input name: " + giftCertificate.getName(),message.getMessage());
+        assertEquals("Invalid input name: " + giftCertificate.getName(), message.getMessage());
     }
 
     @Test
@@ -159,7 +161,7 @@ class VerificationOfRequestsDataTest {
         GiftCertificate giftCertificate = GiftCertificate.builder().description("  ").build();
         InvalidDataException message = assertThrows(InvalidDataException.class,
                 () -> VerificationOfRequestsData.isGiftCertificateValidForUpdate(giftCertificate));
-        assertEquals("Invalid input description: " + giftCertificate.getDescription(),message.getMessage());
+        assertEquals("Invalid input description: " + giftCertificate.getDescription(), message.getMessage());
     }
 
     @Test
@@ -167,7 +169,7 @@ class VerificationOfRequestsDataTest {
         GiftCertificate giftCertificate = GiftCertificate.builder().price(-1).build();
         InvalidDataException message = assertThrows(InvalidDataException.class,
                 () -> VerificationOfRequestsData.isGiftCertificateValidForUpdate(giftCertificate));
-        assertEquals("Price should be > 0. Your value " + giftCertificate.getPrice(),message.getMessage());
+        assertEquals("Price should be > 0. Your value " + giftCertificate.getPrice(), message.getMessage());
     }
 
     @Test
@@ -175,18 +177,18 @@ class VerificationOfRequestsDataTest {
         GiftCertificate giftCertificate = GiftCertificate.builder().duration(-1).build();
         InvalidDataException message = assertThrows(InvalidDataException.class,
                 () -> VerificationOfRequestsData.isGiftCertificateValidForUpdate(giftCertificate));
-        assertEquals("Duration should be > 0. Your value " + giftCertificate.getDuration(),message.getMessage());
+        assertEquals("Duration should be > 0. Your value " + giftCertificate.getDuration(), message.getMessage());
     }
 
     @Test
     void isGiftCertificateValidForUpdateTestFalse_WhenInvalidTags() {
         GiftCertificate giftCertificate = GiftCertificate.builder()
                 .tags(Set.of(Tag.builder().name(" ").build(),
-                Tag.builder().name(null).build(),
-                Tag.builder().name("356").build())).build();
+                        Tag.builder().name(null).build(),
+                        Tag.builder().name("356").build())).build();
         InvalidDataException message = assertThrows(InvalidDataException.class,
                 () -> VerificationOfRequestsData.isGiftCertificateValidForUpdate(giftCertificate));
-        assertEquals("Invalid input tags." + giftCertificate.getTags(),message.getMessage());
+        assertEquals("Invalid input tags." + giftCertificate.getTags(), message.getMessage());
     }
 
 }

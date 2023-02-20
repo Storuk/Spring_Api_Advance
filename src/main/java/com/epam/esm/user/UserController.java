@@ -13,8 +13,9 @@ import java.util.Map;
 
 /**
  * Class UserController which contain method related with User
+ *
  * @author Vlad Storoshchuk
- * */
+ */
 @Validated
 @RestController
 @RequestMapping(value = "/users", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -29,10 +30,11 @@ public class UserController {
 
     /**
      * A controller get method for getting all users
+     *
      * @param page - number of page (min value 0)
      * @param size - count of tags (min value 1)
-     * @see UserService#getAllUsers(int, int) 
-     * */
+     * @see UserService#getAllUsers(int, int)
+     */
     @GetMapping
     public ResponseEntity<?> getAllUsers(@RequestParam(value = "page", defaultValue = "0")
                                          @Min(value = 0, message = "Page index should be >= 0.") int page,
@@ -46,9 +48,10 @@ public class UserController {
 
     /**
      * A controller get method for getting tag by id
+     *
      * @param id - user id (min value 0)
-     * @see UserService#getUserById(long) 
-     * */
+     * @see UserService#getUserById(long)
+     */
     @GetMapping("/{id}")
     public ResponseEntity<?> getUserById(@PathVariable("id")
                                          @Min(value = 1, message = "Id should be >= 1. ") long id) {

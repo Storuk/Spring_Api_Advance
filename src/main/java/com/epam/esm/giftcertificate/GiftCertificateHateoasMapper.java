@@ -19,7 +19,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 /**
  * @author Vlad Storoshchuk
- * */
+ */
 @Component
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class GiftCertificateHateoasMapper {
@@ -27,9 +27,10 @@ public class GiftCertificateHateoasMapper {
 
     /**
      * A component method for adding links to all GiftCertificates
+     *
      * @param pagedGiftCertificate - Page of GiftCertificate
      * @return PagedModel of GiftCertificates with links
-     * */
+     */
     public PagedModel<GiftCertificate> getAllCertificatesHateoasMapper(Page<GiftCertificate> pagedGiftCertificate) {
         PagedModel<GiftCertificate> pagedModel = defaultForGetAll(pagedGiftCertificate);
         pagedModel
@@ -65,9 +66,10 @@ public class GiftCertificateHateoasMapper {
 
     /**
      * A component method for adding links to all GiftCertificates by Tag Name
+     *
      * @param pagedGiftCertificate - Page of GiftCertificate
      * @return PagedModel of GiftCertificates with links
-     * */
+     */
     public PagedModel<GiftCertificate> getAllCertificatesByTagNameHateoasMapper(Page<GiftCertificate> pagedGiftCertificate) {
         PagedModel<GiftCertificate> pagedModel = defaultForGetAll(pagedGiftCertificate);
 
@@ -104,9 +106,10 @@ public class GiftCertificateHateoasMapper {
 
     /**
      * A component method for adding links to all GiftCertificates by Part of description
+     *
      * @param pagedGiftCertificate - Page of GiftCertificate
      * @return PagedModel of GiftCertificates with links
-     * */
+     */
     public PagedModel<GiftCertificate> getAllCertificatesByPartOfDescriptionHateoasMapper(Page<GiftCertificate> pagedGiftCertificate) {
         PagedModel<GiftCertificate> pagedModel = defaultForGetAll(pagedGiftCertificate);
 
@@ -143,9 +146,10 @@ public class GiftCertificateHateoasMapper {
 
     /**
      * A component method for adding links to all GiftCertificates sorted by name
+     *
      * @param pagedGiftCertificate - Page of GiftCertificate
      * @return PagedModel of GiftCertificates with links
-     * */
+     */
     public PagedModel<GiftCertificate> getAllCertificatesSortedByNameHateoasMapper(Page<GiftCertificate> pagedGiftCertificate) {
         PagedModel<GiftCertificate> pagedModel = defaultForGetAll(pagedGiftCertificate);
 
@@ -182,9 +186,10 @@ public class GiftCertificateHateoasMapper {
 
     /**
      * A component method for adding links to all GiftCertificates sorted by name and by date
+     *
      * @param pagedGiftCertificate - Page of GiftCertificate
      * @return PagedModel of GiftCertificates with links
-     * */
+     */
     public PagedModel<GiftCertificate> getAllCertificatesSortedByNameAndByDateHateoasMapper(Page<GiftCertificate> pagedGiftCertificate) {
         PagedModel<GiftCertificate> pagedModel = defaultForGetAll(pagedGiftCertificate);
 
@@ -221,9 +226,10 @@ public class GiftCertificateHateoasMapper {
 
     /**
      * A component method for adding links to all GiftCertificates by tags name
+     *
      * @param pagedGiftCertificate - Page of GiftCertificate
      * @return PagedModel of GiftCertificates with links
-     * */
+     */
     public PagedModel<GiftCertificate> getAllCertificatesByTagsHateoasMapper(Page<GiftCertificate> pagedGiftCertificate) {
         PagedModel<GiftCertificate> pagedModel = defaultForGetAll(pagedGiftCertificate);
 
@@ -260,24 +266,25 @@ public class GiftCertificateHateoasMapper {
 
     /**
      * A component method for adding links to GiftCertificate by id
+     *
      * @param giftCertificate GiftCertificate
      * @return CollectionModel of GiftCertificates with links
-     * */
+     */
     public CollectionModel<GiftCertificate> getGiftCertificateByIdHateoasMapper(GiftCertificate giftCertificate) {
         CollectionModel<GiftCertificate> giftCertificateCollectionModel = CollectionModel.of(List.of(
-                        giftCertificate
-                                .add(linkTo(methodOn(GiftCertificateController.class)
-                                        .deleteGiftCertificate(giftCertificate.getId()))
-                                        .withRel(() -> "delete gift certificate"))
-                                .add(linkTo(methodOn(GiftCertificateController.class)
-                                        .updateGiftCertificate(giftCertificate.getId(), new GiftCertificate()))
-                                        .withRel(() -> "update gift certificate"))
-                                .add(linkTo(methodOn(GiftCertificateController.class)
-                                        .updatePrice(giftCertificate.getId(), 0))
-                                        .withRel(() -> "update price in gift certificate"))
-                                .add(linkTo(methodOn(GiftCertificateController.class)
-                                        .updateDuration(giftCertificate.getId(), 0))
-                                        .withRel(() -> "update duration in gift certificate"))));
+                giftCertificate
+                        .add(linkTo(methodOn(GiftCertificateController.class)
+                                .deleteGiftCertificate(giftCertificate.getId()))
+                                .withRel(() -> "delete gift certificate"))
+                        .add(linkTo(methodOn(GiftCertificateController.class)
+                                .updateGiftCertificate(giftCertificate.getId(), new GiftCertificate()))
+                                .withRel(() -> "update gift certificate"))
+                        .add(linkTo(methodOn(GiftCertificateController.class)
+                                .updatePrice(giftCertificate.getId(), 0))
+                                .withRel(() -> "update price in gift certificate"))
+                        .add(linkTo(methodOn(GiftCertificateController.class)
+                                .updateDuration(giftCertificate.getId(), 0))
+                                .withRel(() -> "update duration in gift certificate"))));
         defaultForGetSingle(giftCertificateCollectionModel);
         tagsDefaultLinks(giftCertificate);
         return giftCertificateCollectionModel;
@@ -285,24 +292,25 @@ public class GiftCertificateHateoasMapper {
 
     /**
      * A component method for adding links to updated GiftCertificate
+     *
      * @param giftCertificate GiftCertificate
      * @return CollectionModel of GiftCertificates with links
-     * */
+     */
     public CollectionModel<GiftCertificate> getGiftCertificateForUpdateHateoasMapper(GiftCertificate giftCertificate) {
         CollectionModel<GiftCertificate> giftCertificateCollectionModel = CollectionModel.of(List.of(
-                        giftCertificate
-                                .add(linkTo(methodOn(GiftCertificateController.class)
-                                        .getGiftCertificateById(giftCertificate.getId()))
-                                        .withRel(() -> "get gift certificate"))
-                                .add(linkTo(methodOn(GiftCertificateController.class)
-                                        .deleteGiftCertificate(giftCertificate.getId()))
-                                        .withRel(() -> "delete gift certificate"))
-                                .add(linkTo(methodOn(GiftCertificateController.class)
-                                        .updatePrice(giftCertificate.getId(), 0))
-                                        .withRel(() -> "update price in gift certificate"))
-                                .add(linkTo(methodOn(GiftCertificateController.class)
-                                        .updateDuration(giftCertificate.getId(), 0))
-                                        .withRel(() -> "update duration in gift certificate"))));
+                giftCertificate
+                        .add(linkTo(methodOn(GiftCertificateController.class)
+                                .getGiftCertificateById(giftCertificate.getId()))
+                                .withRel(() -> "get gift certificate"))
+                        .add(linkTo(methodOn(GiftCertificateController.class)
+                                .deleteGiftCertificate(giftCertificate.getId()))
+                                .withRel(() -> "delete gift certificate"))
+                        .add(linkTo(methodOn(GiftCertificateController.class)
+                                .updatePrice(giftCertificate.getId(), 0))
+                                .withRel(() -> "update price in gift certificate"))
+                        .add(linkTo(methodOn(GiftCertificateController.class)
+                                .updateDuration(giftCertificate.getId(), 0))
+                                .withRel(() -> "update duration in gift certificate"))));
         defaultForGetSingle(giftCertificateCollectionModel);
         tagsDefaultLinks(giftCertificate);
         return giftCertificateCollectionModel;
@@ -310,24 +318,25 @@ public class GiftCertificateHateoasMapper {
 
     /**
      * A component method for adding links to GiftCertificate with updated price
+     *
      * @param giftCertificate GiftCertificate
      * @return CollectionModel of GiftCertificates with links
-     * */
+     */
     public CollectionModel<GiftCertificate> getGiftCertificateForUpdatePriceHateoasMapper(GiftCertificate giftCertificate) {
         CollectionModel<GiftCertificate> giftCertificateCollectionModel = CollectionModel.of(List.of(
-                        giftCertificate
-                                .add(linkTo(methodOn(GiftCertificateController.class)
-                                        .getGiftCertificateById(giftCertificate.getId()))
-                                        .withRel(() -> "get gift certificate"))
-                                .add(linkTo(methodOn(GiftCertificateController.class)
-                                        .deleteGiftCertificate(giftCertificate.getId()))
-                                        .withRel(() -> "delete gift certificate"))
-                                .add(linkTo(methodOn(GiftCertificateController.class)
-                                        .updateGiftCertificate(giftCertificate.getId(), new GiftCertificate()))
-                                        .withRel(() -> "update gift certificate"))
-                                .add(linkTo(methodOn(GiftCertificateController.class)
-                                        .updateDuration(giftCertificate.getId(), 0))
-                                        .withRel(() -> "update duration in gift certificate"))));
+                giftCertificate
+                        .add(linkTo(methodOn(GiftCertificateController.class)
+                                .getGiftCertificateById(giftCertificate.getId()))
+                                .withRel(() -> "get gift certificate"))
+                        .add(linkTo(methodOn(GiftCertificateController.class)
+                                .deleteGiftCertificate(giftCertificate.getId()))
+                                .withRel(() -> "delete gift certificate"))
+                        .add(linkTo(methodOn(GiftCertificateController.class)
+                                .updateGiftCertificate(giftCertificate.getId(), new GiftCertificate()))
+                                .withRel(() -> "update gift certificate"))
+                        .add(linkTo(methodOn(GiftCertificateController.class)
+                                .updateDuration(giftCertificate.getId(), 0))
+                                .withRel(() -> "update duration in gift certificate"))));
         defaultForGetSingle(giftCertificateCollectionModel);
         tagsDefaultLinks(giftCertificate);
         return giftCertificateCollectionModel;
@@ -335,24 +344,25 @@ public class GiftCertificateHateoasMapper {
 
     /**
      * A component method for adding links to GiftCertificate with updated duration
+     *
      * @param giftCertificate GiftCertificate
      * @return CollectionModel of GiftCertificates with links
-     * */
+     */
     public CollectionModel<GiftCertificate> getGiftCertificateForUpdateDurationHateoasMapper(GiftCertificate giftCertificate) {
         CollectionModel<GiftCertificate> giftCertificateCollectionModel = CollectionModel.of(List.of(
-                        giftCertificate
-                                .add(linkTo(methodOn(GiftCertificateController.class)
-                                        .getGiftCertificateById(giftCertificate.getId()))
-                                        .withRel(() -> "get gift certificate"))
-                                .add(linkTo(methodOn(GiftCertificateController.class)
-                                        .updateGiftCertificate(giftCertificate.getId(), new GiftCertificate()))
-                                        .withRel(() -> "update gift certificate"))
-                                .add(linkTo(methodOn(GiftCertificateController.class)
-                                        .updatePrice(giftCertificate.getId(), 0))
-                                        .withRel(() -> "update price in gift certificate"))
-                                .add(linkTo(methodOn(GiftCertificateController.class)
-                                        .deleteGiftCertificate(giftCertificate.getId()))
-                                        .withRel(() -> "delete gift certificate"))));
+                giftCertificate
+                        .add(linkTo(methodOn(GiftCertificateController.class)
+                                .getGiftCertificateById(giftCertificate.getId()))
+                                .withRel(() -> "get gift certificate"))
+                        .add(linkTo(methodOn(GiftCertificateController.class)
+                                .updateGiftCertificate(giftCertificate.getId(), new GiftCertificate()))
+                                .withRel(() -> "update gift certificate"))
+                        .add(linkTo(methodOn(GiftCertificateController.class)
+                                .updatePrice(giftCertificate.getId(), 0))
+                                .withRel(() -> "update price in gift certificate"))
+                        .add(linkTo(methodOn(GiftCertificateController.class)
+                                .deleteGiftCertificate(giftCertificate.getId()))
+                                .withRel(() -> "delete gift certificate"))));
         defaultForGetSingle(giftCertificateCollectionModel);
         tagsDefaultLinks(giftCertificate);
         return giftCertificateCollectionModel;
@@ -360,9 +370,10 @@ public class GiftCertificateHateoasMapper {
 
     /**
      * A component method for adding links to created GiftCertificate
+     *
      * @param giftCertificate GiftCertificate
      * @return CollectionModel of GiftCertificates with links
-     * */
+     */
     public CollectionModel<GiftCertificate> getGiftCertificateForCreateHateoasMapper(GiftCertificate giftCertificate) {
         CollectionModel<GiftCertificate> giftCertificateCollectionModel = CollectionModel.of(List.of(
                         giftCertificateDefaultLinks(giftCertificate)))
@@ -401,18 +412,20 @@ public class GiftCertificateHateoasMapper {
 
     /**
      * A component method for adding default links to GiftCertificate Tags
+     *
      * @param giftCertificate GiftCertificate
-     * */
+     */
     public void tagsDefaultLinks(GiftCertificate giftCertificate) {
         if (giftCertificate.getTags() != null) {
             for (Tag tag : giftCertificate.getTags()) {
-                if (!tag.hasLinks()) { tag
-                        .add(linkTo(methodOn(TagController.class)
-                                .deleteTag(tag.getId()))
-                                .withRel(() -> "delete tag by id"))
-                        .add(linkTo(methodOn(TagController.class)
-                                .getTagById(tag.getId()))
-                                .withRel(() -> "get tag by id"));
+                if (!tag.hasLinks()) {
+                    tag
+                            .add(linkTo(methodOn(TagController.class)
+                                    .deleteTag(tag.getId()))
+                                    .withRel(() -> "delete tag by id"))
+                            .add(linkTo(methodOn(TagController.class)
+                                    .getTagById(tag.getId()))
+                                    .withRel(() -> "get tag by id"));
                 }
             }
         }
@@ -420,8 +433,9 @@ public class GiftCertificateHateoasMapper {
 
     /**
      * A component method for adding default links to GiftCertificate
+     *
      * @param giftCertificate GiftCertificate
-     * */
+     */
     public GiftCertificate giftCertificateDefaultLinks(GiftCertificate giftCertificate) {
         return giftCertificate
                 .add(linkTo(methodOn(GiftCertificateController.class)
@@ -443,8 +457,9 @@ public class GiftCertificateHateoasMapper {
 
     /**
      * A component method for adding default links to Page of GiftCertificates
+     *
      * @param pagedGiftCertificate Page of GiftCertificates
-     * */
+     */
     private PagedModel<GiftCertificate> defaultForGetAll(Page<GiftCertificate> pagedGiftCertificate) {
         return pagedResourcesAssembler
                 .toModel(pagedGiftCertificate, giftCertificate -> {
@@ -456,8 +471,9 @@ public class GiftCertificateHateoasMapper {
 
     /**
      * A component method for adding default links to Collection of GiftCertificates
+     *
      * @param giftCertificateCollectionModel Page of GiftCertificates
-     * */
+     */
     private void defaultForGetSingle(CollectionModel<GiftCertificate> giftCertificateCollectionModel) {
         giftCertificateCollectionModel
                 .add(linkTo(methodOn(GiftCertificateController.class)

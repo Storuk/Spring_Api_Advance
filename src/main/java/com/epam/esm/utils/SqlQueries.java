@@ -2,19 +2,13 @@ package com.epam.esm.utils;
 
 /**
  * Class with queries for repositories methods
+ *
  * @author Vlad Storoshchuk
- * */
+ */
 public class SqlQueries {
     /**
-     * Class with queries for Order repository
-     * */
-    public static class OrdersQueries {
-        public static final String GET_ORDERS_BY_USER_ID = "select o from Order o where o.user.id = :user_id";
-    }
-
-    /**
      * Class with queries for Tag repository
-     * */
+     */
     public static class TagsQueries {
         public static final String GET_MOSTLY_USED_TAG = """
                 select t.id, t.name from orders ors
@@ -36,25 +30,25 @@ public class SqlQueries {
 
     /**
      * Class with queries for GiftCertificate repository
-     * */
+     */
     public static class GiftCertificatesQueries {
         public static final String IS_GIFT_CERTIFICATE_EXIST = "select (count(g) > 0) from GiftCertificate g where g.name = ?1";
+        public static final String GET_GIFT_CERTIFICATE_BY_PART_OF_DESCRIPTION = "SELECT * FROM gift_certificate WHERE description LIKE ?1 LIMIT ?2,?3";
         public static final String GET_GIFT_CERTIFICATE_BY_TAG_NAME = "" +
                 "SELECT gc.id , gc.name , gc.description, gc.price, gc.duration ,gc.create_date ,gc.last_update_date " +
                 "FROM gift_certificate_tags gt  " +
                 "JOIN tag t " +
                 "JOIN gift_certificate gc  " +
-                "WHERE gc.id = gt.gift_certificate_id AND t.id = gt.tags_id AND t.name = ?1 LIMIT ?2,?3";
-        public static final String GET_GIFT_CERTIFICATE_BY_PART_OF_DESCRIPTION = "SELECT * FROM gift_certificate WHERE description LIKE ?1 LIMIT ?2,?3";
-        public static final String GET_ALL_GIFT_CERTIFICATES_BY_TAGS_HSQL = "Select g from GiftCertificate g left join fetch g.tags t where t.name in :tagSet";
+                "WHERE gc.id = gt.gift_certificate_id AND t.id = gt.tags_id AND t.name = ?1 " +
+                "LIMIT ?2,?3";
         public static final String GET_ALL_GIFT_CERTIFICATES_BY_TAGS = """
                 SELECT DISTINCT (gc.id) , gc.name , gc.description, gc.price, gc.duration ,gc.create_date ,gc.last_update_date
-                                FROM gift_certificate_tags gct\s
-                                JOIN tag t\s
-                                JOIN gift_certificate gc
-                                WHERE gc.id = gct.gift_certificate_id AND t.id = gct.tags_id AND t.name IN (?1)
-                                group by gc.name, (gc.id), gc.description, gc.price, gc.duration, gc.create_date, gc.last_update_date
-                                having count(t.id) = ?2\s
-                                LIMIT ?3,?4""";
+                FROM gift_certificate_tags gct\s
+                JOIN tag t\s
+                JOIN gift_certificate gc
+                WHERE gc.id = gct.gift_certificate_id AND t.id = gct.tags_id AND t.name IN (?1)
+                group by gc.name, (gc.id), gc.description, gc.price, gc.duration, gc.create_date, gc.last_update_date
+                having count(t.id) = ?2\s
+                LIMIT ?3,?4""";
     }
 }

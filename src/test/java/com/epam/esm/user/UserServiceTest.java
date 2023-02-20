@@ -15,8 +15,10 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
+
 @RunWith(SpringRunner.class)
 @ExtendWith(MockitoExtension.class)
 class UserServiceTest {
@@ -25,10 +27,11 @@ class UserServiceTest {
     private UserRepo userRepoMock;
     @InjectMocks
     private UserService userServiceMock;
+
     @Test
     void getUserByIdTest_WhenUserExists() {
         when(userRepoMock.findById(1L)).thenReturn(Optional.of(new User()));
-        assertEquals(new User(),userServiceMock.getUserById(1L));
+        assertEquals(new User(), userServiceMock.getUserById(1L));
     }
 
     @Test
@@ -44,6 +47,6 @@ class UserServiceTest {
     void getAllUsers() {
         Page<User> users = new PageImpl<>(List.of(new User()));
         when(userRepoMock.findAll(PageRequest.of(0, 3))).thenReturn(users);
-        assertEquals(users,userServiceMock.getAllUsers(0,3));
+        assertEquals(users, userServiceMock.getAllUsers(0, 3));
     }
 }

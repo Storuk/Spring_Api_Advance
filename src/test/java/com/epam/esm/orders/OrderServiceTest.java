@@ -21,6 +21,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
+
 @RunWith(SpringRunner.class)
 @ExtendWith(MockitoExtension.class)
 class OrderServiceTest {
@@ -32,6 +33,7 @@ class OrderServiceTest {
     OrderRepo orderRepoMock;
     @InjectMocks
     OrderService orderServiceMock;
+
     @Test
     void createOrderTest() {
         GiftCertificate giftCertificate = GiftCertificate.builder().price(1).build();
@@ -40,30 +42,30 @@ class OrderServiceTest {
         when(giftCertificateServiceMock.getGiftCertificateById(1L)).thenReturn(giftCertificate);
         when(userServiceMock.getUserById(1L)).thenReturn(new User());
         when(orderRepoMock.save(order)).thenReturn(order);
-        assertEquals(order,orderServiceMock.createOrder(1L, 1L));
+        assertEquals(order, orderServiceMock.createOrder(1L, 1L));
     }
 
     @Test
     void getAllOrdersTest() {
         Page<Order> orders = new PageImpl<>(List.of(new Order()));
         when(orderRepoMock.findAll(PageRequest.of(0, 3))).thenReturn(orders);
-        assertEquals(orders,orderServiceMock.getAllOrders(0, 3));
+        assertEquals(orders, orderServiceMock.getAllOrders(0, 3));
     }
 
     @Test
     void getOrdersByUserIdTestTrue_WhenListIsNotEmpty() {
         Page<Order> allGiftCertificates = new PageImpl<>(List.of(new Order()));
-        when(orderRepoMock.getOrdersByUserId(1L,PageRequest.of(0,3))).thenReturn(allGiftCertificates);
-        assertEquals(allGiftCertificates,orderServiceMock.getOrdersByUserId(1L,0,3));
+        when(orderRepoMock.getOrdersByUserId(1L, PageRequest.of(0, 3))).thenReturn(allGiftCertificates);
+        assertEquals(allGiftCertificates, orderServiceMock.getOrdersByUserId(1L, 0, 3));
     }
 
     @Test
     void getOrdersByUserIdTest_ItemNotFoundException_WhenListIsEmpty() {
         long user_id = 1L;
         Page<Order> allGiftCertificates = new PageImpl<>(List.of());
-        when(orderRepoMock.getOrdersByUserId(user_id,PageRequest.of(0,3))).thenReturn(allGiftCertificates);
+        when(orderRepoMock.getOrdersByUserId(user_id, PageRequest.of(0, 3))).thenReturn(allGiftCertificates);
         ItemNotFoundException exception = assertThrows(ItemNotFoundException.class,
-                () -> orderServiceMock.getOrdersByUserId(user_id,0,3));
+                () -> orderServiceMock.getOrdersByUserId(user_id, 0, 3));
         assertEquals("No orders where user_id = " + user_id, exception.getMessage());
     }
 

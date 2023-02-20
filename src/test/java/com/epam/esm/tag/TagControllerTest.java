@@ -23,8 +23,9 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
@@ -67,18 +68,18 @@ class TagControllerTest {
         Tag tag = Tag.builder().id(1L).name("").build();
         MockHttpServletResponse response = mvc.perform(post("/tags").contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(tag)).accept(MediaType.APPLICATION_JSON)).andReturn().getResponse();
-        assertEquals(HttpStatus.BAD_REQUEST.value(),response.getStatus());
+        assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatus());
         assertFalse(response.getContentAsString().isEmpty());
     }
 
     @Test
     void getAllTagsTest() throws Exception {
         Page<Tag> tagList = new PageImpl<>(List.of());
-        when(tagService.getAllTags(0,10)).thenReturn(tagList);
+        when(tagService.getAllTags(0, 10)).thenReturn(tagList);
         when(tagHateoasMapper.getAllTagHateoas(tagList)).thenReturn(PagedModel.empty());
         MockHttpServletResponse response = mvc.perform(get("/tags?page=0&size=10")
                 .accept(MediaType.APPLICATION_JSON)).andReturn().getResponse();
-        assertEquals(jsonTagPagedModel.write(Map.of("allTags",PagedModel.empty())).getJson(),response.getContentAsString());
+        assertEquals(jsonTagPagedModel.write(Map.of("allTags", PagedModel.empty())).getJson(), response.getContentAsString());
     }
 
     @Test
@@ -89,14 +90,14 @@ class TagControllerTest {
         MockHttpServletResponse response = mvc.perform(get("/tags/1")
                 .accept(MediaType.APPLICATION_JSON)).andReturn().getResponse();
         assertEquals(HttpStatus.OK.value(), response.getStatus());
-        assertEquals(jsonTagCollectionModel.write(Map.of("tag", CollectionModel.of(List.of(tag)))).getJson(),response.getContentAsString());
+        assertEquals(jsonTagCollectionModel.write(Map.of("tag", CollectionModel.of(List.of(tag)))).getJson(), response.getContentAsString());
     }
 
     @Test
     void deleteTagTest() throws Exception {
         when(tagService.deleteTag(1L)).thenReturn(true);
         MockHttpServletResponse response = mvc.perform(MockMvcRequestBuilders.delete("/tags/1")
-                        .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)).andReturn().getResponse();
+                .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)).andReturn().getResponse();
         assertEquals(HttpStatus.OK.value(), response.getStatus());
     }
 

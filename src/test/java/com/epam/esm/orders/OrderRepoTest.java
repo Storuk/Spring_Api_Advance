@@ -25,6 +25,7 @@ class OrderRepoTest {
     private final GiftCertificateRepo giftCertificateRepo;
     private final UserRepo userRepo;
     private final OrderRepo orderRepo;
+
     @Autowired
     OrderRepoTest(TagRepo tagRepo, GiftCertificateRepo giftCertificateRepo, UserRepo userRepo, OrderRepo orderRepo) {
         this.tagRepo = tagRepo;
@@ -41,7 +42,7 @@ class OrderRepoTest {
         Tag fourthTag = Tag.builder().name("fourthTag").build();
         Tag fifthTag = Tag.builder().name("fifthTag").build();
         Tag sixthTag = Tag.builder().name("sixthTag").build();
-        tagRepo.saveAll(List.of(firstTag,secondTag,thirdTag,fourthTag,fifthTag,sixthTag));
+        tagRepo.saveAll(List.of(firstTag, secondTag, thirdTag, fourthTag, fifthTag, sixthTag));
 
         Set<Tag> firstTagSet = Set.of(firstTag, secondTag, thirdTag);
         Set<Tag> secondTagSet = Set.of(fourthTag, fifthTag, sixthTag);
@@ -53,7 +54,7 @@ class OrderRepoTest {
                 .name("second").description("second").price(1).duration(1).tags(secondTagSet).build();
         GiftCertificate thirdGiftCertificate = GiftCertificate.builder()
                 .name("third").description("third").price(1).duration(1).tags(thirdTagSet).build();
-        giftCertificateRepo.saveAll(List.of(firstGiftCertificate,secondGiftCertificate,thirdGiftCertificate));
+        giftCertificateRepo.saveAll(List.of(firstGiftCertificate, secondGiftCertificate, thirdGiftCertificate));
 
         User firstUser = User.builder().login("firstUser").build();
         userRepo.save(firstUser);
@@ -61,10 +62,10 @@ class OrderRepoTest {
         Order firstOrder = Order.builder().user(firstUser).giftCertificate(firstGiftCertificate).cost(firstGiftCertificate.getPrice()).build();
         Order secondOrder = Order.builder().user(firstUser).giftCertificate(secondGiftCertificate).cost(secondGiftCertificate.getPrice()).build();
         Order thirdOrder = Order.builder().user(firstUser).giftCertificate(thirdGiftCertificate).cost(thirdGiftCertificate.getPrice()).build();
-        orderRepo.saveAll(List.of(firstOrder,secondOrder,thirdOrder));
+        orderRepo.saveAll(List.of(firstOrder, secondOrder, thirdOrder));
 
-        List<Order> ordersList = List.of(firstOrder,secondOrder,thirdOrder);
+        List<Order> ordersList = List.of(firstOrder, secondOrder, thirdOrder);
         assertEquals(ordersList,
-                orderRepo.getOrdersByUserId(firstUser.getId(), PageRequest.of(0,5)).stream().toList());
+                orderRepo.getOrdersByUserId(firstUser.getId(), PageRequest.of(0, 5)).stream().toList());
     }
 }

@@ -5,7 +5,7 @@ import org.springframework.stereotype.Repository;
 
 /**
  * @author Vlad Storoshchuk
- * */
+ */
 @Repository
 public interface UserRepo extends JpaRepository<User, Long> {
 }

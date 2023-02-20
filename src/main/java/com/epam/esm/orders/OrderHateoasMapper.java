@@ -21,7 +21,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 /**
  * @author Vlad Storoshchuk
- * */
+ */
 @Component
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class OrderHateoasMapper {
@@ -31,9 +31,10 @@ public class OrderHateoasMapper {
 
     /**
      * A component method for adding links to created Order
+     *
      * @param order created Order
      * @return CollectionModel of Order with links
-     * */
+     */
     public CollectionModel<Order> createOrderHateoasMapper(Order order) {
         CollectionModel<Order> createdOrder = CollectionModel.of(List.of(order));
         if (!order.getUser().hasLinks()) {
@@ -90,9 +91,10 @@ public class OrderHateoasMapper {
 
     /**
      * A component method for adding links to user Orders
+     *
      * @param pagedOrders user Orders
      * @return PagedModel of Order with links
-     * */
+     */
     public PagedModel<Order> getUserOrdersHateoasMapper(Page<Order> pagedOrders) {
         PagedModel<Order> orders = pagedResourcesAssembler
                 .toModel(pagedOrders, order -> {
@@ -127,9 +129,10 @@ public class OrderHateoasMapper {
 
     /**
      * A component method for adding links to all Orders
+     *
      * @param pagedOrders user Orders
      * @return PagedModel of Order with links
-     * */
+     */
     public PagedModel<Order> getAllOrdersHateoasMapper(Page<Order> pagedOrders) {
         PagedModel<Order> orders = pagedResourcesAssembler
                 .toModel(pagedOrders, order -> {
@@ -161,8 +164,9 @@ public class OrderHateoasMapper {
 
     /**
      * A component method for adding default links to Page of Orders
+     *
      * @param orders Page of Orders
-     * */
+     */
     private void defaultLinksForGetAllOrders(PagedModel<Order> orders) {
         orders
                 .add(linkTo(methodOn(GiftCertificateController.class)

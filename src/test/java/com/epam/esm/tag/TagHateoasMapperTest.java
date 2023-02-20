@@ -18,10 +18,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.util.List;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.times;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
@@ -129,7 +128,7 @@ class TagHateoasMapperTest {
         when(tagPagedResourcesAssembler.toModel(eq(tags), ArgumentMatchers.<RepresentationModelAssembler<Tag, Tag>>any())).thenReturn(tagsPagedModel);
         PagedModel<Tag> result = tagHateoasMapper.getAllTagHateoas(tags);
 
-        assertEquals(tagsPagedModel,result);
+        assertEquals(tagsPagedModel, result);
         verify(result, times(5)).add(argumentCaptor.capture());
         assertEquals(argumentCaptor.getAllValues().get(0).getRel().value(), "create tag");
         assertEquals(argumentCaptor.getAllValues().get(1).getRel().value(), "get all tags");

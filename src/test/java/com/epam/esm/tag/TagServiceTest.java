@@ -21,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+
 @RunWith(SpringRunner.class)
 @ExtendWith(MockitoExtension.class)
 class TagServiceTest {
@@ -34,7 +35,7 @@ class TagServiceTest {
         Tag tag = Tag.builder().name("tag").build();
         when(tagRepoMock.tagExists(tag.getName())).thenReturn(false);
         when(tagRepoMock.save(tag)).thenReturn(tag);
-        assertEquals(tag,tagServiceMock.createTag(tag));
+        assertEquals(tag, tagServiceMock.createTag(tag));
     }
 
     @Test
@@ -68,7 +69,7 @@ class TagServiceTest {
     void getTagByIdTest_TrueWhenTagExists() {
         Tag tag = Tag.builder().id(1L).build();
         when(tagRepoMock.findById(tag.getId())).thenReturn(Optional.of(tag));
-        assertEquals(tag,tagServiceMock.getTagById(1L));
+        assertEquals(tag, tagServiceMock.getTagById(1L));
     }
 
     @Test
@@ -84,11 +85,11 @@ class TagServiceTest {
     void getAllTagsTest() {
         Tag tag1 = Tag.builder().name("tag1").build();
         Tag tag2 = Tag.builder().name("tag2").build();
-        Page<Tag> tags = new PageImpl<>(List.of(tag1,tag2));
+        Page<Tag> tags = new PageImpl<>(List.of(tag1, tag2));
 
         when(tagRepoMock.findAll(PageRequest.of(0, 3))).thenReturn(tags);
 
-        assertEquals(tags,tagServiceMock.getAllTags(0, 3));
+        assertEquals(tags, tagServiceMock.getAllTags(0, 3));
     }
 
     @Test
@@ -126,6 +127,6 @@ class TagServiceTest {
     void getTheMostlyUsedTagInUserOrdersTest() {
         Tag tag = Tag.builder().id(1L).name("tag").build();
         when(tagRepoMock.getTheMostlyUsedTag()).thenReturn(tag);
-        assertEquals(tag,tagServiceMock.getTheMostlyUsedTagInUserOrders());
+        assertEquals(tag, tagServiceMock.getTheMostlyUsedTagInUserOrders());
     }
 }

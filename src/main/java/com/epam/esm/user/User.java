@@ -7,7 +7,7 @@ import org.springframework.hateoas.RepresentationModel;
 
 /**
  * @author Vlad Storoshchuk
- * */
+ */
 @EqualsAndHashCode(callSuper = false)
 @Entity
 @AllArgsConstructor

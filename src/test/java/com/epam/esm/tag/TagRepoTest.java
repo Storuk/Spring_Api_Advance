@@ -16,7 +16,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
@@ -49,7 +49,7 @@ class TagRepoTest {
     void tagExists_Tests(String name, boolean expected) {
         Tag tag = Tag.builder().name("cheap").build();
         tagRepo.save(tag);
-        assertEquals(expected,tagRepo.tagExists(name));
+        assertEquals(expected, tagRepo.tagExists(name));
     }
 
     @Test
@@ -60,7 +60,7 @@ class TagRepoTest {
         Tag fourthTag = Tag.builder().name("fourthTag").build();
         Tag fifthTag = Tag.builder().name("fifthTag").build();
         Tag sixthTag = Tag.builder().name("sixthTag").build();
-        tagRepo.saveAll(Set.of(firstTag,secondTag,thirdTag,fourthTag,fifthTag,sixthTag));
+        tagRepo.saveAll(Set.of(firstTag, secondTag, thirdTag, fourthTag, fifthTag, sixthTag));
 
         Set<Tag> firstTagSet = Set.of(firstTag, secondTag, thirdTag);
         Set<Tag> secondTagSet = Set.of(fourthTag, fifthTag, sixthTag);
@@ -72,16 +72,16 @@ class TagRepoTest {
                 .name("second").description("second").price(1).duration(1).tags(secondTagSet).build();
         GiftCertificate thirdGiftCertificate = GiftCertificate.builder()
                 .name("third").description("third").price(1).duration(1).tags(thirdTagSet).build();
-        giftCertificateRepo.saveAll(Set.of(firstGiftCertificate,secondGiftCertificate,thirdGiftCertificate));
+        giftCertificateRepo.saveAll(Set.of(firstGiftCertificate, secondGiftCertificate, thirdGiftCertificate));
 
         User firstUser = User.builder().login("firstUser").build();
         User secondUser = User.builder().login("secondUser").build();
-        userRepo.saveAll(Set.of(firstUser,secondUser));
+        userRepo.saveAll(Set.of(firstUser, secondUser));
 
         Order firstOrder = Order.builder().user(firstUser).giftCertificate(firstGiftCertificate).cost(firstGiftCertificate.getPrice()).build();
         Order secondOrder = Order.builder().user(secondUser).giftCertificate(secondGiftCertificate).cost(secondGiftCertificate.getPrice()).build();
         Order thirdOrder = Order.builder().user(firstUser).giftCertificate(thirdGiftCertificate).cost(thirdGiftCertificate.getPrice()).build();
-        orderRepo.saveAll(Set.of(firstOrder,secondOrder,thirdOrder));
+        orderRepo.saveAll(Set.of(firstOrder, secondOrder, thirdOrder));
 
         assertEquals(thirdTag, tagRepo.getTheMostlyUsedTag());
     }

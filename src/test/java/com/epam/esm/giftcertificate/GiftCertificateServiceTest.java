@@ -106,7 +106,7 @@ class GiftCertificateServiceTest {
         when(giftCertificateRepoMock.giftCertificateExists(giftCertificate.getName())).thenReturn(false);
         when(giftCertificateRepoMock.findById(1L)).thenReturn(Optional.of(giftCertificate));
         when(giftCertificateRepoMock.save(giftCertificate)).thenReturn(giftCertificate);
-        assertEquals(giftCertificate,giftCertificateServiceMock.updateGiftCertificate(1L,giftCertificate));
+        assertEquals(giftCertificate, giftCertificateServiceMock.updateGiftCertificate(1L, giftCertificate));
     }
 
     @Test
@@ -118,7 +118,7 @@ class GiftCertificateServiceTest {
         when(giftCertificateRepoMock.findById(1L)).thenReturn(Optional.of(giftCertificate));
         when(giftCertificateRepoMock.save(giftCertificate)).thenReturn(giftCertificate);
         when(tagServiceMock.saveAllTags(tags)).thenReturn(true);
-        assertEquals(giftCertificate,giftCertificateServiceMock.updateGiftCertificate(1L,giftCertificate));
+        assertEquals(giftCertificate, giftCertificateServiceMock.updateGiftCertificate(1L, giftCertificate));
     }
 
     @Test
@@ -128,7 +128,7 @@ class GiftCertificateServiceTest {
         when(giftCertificateRepoMock.findById(1L))
                 .thenReturn(Optional.of(GiftCertificate.builder().name("secondGiftCertificate").build()));
         ItemNotFoundException exception = assertThrows(ItemNotFoundException.class,
-                () -> giftCertificateServiceMock.updateGiftCertificate(1L,giftCertificate));
+                () -> giftCertificateServiceMock.updateGiftCertificate(1L, giftCertificate));
         assertEquals("Gift certificate with such name already exists " + giftCertificate.getName(), exception.getMessage());
     }
 
@@ -139,7 +139,7 @@ class GiftCertificateServiceTest {
         when(giftCertificateRepoMock.save(giftCertificate)).thenReturn(GiftCertificate
                 .builder().name("giftCertificate").duration(100).build());
 
-        assertEquals(giftCertificate,giftCertificateServiceMock.updateDuration(1L,100));
+        assertEquals(giftCertificate, giftCertificateServiceMock.updateDuration(1L, 100));
     }
 
     @Test
@@ -147,9 +147,9 @@ class GiftCertificateServiceTest {
         long giftCertificateId = 1L;
         when(giftCertificateRepoMock.findById(giftCertificateId)).thenReturn(Optional.empty());
         ItemNotFoundException exception = assertThrows(ItemNotFoundException.class,
-                () -> giftCertificateServiceMock.updateDuration(giftCertificateId,100));
+                () -> giftCertificateServiceMock.updateDuration(giftCertificateId, 100));
 
-        assertEquals("No gift certificate with (id = " + giftCertificateId + ")",exception.getMessage());
+        assertEquals("No gift certificate with (id = " + giftCertificateId + ")", exception.getMessage());
     }
 
     @Test
@@ -159,7 +159,7 @@ class GiftCertificateServiceTest {
         when(giftCertificateRepoMock.save(giftCertificate)).thenReturn(GiftCertificate
                 .builder().name("giftCertificate").price(100).build());
 
-        assertEquals(giftCertificate,giftCertificateServiceMock.updatePrice(1L,100));
+        assertEquals(giftCertificate, giftCertificateServiceMock.updatePrice(1L, 100));
     }
 
     @Test
@@ -167,9 +167,9 @@ class GiftCertificateServiceTest {
         long giftCertificateId = 1L;
         when(giftCertificateRepoMock.findById(giftCertificateId)).thenReturn(Optional.empty());
         ItemNotFoundException exception = assertThrows(ItemNotFoundException.class,
-                () -> giftCertificateServiceMock.updatePrice(giftCertificateId,100));
+                () -> giftCertificateServiceMock.updatePrice(giftCertificateId, 100));
 
-        assertEquals("No gift certificate with (id = " + giftCertificateId + ")",exception.getMessage());
+        assertEquals("No gift certificate with (id = " + giftCertificateId + ")", exception.getMessage());
     }
 
     @Test
@@ -206,7 +206,7 @@ class GiftCertificateServiceTest {
         PageRequest pageRequest = PageRequest.of(0, 3, Sort.by(Sort.Direction.valueOf(sortDirectionName.toUpperCase()), "name")
                 .and(Sort.by(Sort.Direction.valueOf(sortDirectionDate.toUpperCase()), "createDate")));
         when(giftCertificateRepoMock.findAll(pageRequest)).thenReturn(allGiftCertificates);
-        assertEquals(allGiftCertificates, giftCertificateServiceMock.getGiftCertificatesSortedByNameByDate(sortDirectionName,sortDirectionDate, 0, 3));
+        assertEquals(allGiftCertificates, giftCertificateServiceMock.getGiftCertificatesSortedByNameByDate(sortDirectionName, sortDirectionDate, 0, 3));
     }
 
     @Test
@@ -214,7 +214,7 @@ class GiftCertificateServiceTest {
         Set<String> tagNamesSet = Set.of("tag");
         List<GiftCertificate> giftCertificateList = List.of(GiftCertificate.builder().name("tag").build());
         Page<GiftCertificate> allGiftCertificates = new PageImpl<>(giftCertificateList);
-        when(giftCertificateRepoMock.getByTags(tagNamesSet,1, 0, 3))
+        when(giftCertificateRepoMock.getByTags(tagNamesSet, 1, 0, 3))
                 .thenReturn(allGiftCertificates.stream().toList());
         assertEquals(allGiftCertificates, giftCertificateServiceMock.getGiftCertificatesByTags(tagNamesSet, 0, 3));
     }

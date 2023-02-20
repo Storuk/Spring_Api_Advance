@@ -27,32 +27,32 @@ public class Modules3Application {
 
     @Bean
     public CommandLineRunner generateData(GiftCertificateRepo giftCertificateRepo,
-                                          TagRepo tagRepo, UserRepo userRepo, OrderRepo orderRepo){
+                                          TagRepo tagRepo, UserRepo userRepo, OrderRepo orderRepo) {
         return args -> {
             Faker faker = new Faker();
-            for(int i = 0; i < 1000; i++){
+            for (int i = 0; i < 1000; i++) {
                 User user = new User();
                 user.setLogin(faker.name().fullName());
                 userRepo.save(user);
             }
 
-            for(int i = 0; i < 1000; i++){
+            for (int i = 0; i < 1000; i++) {
                 String name = faker.name().fullName();
-                if(tagRepo.tagExists(name)) {
+                if (tagRepo.tagExists(name)) {
                     i--;
-                }else{
+                } else {
                     tagRepo.save(Tag.builder().name(name).build());
                 }
             }
 
-            for(int i = 0; i < 10000; i++){
+            for (int i = 0; i < 10000; i++) {
                 String name = faker.name().fullName();
-                if(giftCertificateRepo.giftCertificateExists(name)) {
+                if (giftCertificateRepo.giftCertificateExists(name)) {
                     i--;
-                }else{
+                } else {
                     long firstTagId = faker.number().numberBetween(1L, 1000L);
                     long secondTagId = faker.number().numberBetween(1L, 1000L);
-                    if(firstTagId != secondTagId) {
+                    if (firstTagId != secondTagId) {
                         GiftCertificate giftCertificate = new GiftCertificate();
                         giftCertificate.setName(name);
                         giftCertificate.setDescription(faker.name().fullName());
@@ -62,13 +62,13 @@ public class Modules3Application {
                                 (Tag.builder().id(firstTagId).build(),
                                         Tag.builder().id(secondTagId).build()));
                         giftCertificateRepo.save(giftCertificate);
-                    }else{
+                    } else {
                         i--;
                     }
                 }
             }
 
-            for(int i = 0; i < 1000; i++){
+            for (int i = 0; i < 1000; i++) {
                 long id = faker.number().numberBetween(1L, 10000L);
                 GiftCertificate giftCertificate = giftCertificateRepo.findById(id).orElse(new GiftCertificate());
                 Order order = new Order();
