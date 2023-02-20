@@ -13,6 +13,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Profile;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 import java.util.Set;
@@ -25,6 +26,7 @@ public class Modules3Application {
         SpringApplication.run(Modules3Application.class, args);
     }
 
+    @Profile("!test")
     @Bean
     public CommandLineRunner generateData(GiftCertificateRepo giftCertificateRepo,
                                           TagRepo tagRepo, UserRepo userRepo, OrderRepo orderRepo) {
