@@ -35,7 +35,7 @@ class TagHateoasMapperTest {
     ArgumentCaptor<Link> argumentCaptor;
 
     @Test
-    void createTagHateoas() {
+    void createTagHateoasTest() {
         Tag tag = Tag.builder().id(1L).name("tag").build();
         Tag tagForTest = Tag.builder().id(1L).name("tag").build();
 
@@ -65,7 +65,7 @@ class TagHateoasMapperTest {
     }
 
     @Test
-    void getMostlyUsedTagHateoas() {
+    void getMostlyUsedTagHateoasTest() {
         Tag tag = Tag.builder().id(1L).name("tag").build();
         Tag tagForTest = Tag.builder().id(1L).name("tag").build();
 
@@ -93,7 +93,7 @@ class TagHateoasMapperTest {
     }
 
     @Test
-    void getTagByIdHateoas() {
+    void getTagByIdHateoasTest() {
         Tag tag = Tag.builder().id(1L).name("tag").build();
         Tag tagForTest = Tag.builder().id(1L).name("tag").build();
 
@@ -121,7 +121,7 @@ class TagHateoasMapperTest {
     }
 
     @Test
-    void getAllTagHateoas() {
+    void getAllTagHateoasTest() {
         Page<Tag> tags = new PageImpl<>(List.of(new Tag()));
         PagedModel<Tag> tagsPagedModel = mock(PagedModel.class);
         when(tagsPagedModel.add(ArgumentMatchers.<Link>any())).thenReturn(tagsPagedModel);
@@ -129,11 +129,10 @@ class TagHateoasMapperTest {
         PagedModel<Tag> result = tagHateoasMapper.getAllTagHateoas(tags);
 
         assertEquals(tagsPagedModel, result);
-        verify(result, times(5)).add(argumentCaptor.capture());
+        verify(result, times(4)).add(argumentCaptor.capture());
         assertEquals(argumentCaptor.getAllValues().get(0).getRel().value(), "create tag");
-        assertEquals(argumentCaptor.getAllValues().get(1).getRel().value(), "get all tags");
-        assertEquals(argumentCaptor.getAllValues().get(2).getRel().value(), "get the mostly used tag from user with highest sum of orders");
-        assertEquals(argumentCaptor.getAllValues().get(3).getRel().value(), "get gift certificates by tag name");
-        assertEquals(argumentCaptor.getAllValues().get(4).getRel().value(), "get gift certificates by tags names");
+        assertEquals(argumentCaptor.getAllValues().get(1).getRel().value(), "get the mostly used tag from user with highest sum of orders");
+        assertEquals(argumentCaptor.getAllValues().get(2).getRel().value(), "get gift certificates by tag name");
+        assertEquals(argumentCaptor.getAllValues().get(3).getRel().value(), "get gift certificates by tags names");
     }
 }

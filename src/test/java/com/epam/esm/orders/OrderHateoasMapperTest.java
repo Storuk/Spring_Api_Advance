@@ -2,6 +2,7 @@ package com.epam.esm.orders;
 
 import com.epam.esm.giftcertificate.GiftCertificate;
 import com.epam.esm.giftcertificate.GiftCertificateController;
+import com.epam.esm.giftcertificate.GiftCertificateHateoasMapper;
 import com.epam.esm.tag.TagController;
 import com.epam.esm.user.User;
 import com.epam.esm.user.UserController;
@@ -37,9 +38,11 @@ class OrderHateoasMapperTest {
     private PagedResourcesAssembler<Order> orderPagedResourcesAssembler;
     @Captor
     ArgumentCaptor<Link> argumentCaptor;
+    @Mock
+    private GiftCertificateHateoasMapper giftCertificateHateoasMapper;
 
     @Test
-    void createOrderHateoasMapper() {
+    void createOrderHateoasMapperTest() {
         User user = User.builder().id(1L).login("user").build();
         GiftCertificate giftCertificate = GiftCertificate.builder().id(1L)
                 .name("certificate").description(null).price(1).duration(1)
@@ -113,7 +116,7 @@ class OrderHateoasMapperTest {
     }
 
     @Test
-    void getUserOrdersHateoasMapper() {
+    void getUserOrdersHateoasMapperTest() {
         Page<Order> orders = new PageImpl<>(List.of(new Order()));
         PagedModel<Order> orderPagedModel = mock(PagedModel.class);
 
@@ -137,7 +140,7 @@ class OrderHateoasMapperTest {
     }
 
     @Test
-    void getAllOrdersHateoasMapper() {
+    void getAllOrdersHateoasMapperTest() {
         Page<Order> orders = new PageImpl<>(List.of(new Order()));
         PagedModel<Order> orderPagedModel = mock(PagedModel.class);
 

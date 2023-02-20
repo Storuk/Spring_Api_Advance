@@ -30,26 +30,19 @@ public class TagHateoasMapper {
      * @return CollectionModel of Tag with links
      */
     public CollectionModel<Tag> createTagHateoas(Tag tag) {
-        return CollectionModel.of(List.of(tag
-                        .add(linkTo(methodOn(TagController.class)
-                                .deleteTag(tag.getId()))
-                                .withRel(() -> "delete tag by id"))
-                        .add(linkTo(methodOn(TagController.class)
-                                .getTagById(tag.getId()))
-                                .withRel(() -> "get tag by id"))))
-
+        CollectionModel<Tag> tagCollectionModel = CollectionModel.of(List.of(tag
                 .add(linkTo(methodOn(TagController.class)
-                        .getAllTags(0, 10))
-                        .withRel(() -> "get all tags"))
+                        .deleteTag(tag.getId()))
+                        .withRel(() -> "delete tag by id"))
+                .add(linkTo(methodOn(TagController.class)
+                        .getTagById(tag.getId()))
+                        .withRel(() -> "get tag by id"))));
+        defaultLinksForCollectionModel(tagCollectionModel);
+        tagCollectionModel
                 .add(linkTo(methodOn(TagController.class)
                         .getTheMostlyUsedTagInUserOrders())
-                        .withRel(() -> "get the mostly used tag from user with highest sum of orders"))
-                .add(linkTo(methodOn(GiftCertificateController.class)
-                        .getGiftCertificatesByTagName("tagName", 0, 10))
-                        .withRel(() -> "get gift-certificates by tag name"))
-                .add(linkTo(methodOn(GiftCertificateController.class)
-                        .getGiftCertificatesByTags(Set.of(), 0, 10))
-                        .withRel(() -> "get gift-certificates by tags names"));
+                        .withRel(() -> "get the mostly used tag from user with highest sum of orders"));
+        return tagCollectionModel;
     }
 
     /**
@@ -59,26 +52,19 @@ public class TagHateoasMapper {
      * @return CollectionModel of Tag with links
      */
     public CollectionModel<Tag> getMostlyUsedTagHateoas(Tag tag) {
-        return CollectionModel.of(List.of(tag
-                        .add(linkTo(methodOn(TagController.class)
-                                .deleteTag(tag.getId()))
-                                .withRel(() -> "delete tag by id"))
-                        .add(linkTo(methodOn(TagController.class)
-                                .getTagById(tag.getId()))
-                                .withRel(() -> "get tag by id"))))
-
+        CollectionModel<Tag> tagCollectionModel = CollectionModel.of(List.of(tag
+                .add(linkTo(methodOn(TagController.class)
+                        .deleteTag(tag.getId()))
+                        .withRel(() -> "delete tag by id"))
+                .add(linkTo(methodOn(TagController.class)
+                        .getTagById(tag.getId()))
+                        .withRel(() -> "get tag by id"))));
+        defaultLinksForCollectionModel(tagCollectionModel);
+        tagCollectionModel
                 .add(linkTo(methodOn(TagController.class)
                         .createTag(new Tag()))
-                        .withRel(() -> "create tag"))
-                .add(linkTo(methodOn(TagController.class)
-                        .getAllTags(0, 10))
-                        .withRel(() -> "get all tags"))
-                .add(linkTo(methodOn(GiftCertificateController.class)
-                        .getGiftCertificatesByTagName("tagName", 0, 10))
-                        .withRel(() -> "get gift certificates by tag name"))
-                .add(linkTo(methodOn(GiftCertificateController.class)
-                        .getGiftCertificatesByTags(Set.of(), 0, 10))
-                        .withRel(() -> "get gift certificates by tags names"));
+                        .withRel(() -> "create tag"));
+        return tagCollectionModel;
     }
 
     /**
@@ -88,26 +74,22 @@ public class TagHateoasMapper {
      * @return CollectionModel of Tag with links
      */
     public CollectionModel<Tag> getTagByIdHateoas(Tag tag) {
-        return CollectionModel.of(List.of(tag
-                        .add(linkTo(methodOn(TagController.class)
-                                .deleteTag(tag.getId()))
-                                .withRel(() -> "delete tag by id"))))
-
+        CollectionModel<Tag> tagCollectionModel = CollectionModel.of(List.of(tag
+                .add(linkTo(methodOn(TagController.class)
+                        .deleteTag(tag.getId()))
+                        .withRel(() -> "delete tag by id"))
+                .add(linkTo(methodOn(TagController.class)
+                        .getTagById(tag.getId()))
+                        .withRel(() -> "get tag by id"))));
+        defaultLinksForCollectionModel(tagCollectionModel);
+        tagCollectionModel
                 .add(linkTo(methodOn(TagController.class)
                         .createTag(new Tag()))
                         .withRel(() -> "create tag"))
                 .add(linkTo(methodOn(TagController.class)
-                        .getAllTags(0, 10))
-                        .withRel(() -> "get all tags"))
-                .add(linkTo(methodOn(TagController.class)
                         .getTheMostlyUsedTagInUserOrders())
-                        .withRel(() -> "get the mostly used tag from user with highest sum of orders"))
-                .add(linkTo(methodOn(GiftCertificateController.class)
-                        .getGiftCertificatesByTagName("tagName", 0, 10))
-                        .withRel(() -> "get gift certificates by tag name"))
-                .add(linkTo(methodOn(GiftCertificateController.class)
-                        .getGiftCertificatesByTags(Set.of(), 0, 10))
-                        .withRel(() -> "get gift certificates by tags names"));
+                        .withRel(() -> "get the mostly used tag from user with highest sum of orders"));
+        return tagCollectionModel;
     }
 
     /**
@@ -126,12 +108,10 @@ public class TagHateoasMapper {
                                 .getTagById(tag.getId()))
                                 .withRel(() -> "get tag by id")));
 
-        tagsPagedModel.add(linkTo(methodOn(TagController.class)
+        tagsPagedModel
+                .add(linkTo(methodOn(TagController.class)
                         .createTag(new Tag()))
                         .withRel(() -> "create tag"))
-                .add(linkTo(methodOn(TagController.class)
-                        .getAllTags(0, 10))
-                        .withRel(() -> "get all tags"))
                 .add(linkTo(methodOn(TagController.class)
                         .getTheMostlyUsedTagInUserOrders())
                         .withRel(() -> "get the mostly used tag from user with highest sum of orders"))
@@ -142,5 +122,18 @@ public class TagHateoasMapper {
                         .getGiftCertificatesByTags(Set.of(), 0, 10))
                         .withRel(() -> "get gift certificates by tags names"));
         return tagsPagedModel;
+    }
+
+    private void defaultLinksForCollectionModel(CollectionModel<Tag> tagCollectionModel) {
+        tagCollectionModel
+                .add(linkTo(methodOn(TagController.class)
+                        .getAllTags(0, 10))
+                        .withRel(() -> "get all tags"))
+                .add(linkTo(methodOn(GiftCertificateController.class)
+                        .getGiftCertificatesByTagName("tagName", 0, 10))
+                        .withRel(() -> "get gift-certificates by tag name"))
+                .add(linkTo(methodOn(GiftCertificateController.class)
+                        .getGiftCertificatesByTags(Set.of(), 0, 10))
+                        .withRel(() -> "get gift-certificates by tags names"));
     }
 }

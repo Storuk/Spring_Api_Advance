@@ -34,7 +34,7 @@ class UserHateoasMapperTest {
     private UserHateoasMapper userHateoasMapper;
 
     @Test
-    void getAllUsersHateoas() {
+    void getAllUsersHateoasTest() {
         Page<User> users = new PageImpl<>(List.of(new User()));
         PagedModel<User> userPagedModel = mock(PagedModel.class);
 
@@ -48,7 +48,7 @@ class UserHateoasMapperTest {
     }
 
     @Test
-    void getUserByIdHateoas() {
+    void getUserByIdHateoasTest() {
         User user = User.builder().id(1L).login("login").build();
         User userForTest = User.builder().id(1L).login("login").build();
 

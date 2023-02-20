@@ -37,7 +37,7 @@ class GiftCertificateHateoasMapperTest {
     private GiftCertificateHateoasMapper giftCertificateHateoasMapper;
 
     @Test
-    void getGiftCertificateByIdHateoasMapper() {
+    void getGiftCertificateByIdHateoasMapperTest() {
         GiftCertificate giftCertificate = GiftCertificate.builder()
                 .id(1L).name("giftCertificate").description(null).price(1)
                 .duration(1).tags(Set.of(Tag.builder().id(1L).name("tag").build()))
@@ -112,7 +112,7 @@ class GiftCertificateHateoasMapperTest {
     }
 
     @Test
-    void getGiftCertificateForUpdateHateoasMapper() {
+    void getGiftCertificateForUpdateHateoasMapperTest() {
         GiftCertificate giftCertificate = GiftCertificate.builder()
                 .id(1L).name("giftCertificate").description(null).price(1)
                 .duration(1).tags(Set.of(Tag.builder().id(1L).name("tag").build()))
@@ -187,7 +187,7 @@ class GiftCertificateHateoasMapperTest {
     }
 
     @Test
-    void getGiftCertificateForUpdatePriceHateoasMapper() {
+    void getGiftCertificateForUpdatePriceHateoasMapperTest() {
         GiftCertificate giftCertificate = GiftCertificate.builder()
                 .id(1L).name("giftCertificate").description(null).price(1)
                 .duration(1).tags(Set.of(Tag.builder().id(1L).name("tag").build()))
@@ -262,7 +262,7 @@ class GiftCertificateHateoasMapperTest {
     }
 
     @Test
-    void getGiftCertificateForUpdateDurationHateoasMapper() {
+    void getGiftCertificateForUpdateDurationHateoasMapperTest() {
         GiftCertificate giftCertificate = GiftCertificate.builder()
                 .id(1L).name("giftCertificate").description(null).price(1)
                 .duration(1).tags(Set.of(Tag.builder().id(1L).name("tag").build()))
@@ -337,7 +337,7 @@ class GiftCertificateHateoasMapperTest {
     }
 
     @Test
-    void getGiftCertificateForCreateHateoasMapper() {
+    void getGiftCertificateForCreateHateoasMapperTest() {
         GiftCertificate giftCertificate = GiftCertificate.builder()
                 .id(1L).name("giftCertificate").description(null).price(1)
                 .duration(1).tags(Set.of(Tag.builder().id(1L).name("tag").build()))
@@ -412,7 +412,7 @@ class GiftCertificateHateoasMapperTest {
     }
 
     @Test
-    void giftCertificateDefaultLinks() {
+    void giftCertificateDefaultLinksTest() {
         GiftCertificate giftCertificate = GiftCertificate.builder()
                 .id(1L).name("giftCertificate").description(null).price(1)
                 .duration(1).tags(Set.of(Tag.builder().id(1L).name("tag").build()))
@@ -445,7 +445,7 @@ class GiftCertificateHateoasMapperTest {
     }
 
     @Test
-    void getAllCertificatesHateoasMapper() {
+    void getAllCertificatesHateoasMapperTest() {
         Page<GiftCertificate> giftCertificates = new PageImpl<>(List.of(new GiftCertificate()));
         PagedModel<GiftCertificate> giftCertificatesPagedModel = mock(PagedModel.class);
         when(giftCertificatesPagedModel.add(ArgumentMatchers.<Link>any())).thenReturn(giftCertificatesPagedModel);
@@ -460,13 +460,13 @@ class GiftCertificateHateoasMapperTest {
         assertEquals(argumentCaptor.getAllValues().get(3).getRel().value(), "get all gift certificates by part of description");
         assertEquals(argumentCaptor.getAllValues().get(4).getRel().value(), "get all tags");
         assertEquals(argumentCaptor.getAllValues().get(5).getRel().value(), "get the mostly used tag from user with highest sum of orders");
-        assertEquals(argumentCaptor.getAllValues().get(6).getRel().value(), "get gift certificates by tag name");
-        assertEquals(argumentCaptor.getAllValues().get(7).getRel().value(), "get gift certificates by tags names");
-        assertEquals(argumentCaptor.getAllValues().get(8).getRel().value(), "create order");
+        assertEquals(argumentCaptor.getAllValues().get(6).getRel().value(), "create order");
+        assertEquals(argumentCaptor.getAllValues().get(7).getRel().value(), "get gift certificates by tag name");
+        assertEquals(argumentCaptor.getAllValues().get(8).getRel().value(), "get gift certificates by tags names");
     }
 
     @Test
-    void getAllCertificatesByTagNameHateoasMapper() {
+    void getAllCertificatesByTagNameHateoasMapperTest() {
         Page<GiftCertificate> giftCertificates = new PageImpl<>(List.of(new GiftCertificate()));
         PagedModel<GiftCertificate> giftCertificatesPagedModel = mock(PagedModel.class);
         when(giftCertificatesPagedModel.add(ArgumentMatchers.<Link>any())).thenReturn(giftCertificatesPagedModel);
@@ -476,18 +476,39 @@ class GiftCertificateHateoasMapperTest {
         assertEquals(result, giftCertificatesPagedModel);
         verify(result, times(9)).add(argumentCaptor.capture());
         assertEquals(argumentCaptor.getAllValues().get(0).getRel().value(), "create GiftCertificate");
-        assertEquals(argumentCaptor.getAllValues().get(1).getRel().value(), "get all giftCertificates");
-        assertEquals(argumentCaptor.getAllValues().get(2).getRel().value(), "get all gift certificates sorted by name");
-        assertEquals(argumentCaptor.getAllValues().get(3).getRel().value(), "get all gift certificates sorted by name and by date");
-        assertEquals(argumentCaptor.getAllValues().get(4).getRel().value(), "get all gift certificates by part of description");
-        assertEquals(argumentCaptor.getAllValues().get(5).getRel().value(), "get all tags");
-        assertEquals(argumentCaptor.getAllValues().get(6).getRel().value(), "get the mostly used tag from user with highest sum of orders");
-        assertEquals(argumentCaptor.getAllValues().get(7).getRel().value(), "get gift certificates by tags names");
-        assertEquals(argumentCaptor.getAllValues().get(8).getRel().value(), "create order");
+        assertEquals(argumentCaptor.getAllValues().get(1).getRel().value(), "get all gift certificates sorted by name");
+        assertEquals(argumentCaptor.getAllValues().get(2).getRel().value(), "get all gift certificates sorted by name and by date");
+        assertEquals(argumentCaptor.getAllValues().get(3).getRel().value(), "get all gift certificates by part of description");
+        assertEquals(argumentCaptor.getAllValues().get(4).getRel().value(), "get all tags");
+        assertEquals(argumentCaptor.getAllValues().get(5).getRel().value(), "get the mostly used tag from user with highest sum of orders");
+        assertEquals(argumentCaptor.getAllValues().get(6).getRel().value(), "create order");
+        assertEquals(argumentCaptor.getAllValues().get(7).getRel().value(), "get all gift certificates");
+        assertEquals(argumentCaptor.getAllValues().get(8).getRel().value(), "get gift certificates by tags names");
     }
 
     @Test
-    void getAllCertificatesByPartOfDescriptionHateoasMapper() {
+    void getAllCertificatesByTagsHateoasMapperTest() {
+        Page<GiftCertificate> giftCertificates = new PageImpl<>(List.of(new GiftCertificate()));
+        PagedModel<GiftCertificate> giftCertificatesPagedModel = mock(PagedModel.class);
+        when(giftCertificatesPagedModel.add(ArgumentMatchers.<Link>any())).thenReturn(giftCertificatesPagedModel);
+        when(orderPagedResourcesAssembler.toModel(eq(giftCertificates), ArgumentMatchers.<RepresentationModelAssembler<GiftCertificate, GiftCertificate>>any())).thenReturn(giftCertificatesPagedModel);
+        PagedModel<GiftCertificate> result = giftCertificateHateoasMapper.getAllCertificatesByTagsHateoasMapper(giftCertificates);
+
+        assertEquals(result, giftCertificatesPagedModel);
+        verify(result, times(9)).add(argumentCaptor.capture());
+        assertEquals(argumentCaptor.getAllValues().get(0).getRel().value(), "create GiftCertificate");
+        assertEquals(argumentCaptor.getAllValues().get(1).getRel().value(), "get all gift certificates sorted by name");
+        assertEquals(argumentCaptor.getAllValues().get(2).getRel().value(), "get all gift certificates sorted by name and by date");
+        assertEquals(argumentCaptor.getAllValues().get(3).getRel().value(), "get all gift certificates by part of description");
+        assertEquals(argumentCaptor.getAllValues().get(4).getRel().value(), "get all tags");
+        assertEquals(argumentCaptor.getAllValues().get(5).getRel().value(), "get the mostly used tag from user with highest sum of orders");
+        assertEquals(argumentCaptor.getAllValues().get(6).getRel().value(), "create order");
+        assertEquals(argumentCaptor.getAllValues().get(7).getRel().value(), "get all gift certificates");
+        assertEquals(argumentCaptor.getAllValues().get(8).getRel().value(), "get gift certificates by tag name");
+    }
+
+    @Test
+    void getAllCertificatesByPartOfDescriptionHateoasMapperTest() {
         Page<GiftCertificate> giftCertificates = new PageImpl<>(List.of(new GiftCertificate()));
         PagedModel<GiftCertificate> giftCertificatesPagedModel = mock(PagedModel.class);
         when(giftCertificatesPagedModel.add(ArgumentMatchers.<Link>any())).thenReturn(giftCertificatesPagedModel);
@@ -498,17 +519,17 @@ class GiftCertificateHateoasMapperTest {
         verify(result, times(9)).add(argumentCaptor.capture());
         assertEquals(argumentCaptor.getAllValues().get(0).getRel().value(), "create GiftCertificate");
         assertEquals(argumentCaptor.getAllValues().get(1).getRel().value(), "get all gift certificates");
-        assertEquals(argumentCaptor.getAllValues().get(2).getRel().value(), "get all gift certificates sorted by name");
-        assertEquals(argumentCaptor.getAllValues().get(3).getRel().value(), "get all gift certificates sorted by name and by date");
-        assertEquals(argumentCaptor.getAllValues().get(4).getRel().value(), "get all tags");
-        assertEquals(argumentCaptor.getAllValues().get(5).getRel().value(), "get the mostly used tag from user with highest sum of orders");
-        assertEquals(argumentCaptor.getAllValues().get(6).getRel().value(), "get gift certificates by tag name");
-        assertEquals(argumentCaptor.getAllValues().get(7).getRel().value(), "get gift certificates by tags names");
-        assertEquals(argumentCaptor.getAllValues().get(8).getRel().value(), "create order");
+        assertEquals(argumentCaptor.getAllValues().get(2).getRel().value(), "get all tags");
+        assertEquals(argumentCaptor.getAllValues().get(3).getRel().value(), "get the mostly used tag from user with highest sum of orders");
+        assertEquals(argumentCaptor.getAllValues().get(4).getRel().value(), "get gift certificates by tag name");
+        assertEquals(argumentCaptor.getAllValues().get(5).getRel().value(), "get gift certificates by tags names");
+        assertEquals(argumentCaptor.getAllValues().get(6).getRel().value(), "create order");
+        assertEquals(argumentCaptor.getAllValues().get(7).getRel().value(), "get all gift certificates sorted by name");
+        assertEquals(argumentCaptor.getAllValues().get(8).getRel().value(), "get all gift certificates sorted by name and by date");
     }
 
     @Test
-    void getAllCertificatesSortedByNameHateoasMapper() {
+    void getAllCertificatesSortedByNameHateoasMapperTest() {
         Page<GiftCertificate> giftCertificates = new PageImpl<>(List.of(new GiftCertificate()));
         PagedModel<GiftCertificate> giftCertificatesPagedModel = mock(PagedModel.class);
         when(giftCertificatesPagedModel.add(ArgumentMatchers.<Link>any())).thenReturn(giftCertificatesPagedModel);
@@ -519,17 +540,17 @@ class GiftCertificateHateoasMapperTest {
         verify(result, times(9)).add(argumentCaptor.capture());
         assertEquals(argumentCaptor.getAllValues().get(0).getRel().value(), "create GiftCertificate");
         assertEquals(argumentCaptor.getAllValues().get(1).getRel().value(), "get all gift certificates");
-        assertEquals(argumentCaptor.getAllValues().get(2).getRel().value(), "get all gift certificates sorted by name and by date");
-        assertEquals(argumentCaptor.getAllValues().get(3).getRel().value(), "get all gift certificates by part of description");
-        assertEquals(argumentCaptor.getAllValues().get(4).getRel().value(), "get all tags");
-        assertEquals(argumentCaptor.getAllValues().get(5).getRel().value(), "get the mostly used tag from user with highest sum of orders");
-        assertEquals(argumentCaptor.getAllValues().get(6).getRel().value(), "get gift certificates by tag name");
-        assertEquals(argumentCaptor.getAllValues().get(7).getRel().value(), "get gift certificates by tags names");
-        assertEquals(argumentCaptor.getAllValues().get(8).getRel().value(), "create order");
+        assertEquals(argumentCaptor.getAllValues().get(2).getRel().value(), "get all tags");
+        assertEquals(argumentCaptor.getAllValues().get(3).getRel().value(), "get the mostly used tag from user with highest sum of orders");
+        assertEquals(argumentCaptor.getAllValues().get(4).getRel().value(), "get gift certificates by tag name");
+        assertEquals(argumentCaptor.getAllValues().get(5).getRel().value(), "get gift certificates by tags names");
+        assertEquals(argumentCaptor.getAllValues().get(6).getRel().value(), "create order");
+        assertEquals(argumentCaptor.getAllValues().get(7).getRel().value(), "get all gift certificates sorted by name and by date");
+        assertEquals(argumentCaptor.getAllValues().get(8).getRel().value(), "get all gift certificates by part of description");
     }
 
     @Test
-    void getAllCertificatesSortedByNameAndByDateHateoasMapper() {
+    void getAllCertificatesSortedByNameAndByDateHateoasMapperTest() {
         Page<GiftCertificate> giftCertificates = new PageImpl<>(List.of(new GiftCertificate()));
         PagedModel<GiftCertificate> giftCertificatesPagedModel = mock(PagedModel.class);
         when(giftCertificatesPagedModel.add(ArgumentMatchers.<Link>any())).thenReturn(giftCertificatesPagedModel);
@@ -540,34 +561,13 @@ class GiftCertificateHateoasMapperTest {
         verify(result, times(9)).add(argumentCaptor.capture());
         assertEquals(argumentCaptor.getAllValues().get(0).getRel().value(), "create GiftCertificate");
         assertEquals(argumentCaptor.getAllValues().get(1).getRel().value(), "get all gift certificates");
-        assertEquals(argumentCaptor.getAllValues().get(2).getRel().value(), "get all gift certificates sorted by name");
-        assertEquals(argumentCaptor.getAllValues().get(3).getRel().value(), "get all gift certificates by part of description");
-        assertEquals(argumentCaptor.getAllValues().get(4).getRel().value(), "get all tags");
-        assertEquals(argumentCaptor.getAllValues().get(5).getRel().value(), "get the mostly used tag from user with highest sum of orders");
-        assertEquals(argumentCaptor.getAllValues().get(6).getRel().value(), "get gift certificates by tag name");
-        assertEquals(argumentCaptor.getAllValues().get(7).getRel().value(), "get gift certificates by tags names");
-        assertEquals(argumentCaptor.getAllValues().get(8).getRel().value(), "create order");
-    }
-
-    @Test
-    void getAllCertificatesByTagsHateoasMapper() {
-        Page<GiftCertificate> giftCertificates = new PageImpl<>(List.of(new GiftCertificate()));
-        PagedModel<GiftCertificate> giftCertificatesPagedModel = mock(PagedModel.class);
-        when(giftCertificatesPagedModel.add(ArgumentMatchers.<Link>any())).thenReturn(giftCertificatesPagedModel);
-        when(orderPagedResourcesAssembler.toModel(eq(giftCertificates), ArgumentMatchers.<RepresentationModelAssembler<GiftCertificate, GiftCertificate>>any())).thenReturn(giftCertificatesPagedModel);
-        PagedModel<GiftCertificate> result = giftCertificateHateoasMapper.getAllCertificatesByTagsHateoasMapper(giftCertificates);
-
-        assertEquals(result, giftCertificatesPagedModel);
-        verify(result, times(9)).add(argumentCaptor.capture());
-        assertEquals(argumentCaptor.getAllValues().get(0).getRel().value(), "create giftCertificate");
-        assertEquals(argumentCaptor.getAllValues().get(1).getRel().value(), "get all gift certificates");
-        assertEquals(argumentCaptor.getAllValues().get(2).getRel().value(), "get all gift certificates sorted by name");
-        assertEquals(argumentCaptor.getAllValues().get(3).getRel().value(), "get all gift certificates sorted by name and by date");
-        assertEquals(argumentCaptor.getAllValues().get(4).getRel().value(), "get all gift certificates by part of description");
-        assertEquals(argumentCaptor.getAllValues().get(5).getRel().value(), "get all tags");
-        assertEquals(argumentCaptor.getAllValues().get(6).getRel().value(), "get the mostly used tag from user with highest sum of orders");
-        assertEquals(argumentCaptor.getAllValues().get(7).getRel().value(), "get gift certificates by tag name");
-        assertEquals(argumentCaptor.getAllValues().get(8).getRel().value(), "create order");
+        assertEquals(argumentCaptor.getAllValues().get(2).getRel().value(), "get all tags");
+        assertEquals(argumentCaptor.getAllValues().get(3).getRel().value(), "get the mostly used tag from user with highest sum of orders");
+        assertEquals(argumentCaptor.getAllValues().get(4).getRel().value(), "get gift certificates by tag name");
+        assertEquals(argumentCaptor.getAllValues().get(5).getRel().value(), "get gift certificates by tags names");
+        assertEquals(argumentCaptor.getAllValues().get(6).getRel().value(), "create order");
+        assertEquals(argumentCaptor.getAllValues().get(7).getRel().value(), "get all gift certificates sorted by name");
+        assertEquals(argumentCaptor.getAllValues().get(8).getRel().value(), "get all gift certificates by part of description");
     }
 
 }

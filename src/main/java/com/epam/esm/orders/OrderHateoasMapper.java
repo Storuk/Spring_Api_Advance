@@ -54,38 +54,14 @@ public class OrderHateoasMapper {
         if (order.getGiftCertificate().getTags() != null) {
             giftCertificateHateoasMapper.tagsDefaultLinks(order.getGiftCertificate());
         }
-
+        giftCertificateHateoasMapper.defaultLinksForCollectionModel(createdOrder);
         createdOrder
                 .add(linkTo(methodOn(OrderController.class)
                         .getAllOrders(0, 10))
                         .withRel(() -> "get all orders"))
                 .add(linkTo(methodOn(GiftCertificateController.class)
-                        .getAllCertificates(0, 10))
-                        .withRel(() -> "get all gift-certificates"))
-                .add(linkTo(methodOn(GiftCertificateController.class)
-                        .getGiftCertificatesByPartOfDescription("Description", 0, 10))
-                        .withRel(() -> "get all gift certificates by part of description"))
-                .add(linkTo(methodOn(GiftCertificateController.class)
-                        .getGiftCertificatesSortedByName("DESC", 0, 10))
-                        .withRel(() -> "get all gift certificates sorted by name"))
-                .add(linkTo(methodOn(GiftCertificateController.class)
-                        .getGiftCertificatesSortedByNameByDate("DESC", "DESC", 0, 10))
-                        .withRel(() -> "get all gift certificates sorted by name and by date"))
-                .add(linkTo(methodOn(GiftCertificateController.class)
                         .createCertificate(new GiftCertificate()))
-                        .withRel(() -> "create GiftCertificate"))
-                .add(linkTo(methodOn(TagController.class)
-                        .getAllTags(0, 10))
-                        .withRel(() -> "get all tags"))
-                .add(linkTo(methodOn(TagController.class)
-                        .getTheMostlyUsedTagInUserOrders())
-                        .withRel(() -> "get the mostly used tag from user with highest sum of orders"))
-                .add(linkTo(methodOn(GiftCertificateController.class)
-                        .getGiftCertificatesByTagName("tagName", 0, 10))
-                        .withRel(() -> "get gift certificates by tag name"))
-                .add(linkTo(methodOn(GiftCertificateController.class)
-                        .getGiftCertificatesByTags(Set.of(), 0, 10))
-                        .withRel(() -> "get gift certificates by tags names"));
+                        .withRel(() -> "create GiftCertificate"));
         return createdOrder;
     }
 
@@ -98,7 +74,6 @@ public class OrderHateoasMapper {
     public PagedModel<Order> getUserOrdersHateoasMapper(Page<Order> pagedOrders) {
         PagedModel<Order> orders = pagedResourcesAssembler
                 .toModel(pagedOrders, order -> {
-
                     if (!order.getUser().hasLinks()) {
                         order.getUser()
                                 .add(linkTo(methodOn(UserController.class)

@@ -32,35 +32,15 @@ public class GiftCertificateHateoasMapper {
      * @return PagedModel of GiftCertificates with links
      */
     public PagedModel<GiftCertificate> getAllCertificatesHateoasMapper(Page<GiftCertificate> pagedGiftCertificate) {
-        PagedModel<GiftCertificate> pagedModel = defaultForGetAll(pagedGiftCertificate);
+        PagedModel<GiftCertificate> pagedModel = defaultForPagedModelToModel(pagedGiftCertificate);
+        defaultForPagedModelWithoutGetAllAndGetAllByTagNameAndGetByTagsName(pagedModel);
         pagedModel
-                .add(linkTo(methodOn(GiftCertificateController.class)
-                        .createCertificate(new GiftCertificate()))
-                        .withRel(() -> "create GiftCertificate"))
-                .add(linkTo(methodOn(GiftCertificateController.class)
-                        .getGiftCertificatesSortedByName("DESC", 0, 20))
-                        .withRel(() -> "get all gift certificates sorted by name"))
-                .add(linkTo(methodOn(GiftCertificateController.class)
-                        .getGiftCertificatesSortedByNameByDate("DESC", "DESC", 0, 10))
-                        .withRel(() -> "get all gift certificates sorted by name and by date"))
-                .add(linkTo(methodOn(GiftCertificateController.class)
-                        .getGiftCertificatesByPartOfDescription("Description", 0, 10))
-                        .withRel(() -> "get all gift certificates by part of description"))
-                .add(linkTo(methodOn(TagController.class)
-                        .getAllTags(0, 10))
-                        .withRel(() -> "get all tags"))
-                .add(linkTo(methodOn(TagController.class)
-                        .getTheMostlyUsedTagInUserOrders())
-                        .withRel(() -> "get the mostly used tag from user with highest sum of orders"))
                 .add(linkTo(methodOn(GiftCertificateController.class)
                         .getGiftCertificatesByTagName("tagName", 0, 10))
                         .withRel(() -> "get gift certificates by tag name"))
                 .add(linkTo(methodOn(GiftCertificateController.class)
                         .getGiftCertificatesByTags(Set.of(), 0, 10))
-                        .withRel(() -> "get gift certificates by tags names"))
-                .add(linkTo(methodOn(OrderController.class)
-                        .createOrder(0, 0))
-                        .withRel(() -> "create order"));
+                        .withRel(() -> "get gift certificates by tags names"));
         return pagedModel;
     }
 
@@ -71,156 +51,15 @@ public class GiftCertificateHateoasMapper {
      * @return PagedModel of GiftCertificates with links
      */
     public PagedModel<GiftCertificate> getAllCertificatesByTagNameHateoasMapper(Page<GiftCertificate> pagedGiftCertificate) {
-        PagedModel<GiftCertificate> pagedModel = defaultForGetAll(pagedGiftCertificate);
-
+        PagedModel<GiftCertificate> pagedModel = defaultForPagedModelToModel(pagedGiftCertificate);
+        defaultForPagedModelWithoutGetAllAndGetAllByTagNameAndGetByTagsName(pagedModel);
         pagedModel
-                .add(linkTo(methodOn(GiftCertificateController.class)
-                        .createCertificate(new GiftCertificate()))
-                        .withRel(() -> "create GiftCertificate"))
-                .add(linkTo(methodOn(GiftCertificateController.class)
-                        .getAllCertificates(0, 10))
-                        .withRel(() -> "get all giftCertificates"))
-                .add(linkTo(methodOn(GiftCertificateController.class)
-                        .getGiftCertificatesSortedByName("DESC", 0, 10))
-                        .withRel(() -> "get all gift certificates sorted by name"))
-                .add(linkTo(methodOn(GiftCertificateController.class)
-                        .getGiftCertificatesSortedByNameByDate("DESC", "DESC", 0, 10))
-                        .withRel(() -> "get all gift certificates sorted by name and by date"))
-                .add(linkTo(methodOn(GiftCertificateController.class)
-                        .getGiftCertificatesByPartOfDescription("Description", 0, 10))
-                        .withRel(() -> "get all gift certificates by part of description"))
-                .add(linkTo(methodOn(TagController.class)
-                        .getAllTags(0, 10))
-                        .withRel(() -> "get all tags"))
-                .add(linkTo(methodOn(TagController.class)
-                        .getTheMostlyUsedTagInUserOrders())
-                        .withRel(() -> "get the mostly used tag from user with highest sum of orders"))
-                .add(linkTo(methodOn(GiftCertificateController.class)
-                        .getGiftCertificatesByTags(Set.of(), 0, 10))
-                        .withRel(() -> "get gift certificates by tags names"))
-                .add(linkTo(methodOn(OrderController.class)
-                        .createOrder(0, 0))
-                        .withRel(() -> "create order"));
-        return pagedModel;
-    }
-
-    /**
-     * A component method for adding links to all GiftCertificates by Part of description
-     *
-     * @param pagedGiftCertificate - Page of GiftCertificate
-     * @return PagedModel of GiftCertificates with links
-     */
-    public PagedModel<GiftCertificate> getAllCertificatesByPartOfDescriptionHateoasMapper(Page<GiftCertificate> pagedGiftCertificate) {
-        PagedModel<GiftCertificate> pagedModel = defaultForGetAll(pagedGiftCertificate);
-
-        pagedModel
-                .add(linkTo(methodOn(GiftCertificateController.class)
-                        .createCertificate(new GiftCertificate()))
-                        .withRel(() -> "create GiftCertificate"))
                 .add(linkTo(methodOn(GiftCertificateController.class)
                         .getAllCertificates(0, 10))
                         .withRel(() -> "get all gift certificates"))
                 .add(linkTo(methodOn(GiftCertificateController.class)
-                        .getGiftCertificatesSortedByName("DESC", 0, 10))
-                        .withRel(() -> "get all gift certificates sorted by name"))
-                .add(linkTo(methodOn(GiftCertificateController.class)
-                        .getGiftCertificatesSortedByNameByDate("DESC", "DESC", 0, 10))
-                        .withRel(() -> "get all gift certificates sorted by name and by date"))
-                .add(linkTo(methodOn(TagController.class)
-                        .getAllTags(0, 10))
-                        .withRel(() -> "get all tags"))
-                .add(linkTo(methodOn(TagController.class)
-                        .getTheMostlyUsedTagInUserOrders())
-                        .withRel(() -> "get the mostly used tag from user with highest sum of orders"))
-                .add(linkTo(methodOn(GiftCertificateController.class)
-                        .getGiftCertificatesByTagName("tagName", 0, 10))
-                        .withRel(() -> "get gift certificates by tag name"))
-                .add(linkTo(methodOn(GiftCertificateController.class)
                         .getGiftCertificatesByTags(Set.of(), 0, 10))
-                        .withRel(() -> "get gift certificates by tags names"))
-                .add(linkTo(methodOn(OrderController.class)
-                        .createOrder(0, 0))
-                        .withRel(() -> "create order"));
-        return pagedModel;
-    }
-
-    /**
-     * A component method for adding links to all GiftCertificates sorted by name
-     *
-     * @param pagedGiftCertificate - Page of GiftCertificate
-     * @return PagedModel of GiftCertificates with links
-     */
-    public PagedModel<GiftCertificate> getAllCertificatesSortedByNameHateoasMapper(Page<GiftCertificate> pagedGiftCertificate) {
-        PagedModel<GiftCertificate> pagedModel = defaultForGetAll(pagedGiftCertificate);
-
-        pagedModel
-                .add(linkTo(methodOn(GiftCertificateController.class)
-                        .createCertificate(new GiftCertificate()))
-                        .withRel(() -> "create GiftCertificate"))
-                .add(linkTo(methodOn(GiftCertificateController.class)
-                        .getAllCertificates(0, 10))
-                        .withRel(() -> "get all gift certificates"))
-                .add(linkTo(methodOn(GiftCertificateController.class)
-                        .getGiftCertificatesSortedByNameByDate("DESC", "DESC", 0, 10))
-                        .withRel(() -> "get all gift certificates sorted by name and by date"))
-                .add(linkTo(methodOn(GiftCertificateController.class)
-                        .getGiftCertificatesByPartOfDescription("Description", 0, 10))
-                        .withRel(() -> "get all gift certificates by part of description"))
-                .add(linkTo(methodOn(TagController.class)
-                        .getAllTags(0, 10))
-                        .withRel(() -> "get all tags"))
-                .add(linkTo(methodOn(TagController.class)
-                        .getTheMostlyUsedTagInUserOrders())
-                        .withRel(() -> "get the mostly used tag from user with highest sum of orders"))
-                .add(linkTo(methodOn(GiftCertificateController.class)
-                        .getGiftCertificatesByTagName("tagName", 0, 10))
-                        .withRel(() -> "get gift certificates by tag name"))
-                .add(linkTo(methodOn(GiftCertificateController.class)
-                        .getGiftCertificatesByTags(Set.of(), 0, 10))
-                        .withRel(() -> "get gift certificates by tags names"))
-                .add(linkTo(methodOn(OrderController.class)
-                        .createOrder(0, 0))
-                        .withRel(() -> "create order"));
-        return pagedModel;
-    }
-
-    /**
-     * A component method for adding links to all GiftCertificates sorted by name and by date
-     *
-     * @param pagedGiftCertificate - Page of GiftCertificate
-     * @return PagedModel of GiftCertificates with links
-     */
-    public PagedModel<GiftCertificate> getAllCertificatesSortedByNameAndByDateHateoasMapper(Page<GiftCertificate> pagedGiftCertificate) {
-        PagedModel<GiftCertificate> pagedModel = defaultForGetAll(pagedGiftCertificate);
-
-        pagedModel
-                .add(linkTo(methodOn(GiftCertificateController.class)
-                        .createCertificate(new GiftCertificate()))
-                        .withRel(() -> "create GiftCertificate"))
-                .add(linkTo(methodOn(GiftCertificateController.class)
-                        .getAllCertificates(0, 10))
-                        .withRel(() -> "get all gift certificates"))
-                .add(linkTo(methodOn(GiftCertificateController.class)
-                        .getGiftCertificatesSortedByName("DESC", 0, 10))
-                        .withRel(() -> "get all gift certificates sorted by name"))
-                .add(linkTo(methodOn(GiftCertificateController.class)
-                        .getGiftCertificatesByPartOfDescription("Description", 0, 10))
-                        .withRel(() -> "get all gift certificates by part of description"))
-                .add(linkTo(methodOn(TagController.class)
-                        .getAllTags(0, 10))
-                        .withRel(() -> "get all tags"))
-                .add(linkTo(methodOn(TagController.class)
-                        .getTheMostlyUsedTagInUserOrders())
-                        .withRel(() -> "get the mostly used tag from user with highest sum of orders"))
-                .add(linkTo(methodOn(GiftCertificateController.class)
-                        .getGiftCertificatesByTagName("tagName", 0, 10))
-                        .withRel(() -> "get gift certificates by tag name"))
-                .add(linkTo(methodOn(GiftCertificateController.class)
-                        .getGiftCertificatesByTags(Set.of(), 0, 10))
-                        .withRel(() -> "get gift certificates by tags names"))
-                .add(linkTo(methodOn(OrderController.class)
-                        .createOrder(0, 0))
-                        .withRel(() -> "create order"));
+                        .withRel(() -> "get gift certificates by tags names"));
         return pagedModel;
     }
 
@@ -231,36 +70,72 @@ public class GiftCertificateHateoasMapper {
      * @return PagedModel of GiftCertificates with links
      */
     public PagedModel<GiftCertificate> getAllCertificatesByTagsHateoasMapper(Page<GiftCertificate> pagedGiftCertificate) {
-        PagedModel<GiftCertificate> pagedModel = defaultForGetAll(pagedGiftCertificate);
-
+        PagedModel<GiftCertificate> pagedModel = defaultForPagedModelToModel(pagedGiftCertificate);
+        defaultForPagedModelWithoutGetAllAndGetAllByTagNameAndGetByTagsName(pagedModel);
         pagedModel
-                .add(linkTo(methodOn(GiftCertificateController.class)
-                        .createCertificate(new GiftCertificate()))
-                        .withRel(() -> "create giftCertificate"))
                 .add(linkTo(methodOn(GiftCertificateController.class)
                         .getAllCertificates(0, 10))
                         .withRel(() -> "get all gift certificates"))
+                .add(linkTo(methodOn(GiftCertificateController.class)
+                        .getGiftCertificatesByTagName("tagName", 0, 10))
+                        .withRel(() -> "get gift certificates by tag name"));
+        return pagedModel;
+    }
+
+    /**
+     * A component method for adding links to all GiftCertificates by Part of description
+     *
+     * @param pagedGiftCertificate - Page of GiftCertificate
+     * @return PagedModel of GiftCertificates with links
+     */
+    public PagedModel<GiftCertificate> getAllCertificatesByPartOfDescriptionHateoasMapper(Page<GiftCertificate> pagedGiftCertificate) {
+        PagedModel<GiftCertificate> pagedModel = defaultForPagedModelToModel(pagedGiftCertificate);
+        defaultForPagedModelWithoutGetByPartOfDescriptionAndSortByNameAndSortByNameByDate(pagedModel);
+        pagedModel
                 .add(linkTo(methodOn(GiftCertificateController.class)
                         .getGiftCertificatesSortedByName("DESC", 0, 10))
                         .withRel(() -> "get all gift certificates sorted by name"))
                 .add(linkTo(methodOn(GiftCertificateController.class)
                         .getGiftCertificatesSortedByNameByDate("DESC", "DESC", 0, 10))
+                        .withRel(() -> "get all gift certificates sorted by name and by date"));
+        return pagedModel;
+    }
+
+    /**
+     * A component method for adding links to all GiftCertificates sorted by name
+     *
+     * @param pagedGiftCertificate - Page of GiftCertificate
+     * @return PagedModel of GiftCertificates with links
+     */
+    public PagedModel<GiftCertificate> getAllCertificatesSortedByNameHateoasMapper(Page<GiftCertificate> pagedGiftCertificate) {
+        PagedModel<GiftCertificate> pagedModel = defaultForPagedModelToModel(pagedGiftCertificate);
+        defaultForPagedModelWithoutGetByPartOfDescriptionAndSortByNameAndSortByNameByDate(pagedModel);
+        pagedModel
+                .add(linkTo(methodOn(GiftCertificateController.class)
+                        .getGiftCertificatesSortedByNameByDate("DESC", "DESC", 0, 10))
                         .withRel(() -> "get all gift certificates sorted by name and by date"))
                 .add(linkTo(methodOn(GiftCertificateController.class)
                         .getGiftCertificatesByPartOfDescription("Description", 0, 10))
-                        .withRel(() -> "get all gift certificates by part of description"))
-                .add(linkTo(methodOn(TagController.class)
-                        .getAllTags(0, 10))
-                        .withRel(() -> "get all tags"))
-                .add(linkTo(methodOn(TagController.class)
-                        .getTheMostlyUsedTagInUserOrders())
-                        .withRel(() -> "get the mostly used tag from user with highest sum of orders"))
+                        .withRel(() -> "get all gift certificates by part of description"));
+        return pagedModel;
+    }
+
+    /**
+     * A component method for adding links to all GiftCertificates sorted by name and by date
+     *
+     * @param pagedGiftCertificate - Page of GiftCertificate
+     * @return PagedModel of GiftCertificates with links
+     */
+    public PagedModel<GiftCertificate> getAllCertificatesSortedByNameAndByDateHateoasMapper(Page<GiftCertificate> pagedGiftCertificate) {
+        PagedModel<GiftCertificate> pagedModel = defaultForPagedModelToModel(pagedGiftCertificate);
+        defaultForPagedModelWithoutGetByPartOfDescriptionAndSortByNameAndSortByNameByDate(pagedModel);
+        pagedModel
                 .add(linkTo(methodOn(GiftCertificateController.class)
-                        .getGiftCertificatesByTagName("tagName", 0, 10))
-                        .withRel(() -> "get gift certificates by tag name"))
-                .add(linkTo(methodOn(OrderController.class)
-                        .createOrder(0, 0))
-                        .withRel(() -> "create order"));
+                        .getGiftCertificatesSortedByName("DESC", 0, 10))
+                        .withRel(() -> "get all gift certificates sorted by name"))
+                .add(linkTo(methodOn(GiftCertificateController.class)
+                        .getGiftCertificatesByPartOfDescription("Description", 0, 10))
+                        .withRel(() -> "get all gift certificates by part of description"));
         return pagedModel;
     }
 
@@ -285,8 +160,15 @@ public class GiftCertificateHateoasMapper {
                         .add(linkTo(methodOn(GiftCertificateController.class)
                                 .updateDuration(giftCertificate.getId(), 0))
                                 .withRel(() -> "update duration in gift certificate"))));
-        defaultForGetSingle(giftCertificateCollectionModel);
+        defaultLinksForCollectionModel(giftCertificateCollectionModel);
         tagsDefaultLinks(giftCertificate);
+        giftCertificateCollectionModel
+                .add(linkTo(methodOn(GiftCertificateController.class)
+                        .createCertificate(new GiftCertificate()))
+                        .withRel(() -> "create GiftCertificate"))
+                .add(linkTo(methodOn(OrderController.class)
+                        .createOrder(0, 0))
+                        .withRel(() -> "create order"));
         return giftCertificateCollectionModel;
     }
 
@@ -311,8 +193,15 @@ public class GiftCertificateHateoasMapper {
                         .add(linkTo(methodOn(GiftCertificateController.class)
                                 .updateDuration(giftCertificate.getId(), 0))
                                 .withRel(() -> "update duration in gift certificate"))));
-        defaultForGetSingle(giftCertificateCollectionModel);
+        defaultLinksForCollectionModel(giftCertificateCollectionModel);
         tagsDefaultLinks(giftCertificate);
+        giftCertificateCollectionModel
+                .add(linkTo(methodOn(GiftCertificateController.class)
+                        .createCertificate(new GiftCertificate()))
+                        .withRel(() -> "create GiftCertificate"))
+                .add(linkTo(methodOn(OrderController.class)
+                        .createOrder(0, 0))
+                        .withRel(() -> "create order"));
         return giftCertificateCollectionModel;
     }
 
@@ -337,8 +226,15 @@ public class GiftCertificateHateoasMapper {
                         .add(linkTo(methodOn(GiftCertificateController.class)
                                 .updateDuration(giftCertificate.getId(), 0))
                                 .withRel(() -> "update duration in gift certificate"))));
-        defaultForGetSingle(giftCertificateCollectionModel);
+        defaultLinksForCollectionModel(giftCertificateCollectionModel);
         tagsDefaultLinks(giftCertificate);
+        giftCertificate
+                .add(linkTo(methodOn(GiftCertificateController.class)
+                        .createCertificate(new GiftCertificate()))
+                        .withRel(() -> "create GiftCertificate"))
+                .add(linkTo(methodOn(OrderController.class)
+                        .createOrder(0, 0))
+                        .withRel(() -> "create order"));
         return giftCertificateCollectionModel;
     }
 
@@ -363,8 +259,15 @@ public class GiftCertificateHateoasMapper {
                         .add(linkTo(methodOn(GiftCertificateController.class)
                                 .deleteGiftCertificate(giftCertificate.getId()))
                                 .withRel(() -> "delete gift certificate"))));
-        defaultForGetSingle(giftCertificateCollectionModel);
+        defaultLinksForCollectionModel(giftCertificateCollectionModel);
         tagsDefaultLinks(giftCertificate);
+        giftCertificateCollectionModel
+                .add(linkTo(methodOn(GiftCertificateController.class)
+                        .createCertificate(new GiftCertificate()))
+                        .withRel(() -> "create GiftCertificate"))
+                .add(linkTo(methodOn(OrderController.class)
+                        .createOrder(0, 0))
+                        .withRel(() -> "create order"));
         return giftCertificateCollectionModel;
     }
 
@@ -376,39 +279,17 @@ public class GiftCertificateHateoasMapper {
      */
     public CollectionModel<GiftCertificate> getGiftCertificateForCreateHateoasMapper(GiftCertificate giftCertificate) {
         CollectionModel<GiftCertificate> giftCertificateCollectionModel = CollectionModel.of(List.of(
-                        giftCertificateDefaultLinks(giftCertificate)))
-
-                .add(linkTo(methodOn(GiftCertificateController.class)
-                        .getAllCertificates(0, 10))
-                        .withRel(() -> "get all gift-certificates"))
-                .add(linkTo(methodOn(GiftCertificateController.class)
-                        .getGiftCertificatesSortedByName("DESC", 0, 10))
-                        .withRel(() -> "get all gift certificates sorted by name"))
-                .add(linkTo(methodOn(GiftCertificateController.class)
-                        .getGiftCertificatesSortedByNameByDate("DESC", "DESC", 0, 10))
-                        .withRel(() -> "get all gift certificates sorted by name and by date"))
-                .add(linkTo(methodOn(GiftCertificateController.class)
-                        .getGiftCertificatesByPartOfDescription("Description", 0, 10))
-                        .withRel(() -> "get all gift certificates by part of description"))
-                .add(linkTo(methodOn(TagController.class)
-                        .getAllTags(0, 10))
-                        .withRel(() -> "get all tags"))
-                .add(linkTo(methodOn(TagController.class)
-                        .getTheMostlyUsedTagInUserOrders())
-                        .withRel(() -> "get the mostly used tag from user with highest sum of orders"))
-                .add(linkTo(methodOn(GiftCertificateController.class)
-                        .getGiftCertificatesByTagName("tagName", 0, 10))
-                        .withRel(() -> "get gift certificates by tag name"))
-                .add(linkTo(methodOn(GiftCertificateController.class)
-                        .getGiftCertificatesByTags(Set.of(), 0, 10))
-                        .withRel(() -> "get gift certificates by tags names"))
+                giftCertificateDefaultLinks(giftCertificate)));
+        defaultLinksForCollectionModel(giftCertificateCollectionModel);
+        tagsDefaultLinks(giftCertificate);
+        giftCertificateCollectionModel
                 .add(linkTo(methodOn(OrderController.class)
                         .createOrder(0, 0))
                         .withRel(() -> "create order"));
-
-        tagsDefaultLinks(giftCertificate);
         return giftCertificateCollectionModel;
     }
+
+    /* Utils Methods For Adding Links */
 
     /**
      * A component method for adding default links to GiftCertificate Tags
@@ -460,7 +341,7 @@ public class GiftCertificateHateoasMapper {
      *
      * @param pagedGiftCertificate Page of GiftCertificates
      */
-    private PagedModel<GiftCertificate> defaultForGetAll(Page<GiftCertificate> pagedGiftCertificate) {
+    private PagedModel<GiftCertificate> defaultForPagedModelToModel(Page<GiftCertificate> pagedGiftCertificate) {
         return pagedResourcesAssembler
                 .toModel(pagedGiftCertificate, giftCertificate -> {
                     giftCertificateDefaultLinks(giftCertificate);
@@ -470,12 +351,12 @@ public class GiftCertificateHateoasMapper {
     }
 
     /**
-     * A component method for adding default links to Collection of GiftCertificates
+     * A component method for adding default links to Collection of Object
      *
-     * @param giftCertificateCollectionModel Page of GiftCertificates
+     * @param collectionModel CollectionModel of GiftCertificate or Order
      */
-    private void defaultForGetSingle(CollectionModel<GiftCertificate> giftCertificateCollectionModel) {
-        giftCertificateCollectionModel
+    public void defaultLinksForCollectionModel(CollectionModel<?> collectionModel) {
+        collectionModel
                 .add(linkTo(methodOn(GiftCertificateController.class)
                         .getAllCertificates(0, 10))
                         .withRel(() -> "get all gift-certificates"))
@@ -499,12 +380,68 @@ public class GiftCertificateHateoasMapper {
                         .withRel(() -> "get gift certificates by tag name"))
                 .add(linkTo(methodOn(GiftCertificateController.class)
                         .getGiftCertificatesByTags(Set.of(), 0, 10))
+                        .withRel(() -> "get gift certificates by tags names"));
+    }
+
+    /**
+     * A component method for adding default links
+     * Without GetAll GetAllByTagName and GetByTagsName to PagedModel of GiftCertificates
+     *
+     * @param pagedModel Page of GiftCertificates
+     */
+    private void defaultForPagedModelWithoutGetAllAndGetAllByTagNameAndGetByTagsName(PagedModel<GiftCertificate> pagedModel) {
+        pagedModel
+                .add(linkTo(methodOn(GiftCertificateController.class)
+                        .createCertificate(new GiftCertificate()))
+                        .withRel(() -> "create GiftCertificate"))
+                .add(linkTo(methodOn(GiftCertificateController.class)
+                        .getGiftCertificatesSortedByName("DESC", 0, 10))
+                        .withRel(() -> "get all gift certificates sorted by name"))
+                .add(linkTo(methodOn(GiftCertificateController.class)
+                        .getGiftCertificatesSortedByNameByDate("DESC", "DESC", 0, 10))
+                        .withRel(() -> "get all gift certificates sorted by name and by date"))
+                .add(linkTo(methodOn(GiftCertificateController.class)
+                        .getGiftCertificatesByPartOfDescription("Description", 0, 10))
+                        .withRel(() -> "get all gift certificates by part of description"))
+                .add(linkTo(methodOn(TagController.class)
+                        .getAllTags(0, 10))
+                        .withRel(() -> "get all tags"))
+                .add(linkTo(methodOn(TagController.class)
+                        .getTheMostlyUsedTagInUserOrders())
+                        .withRel(() -> "get the mostly used tag from user with highest sum of orders"))
+                .add(linkTo(methodOn(OrderController.class)
+                        .createOrder(0, 0))
+                        .withRel(() -> "create order"));
+    }
+
+    /**
+     * A component method for adding default links
+     * Without GetByPartOfDescription SortByName and SortByNameByDate to PagedModel of GiftCertificates
+     *
+     * @param pagedModel Page of GiftCertificates
+     */
+    private void defaultForPagedModelWithoutGetByPartOfDescriptionAndSortByNameAndSortByNameByDate(PagedModel<GiftCertificate> pagedModel) {
+        pagedModel
+                .add(linkTo(methodOn(GiftCertificateController.class)
+                        .createCertificate(new GiftCertificate()))
+                        .withRel(() -> "create GiftCertificate"))
+                .add(linkTo(methodOn(GiftCertificateController.class)
+                        .getAllCertificates(0, 10))
+                        .withRel(() -> "get all gift certificates"))
+                .add(linkTo(methodOn(TagController.class)
+                        .getAllTags(0, 10))
+                        .withRel(() -> "get all tags"))
+                .add(linkTo(methodOn(TagController.class)
+                        .getTheMostlyUsedTagInUserOrders())
+                        .withRel(() -> "get the mostly used tag from user with highest sum of orders"))
+                .add(linkTo(methodOn(GiftCertificateController.class)
+                        .getGiftCertificatesByTagName("tagName", 0, 10))
+                        .withRel(() -> "get gift certificates by tag name"))
+                .add(linkTo(methodOn(GiftCertificateController.class)
+                        .getGiftCertificatesByTags(Set.of(), 0, 10))
                         .withRel(() -> "get gift certificates by tags names"))
                 .add(linkTo(methodOn(OrderController.class)
                         .createOrder(0, 0))
-                        .withRel(() -> "create order"))
-                .add(linkTo(methodOn(GiftCertificateController.class)
-                        .createCertificate(new GiftCertificate()))
-                        .withRel(() -> "create GiftCertificate"));
+                        .withRel(() -> "create order"));
     }
 }
