@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import java.sql.SQLSyntaxErrorException;
 import java.util.Map;
 
 /**
@@ -35,10 +34,17 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
     /**
      * Method for handling NullPointerException, SQLSyntaxErrorException, InvalidDataException, ConstraintViolationException
      */
-    @ExceptionHandler(value = {ConstraintViolationException.class, NullPointerException.class, SQLSyntaxErrorException.class, InvalidDataException.class})
+    @ExceptionHandler(value = {ConstraintViolationException.class, InvalidDataException.class})
     protected ResponseEntity<?> handleInvalidDataException(RuntimeException ex, WebRequest request) {
         return handleExceptionInternal(ex,
                 Map.of("HTTP Status", HttpStatus.BAD_REQUEST, "response body", Map.of("message", ex.getLocalizedMessage())),
                 new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+    }
+
+    @ExceptionHandler(value = {Exception.class})
+    protected ResponseEntity<?> handleNullPointerException(Exception ex, WebRequest request) {
+        return handleExceptionInternal(ex,
+                Map.of("HTTP Status", HttpStatus.INTERNAL_SERVER_ERROR, "response body", Map.of("messag", ex.getLocalizedMessage())),
+                new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR, request);
     }
 }
