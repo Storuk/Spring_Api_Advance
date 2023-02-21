@@ -55,7 +55,7 @@ class GiftCertificateHateoasMapperTest {
                         .deleteGiftCertificate(giftCertificate.getId()))
                         .withRel(() -> "delete gift certificate"))
                 .add(linkTo(methodOn(GiftCertificateController.class)
-                        .updateGiftCertificate(giftCertificate.getId(), new GiftCertificate()))
+                        .updateGiftCertificate(giftCertificate.getId(), new GiftCertificateDTO()))
                         .withRel(() -> "update gift certificate"))
                 .add(linkTo(methodOn(GiftCertificateController.class)
                         .updatePrice(giftCertificate.getId(), 0))
@@ -103,7 +103,7 @@ class GiftCertificateHateoasMapperTest {
                         .createOrder(0, 0))
                         .withRel(() -> "create order"))
                 .add(linkTo(methodOn(GiftCertificateController.class)
-                        .createCertificate(new GiftCertificate()))
+                        .createCertificate(new GiftCertificateDTO()))
                         .withRel(() -> "create GiftCertificate"));
 
         CollectionModel<GiftCertificate> result = giftCertificateHateoasMapper.getGiftCertificateByIdHateoasMapper(giftCertificateForTest);
@@ -178,7 +178,7 @@ class GiftCertificateHateoasMapperTest {
                         .createOrder(0, 0))
                         .withRel(() -> "create order"))
                 .add(linkTo(methodOn(GiftCertificateController.class)
-                        .createCertificate(new GiftCertificate()))
+                        .createCertificate(new GiftCertificateDTO()))
                         .withRel(() -> "create GiftCertificate"));
 
         CollectionModel<GiftCertificate> result = giftCertificateHateoasMapper.getGiftCertificateForUpdateHateoasMapper(giftCertificateForTest);
@@ -208,7 +208,7 @@ class GiftCertificateHateoasMapperTest {
                         .deleteGiftCertificate(giftCertificate.getId()))
                         .withRel(() -> "delete gift certificate"))
                 .add(linkTo(methodOn(GiftCertificateController.class)
-                        .updateGiftCertificate(giftCertificate.getId(), new GiftCertificate()))
+                        .updateGiftCertificate(giftCertificate.getId(), new GiftCertificateDTO()))
                         .withRel(() -> "update gift certificate"))
                 .add(linkTo(methodOn(GiftCertificateController.class)
                         .updateDuration(giftCertificate.getId(), 0))
@@ -253,7 +253,7 @@ class GiftCertificateHateoasMapperTest {
                         .createOrder(0, 0))
                         .withRel(() -> "create order"))
                 .add(linkTo(methodOn(GiftCertificateController.class)
-                        .createCertificate(new GiftCertificate()))
+                        .createCertificate(new GiftCertificateDTO()))
                         .withRel(() -> "create GiftCertificate"));
 
         CollectionModel<GiftCertificate> result = giftCertificateHateoasMapper.getGiftCertificateForUpdatePriceHateoasMapper(giftCertificateForTest);
@@ -280,7 +280,7 @@ class GiftCertificateHateoasMapperTest {
                         .getGiftCertificateById(giftCertificate.getId()))
                         .withRel(() -> "get gift certificate"))
                 .add(linkTo(methodOn(GiftCertificateController.class)
-                        .updateGiftCertificate(giftCertificate.getId(), new GiftCertificate()))
+                        .updateGiftCertificate(giftCertificate.getId(), new GiftCertificateDTO()))
                         .withRel(() -> "update gift certificate"))
                 .add(linkTo(methodOn(GiftCertificateController.class)
                         .updatePrice(giftCertificate.getId(), 0))
@@ -328,7 +328,7 @@ class GiftCertificateHateoasMapperTest {
                         .createOrder(0, 0))
                         .withRel(() -> "create order"))
                 .add(linkTo(methodOn(GiftCertificateController.class)
-                        .createCertificate(new GiftCertificate()))
+                        .createCertificate(new GiftCertificateDTO()))
                         .withRel(() -> "create GiftCertificate"));
 
         CollectionModel<GiftCertificate> result = giftCertificateHateoasMapper.getGiftCertificateForUpdateDurationHateoasMapper(giftCertificateForTest);
@@ -358,7 +358,7 @@ class GiftCertificateHateoasMapperTest {
                         .deleteGiftCertificate(giftCertificate.getId()))
                         .withRel(() -> "delete gift certificate"))
                 .add(linkTo(methodOn(GiftCertificateController.class)
-                        .updateGiftCertificate(giftCertificate.getId(), new GiftCertificate()))
+                        .updateGiftCertificate(giftCertificate.getId(), new GiftCertificateDTO()))
                         .withRel(() -> "update gift certificate"))
                 .add(linkTo(methodOn(GiftCertificateController.class)
                         .updatePrice(giftCertificate.getId(), 0))
@@ -431,7 +431,7 @@ class GiftCertificateHateoasMapperTest {
                         .deleteGiftCertificate(giftCertificate.getId()))
                         .withRel(() -> "delete gift certificate"))
                 .add(linkTo(methodOn(GiftCertificateController.class)
-                        .updateGiftCertificate(giftCertificate.getId(), new GiftCertificate()))
+                        .updateGiftCertificate(giftCertificate.getId(), new GiftCertificateDTO()))
                         .withRel(() -> "update gift certificate"))
                 .add(linkTo(methodOn(GiftCertificateController.class)
                         .updatePrice(giftCertificate.getId(), 0))

@@ -2,7 +2,7 @@ package com.epam.esm.orders;
 
 import com.epam.esm.giftcertificate.GiftCertificate;
 import com.epam.esm.giftcertificate.GiftCertificateController;
-import com.epam.esm.giftcertificate.GiftCertificateHateoasMapper;
+import com.epam.esm.giftcertificate.GiftCertificateDTO;
 import com.epam.esm.tag.TagController;
 import com.epam.esm.user.User;
 import com.epam.esm.user.UserController;
@@ -38,8 +38,6 @@ class OrderHateoasMapperTest {
     private PagedResourcesAssembler<Order> orderPagedResourcesAssembler;
     @Captor
     ArgumentCaptor<Link> argumentCaptor;
-    @Mock
-    private GiftCertificateHateoasMapper giftCertificateHateoasMapper;
 
     @Test
     void createOrderHateoasMapperTest() {
@@ -70,7 +68,7 @@ class OrderHateoasMapperTest {
                         .deleteGiftCertificate(giftCertificate.getId()))
                         .withRel(() -> "delete gift certificate"))
                 .add(linkTo(methodOn(GiftCertificateController.class)
-                        .updateGiftCertificate(giftCertificate.getId(), new GiftCertificate()))
+                        .updateGiftCertificate(giftCertificate.getId(), new GiftCertificateDTO()))
                         .withRel(() -> "update gift certificate"))
                 .add(linkTo(methodOn(GiftCertificateController.class)
                         .updatePrice(giftCertificate.getId(), 0))
@@ -96,7 +94,7 @@ class OrderHateoasMapperTest {
                         .getGiftCertificatesSortedByNameByDate("DESC", "DESC", 0, 10))
                         .withRel(() -> "get all gift certificates sorted by name and by date"))
                 .add(linkTo(methodOn(GiftCertificateController.class)
-                        .createCertificate(new GiftCertificate()))
+                        .createCertificate(new GiftCertificateDTO()))
                         .withRel(() -> "create GiftCertificate"))
                 .add(linkTo(methodOn(TagController.class)
                         .getAllTags(0, 10))

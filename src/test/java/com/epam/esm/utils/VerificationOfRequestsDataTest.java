@@ -1,8 +1,8 @@
 package com.epam.esm.utils;
 
 import com.epam.esm.exceptions.InvalidDataException;
-import com.epam.esm.giftcertificate.GiftCertificate;
-import com.epam.esm.tag.Tag;
+import com.epam.esm.giftcertificate.GiftCertificateDTO;
+import com.epam.esm.tag.TagDTO;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -48,14 +48,14 @@ class VerificationOfRequestsDataTest {
 
     @Test
     void isTagCorrectTest_True() {
-        assertTrue(VerificationOfRequestsData.isTagCorrect(Tag.builder().name("exp12").build()));
+        assertTrue(VerificationOfRequestsData.isTagCorrect(TagDTO.builder().name("exp12").build()));
     }
 
     @ParameterizedTest
     @NullAndEmptySource
     @ValueSource(strings = {" ", "123"})
     void isTagCorrectTest_FalseWhenEmptyOrBlankOrNullOrNumeric(String value) {
-        assertFalse(VerificationOfRequestsData.isTagCorrect(Tag.builder().name(value).build()));
+        assertFalse(VerificationOfRequestsData.isTagCorrect(TagDTO.builder().name(value).build()));
     }
 
     @ParameterizedTest
@@ -84,62 +84,62 @@ class VerificationOfRequestsDataTest {
 
     @Test
     void isNewCertificateCorrectTestTrue() {
-        GiftCertificate giftCertificate = GiftCertificate.builder().
+        GiftCertificateDTO giftCertificate = GiftCertificateDTO.builder().
                 name("certificate").description("certificate").price(1).duration(1).build();
         assertTrue(VerificationOfRequestsData.isNewCertificateCorrect(giftCertificate));
     }
 
     @Test
     void isNewCertificateCorrectTestFalse_WhenIncorrectName() {
-        GiftCertificate giftCertificate = GiftCertificate.builder().
+        GiftCertificateDTO giftCertificate = GiftCertificateDTO.builder().
                 name("123").description("certificate").price(1).duration(1).build();
         assertFalse(VerificationOfRequestsData.isNewCertificateCorrect(giftCertificate));
     }
 
     @Test
     void isNewCertificateCorrectTestFalse_WhenIncorrectDescription() {
-        GiftCertificate giftCertificate = GiftCertificate.builder().
+        GiftCertificateDTO giftCertificate = GiftCertificateDTO.builder().
                 name("certificate").description("   ").price(1).duration(1).build();
         assertFalse(VerificationOfRequestsData.isNewCertificateCorrect(giftCertificate));
     }
 
     @Test
     void isNewCertificateCorrectTestFalse_WhenIncorrectPrice() {
-        GiftCertificate giftCertificate = GiftCertificate.builder().
+        GiftCertificateDTO giftCertificate = GiftCertificateDTO.builder().
                 name("certificate").description("certificate").price(-1).duration(1).build();
         assertFalse(VerificationOfRequestsData.isNewCertificateCorrect(giftCertificate));
     }
 
     @Test
     void isNewCertificateCorrectTestFalse_WhenIncorrectDuration() {
-        GiftCertificate giftCertificate = GiftCertificate.builder().
+        GiftCertificateDTO giftCertificate = GiftCertificateDTO.builder().
                 name("certificate").description("certificate").price(1).duration(-1).build();
         assertFalse(VerificationOfRequestsData.isNewCertificateCorrect(giftCertificate));
     }
 
     @Test
     void isSetOfTagsCorrectTestTrue() {
-        Set<Tag> tagSet = Set.of(Tag.builder().name("2ha2rd1").build(),
-                Tag.builder().name("exp12").build(),
-                Tag.builder().name("yep37").build());
+        Set<TagDTO> tagSet = Set.of(TagDTO.builder().name("2ha2rd1").build(),
+                TagDTO.builder().name("exp12").build(),
+                TagDTO.builder().name("yep37").build());
         assertTrue(VerificationOfRequestsData.isSetOfTagsCorrect(tagSet));
     }
 
     @Test
     void isSetOfTagsCorrectTestFalse_EmptyNullAndNumeric() {
-        Set<Tag> tagSet = Set.of(Tag.builder().name(" ").build(),
-                Tag.builder().name(null).build(),
-                Tag.builder().name("356").build());
+        Set<TagDTO> tagSet = Set.of(TagDTO.builder().name(" ").build(),
+                TagDTO.builder().name(null).build(),
+                TagDTO.builder().name("356").build());
         assertFalse(VerificationOfRequestsData.isSetOfTagsCorrect(tagSet));
     }
 
     @Test
     void isGiftCertificateValidForUpdateTestTrue() {
-        GiftCertificate giftCertificate = GiftCertificate.builder()
+        GiftCertificateDTO giftCertificate = GiftCertificateDTO.builder()
                 .name("certificate").description("certificate").price(1).duration(1)
-                .tags(Set.of(Tag.builder().name("2ha2rd1").build(),
-                        Tag.builder().name("exp12").build(),
-                        Tag.builder().name("yep37").build())).build();
+                .tags(Set.of(TagDTO.builder().name("2ha2rd1").build(),
+                        TagDTO.builder().name("exp12").build(),
+                        TagDTO.builder().name("yep37").build())).build();
         assertTrue(VerificationOfRequestsData.isGiftCertificateValidForUpdate(giftCertificate));
     }
 
@@ -150,7 +150,7 @@ class VerificationOfRequestsDataTest {
 
     @Test
     void isGiftCertificateValidForUpdateTestFalse_WhenInvalidName() {
-        GiftCertificate giftCertificate = GiftCertificate.builder().name("123").build();
+        GiftCertificateDTO giftCertificate = GiftCertificateDTO.builder().name("123").build();
         InvalidDataException message = assertThrows(InvalidDataException.class,
                 () -> VerificationOfRequestsData.isGiftCertificateValidForUpdate(giftCertificate));
         assertEquals("Invalid input name: " + giftCertificate.getName(), message.getMessage());
@@ -158,7 +158,7 @@ class VerificationOfRequestsDataTest {
 
     @Test
     void isGiftCertificateValidForUpdateTestFalse_WhenInvalidDescription() {
-        GiftCertificate giftCertificate = GiftCertificate.builder().description("  ").build();
+        GiftCertificateDTO giftCertificate = GiftCertificateDTO.builder().description("  ").build();
         InvalidDataException message = assertThrows(InvalidDataException.class,
                 () -> VerificationOfRequestsData.isGiftCertificateValidForUpdate(giftCertificate));
         assertEquals("Invalid input description: " + giftCertificate.getDescription(), message.getMessage());
@@ -166,7 +166,7 @@ class VerificationOfRequestsDataTest {
 
     @Test
     void isGiftCertificateValidForUpdateTestFalse_WhenInvalidPrice() {
-        GiftCertificate giftCertificate = GiftCertificate.builder().price(-1).build();
+        GiftCertificateDTO giftCertificate = GiftCertificateDTO.builder().price(-1).build();
         InvalidDataException message = assertThrows(InvalidDataException.class,
                 () -> VerificationOfRequestsData.isGiftCertificateValidForUpdate(giftCertificate));
         assertEquals("Price should be > 0. Your value " + giftCertificate.getPrice(), message.getMessage());
@@ -174,7 +174,7 @@ class VerificationOfRequestsDataTest {
 
     @Test
     void isGiftCertificateValidForUpdateTestFalse_WhenInvalidDuration() {
-        GiftCertificate giftCertificate = GiftCertificate.builder().duration(-1).build();
+        GiftCertificateDTO giftCertificate = GiftCertificateDTO.builder().duration(-1).build();
         InvalidDataException message = assertThrows(InvalidDataException.class,
                 () -> VerificationOfRequestsData.isGiftCertificateValidForUpdate(giftCertificate));
         assertEquals("Duration should be > 0. Your value " + giftCertificate.getDuration(), message.getMessage());
@@ -182,10 +182,10 @@ class VerificationOfRequestsDataTest {
 
     @Test
     void isGiftCertificateValidForUpdateTestFalse_WhenInvalidTags() {
-        GiftCertificate giftCertificate = GiftCertificate.builder()
-                .tags(Set.of(Tag.builder().name(" ").build(),
-                        Tag.builder().name(null).build(),
-                        Tag.builder().name("356").build())).build();
+        GiftCertificateDTO giftCertificate = GiftCertificateDTO.builder()
+                .tags(Set.of(TagDTO.builder().name(" ").build(),
+                        TagDTO.builder().name(null).build(),
+                        TagDTO.builder().name("356").build())).build();
         InvalidDataException message = assertThrows(InvalidDataException.class,
                 () -> VerificationOfRequestsData.isGiftCertificateValidForUpdate(giftCertificate));
         assertEquals("Invalid input tags." + giftCertificate.getTags(), message.getMessage());

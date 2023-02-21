@@ -15,9 +15,11 @@ import java.util.Set;
 @Service
 public class TagService {
     private final TagRepo tagRepo;
+    private final TagDtoToEntityMapper dtoToEntityMapper;
 
-    public TagService(TagRepo tagRepo) {
+    public TagService(TagRepo tagRepo, TagDtoToEntityMapper dtoToEntityMapper) {
         this.tagRepo = tagRepo;
+        this.dtoToEntityMapper = dtoToEntityMapper;
     }
 
     /**
@@ -27,9 +29,9 @@ public class TagService {
      * @return saved Tag
      * @see TagRepo#save(Object) for saving Tag
      */
-    public Tag createTag(Tag tag) {
+    public Tag createTag(TagDTO tag) {
         if (!tagExists(tag.getName())) {
-            return tagRepo.save(tag);
+            return tagRepo.save(dtoToEntityMapper.convertTagDtoToEntity(tag));
         }
         throw new InvalidDataException("Tag already exist: " + tag.getName());
     }

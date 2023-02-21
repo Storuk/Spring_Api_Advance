@@ -152,7 +152,7 @@ public class GiftCertificateHateoasMapper {
                                 .deleteGiftCertificate(giftCertificate.getId()))
                                 .withRel(() -> "delete gift certificate"))
                         .add(linkTo(methodOn(GiftCertificateController.class)
-                                .updateGiftCertificate(giftCertificate.getId(), new GiftCertificate()))
+                                .updateGiftCertificate(giftCertificate.getId(), new GiftCertificateDTO()))
                                 .withRel(() -> "update gift certificate"))
                         .add(linkTo(methodOn(GiftCertificateController.class)
                                 .updatePrice(giftCertificate.getId(), 0))
@@ -164,7 +164,7 @@ public class GiftCertificateHateoasMapper {
         tagsDefaultLinks(giftCertificate);
         giftCertificateCollectionModel
                 .add(linkTo(methodOn(GiftCertificateController.class)
-                        .createCertificate(new GiftCertificate()))
+                        .createCertificate(new GiftCertificateDTO()))
                         .withRel(() -> "create GiftCertificate"))
                 .add(linkTo(methodOn(OrderController.class)
                         .createOrder(0, 0))
@@ -197,7 +197,7 @@ public class GiftCertificateHateoasMapper {
         tagsDefaultLinks(giftCertificate);
         giftCertificateCollectionModel
                 .add(linkTo(methodOn(GiftCertificateController.class)
-                        .createCertificate(new GiftCertificate()))
+                        .createCertificate(new GiftCertificateDTO()))
                         .withRel(() -> "create GiftCertificate"))
                 .add(linkTo(methodOn(OrderController.class)
                         .createOrder(0, 0))
@@ -221,7 +221,7 @@ public class GiftCertificateHateoasMapper {
                                 .deleteGiftCertificate(giftCertificate.getId()))
                                 .withRel(() -> "delete gift certificate"))
                         .add(linkTo(methodOn(GiftCertificateController.class)
-                                .updateGiftCertificate(giftCertificate.getId(), new GiftCertificate()))
+                                .updateGiftCertificate(giftCertificate.getId(), new GiftCertificateDTO()))
                                 .withRel(() -> "update gift certificate"))
                         .add(linkTo(methodOn(GiftCertificateController.class)
                                 .updateDuration(giftCertificate.getId(), 0))
@@ -230,7 +230,7 @@ public class GiftCertificateHateoasMapper {
         tagsDefaultLinks(giftCertificate);
         giftCertificate
                 .add(linkTo(methodOn(GiftCertificateController.class)
-                        .createCertificate(new GiftCertificate()))
+                        .createCertificate(new GiftCertificateDTO()))
                         .withRel(() -> "create GiftCertificate"))
                 .add(linkTo(methodOn(OrderController.class)
                         .createOrder(0, 0))
@@ -251,7 +251,7 @@ public class GiftCertificateHateoasMapper {
                                 .getGiftCertificateById(giftCertificate.getId()))
                                 .withRel(() -> "get gift certificate"))
                         .add(linkTo(methodOn(GiftCertificateController.class)
-                                .updateGiftCertificate(giftCertificate.getId(), new GiftCertificate()))
+                                .updateGiftCertificate(giftCertificate.getId(), new GiftCertificateDTO()))
                                 .withRel(() -> "update gift certificate"))
                         .add(linkTo(methodOn(GiftCertificateController.class)
                                 .updatePrice(giftCertificate.getId(), 0))
@@ -263,7 +263,7 @@ public class GiftCertificateHateoasMapper {
         tagsDefaultLinks(giftCertificate);
         giftCertificateCollectionModel
                 .add(linkTo(methodOn(GiftCertificateController.class)
-                        .createCertificate(new GiftCertificate()))
+                        .createCertificate(new GiftCertificateDTO()))
                         .withRel(() -> "create GiftCertificate"))
                 .add(linkTo(methodOn(OrderController.class)
                         .createOrder(0, 0))
@@ -326,7 +326,7 @@ public class GiftCertificateHateoasMapper {
                         .deleteGiftCertificate(giftCertificate.getId()))
                         .withRel(() -> "delete gift certificate"))
                 .add(linkTo(methodOn(GiftCertificateController.class)
-                        .updateGiftCertificate(giftCertificate.getId(), new GiftCertificate()))
+                        .updateGiftCertificate(giftCertificate.getId(), new GiftCertificateDTO()))
                         .withRel(() -> "update gift certificate"))
                 .add(linkTo(methodOn(GiftCertificateController.class)
                         .updatePrice(giftCertificate.getId(), 0))
@@ -355,7 +355,7 @@ public class GiftCertificateHateoasMapper {
      *
      * @param collectionModel CollectionModel of GiftCertificate or Order
      */
-    public void defaultLinksForCollectionModel(CollectionModel<?> collectionModel) {
+    private void defaultLinksForCollectionModel(CollectionModel<GiftCertificate> collectionModel) {
         collectionModel
                 .add(linkTo(methodOn(GiftCertificateController.class)
                         .getAllCertificates(0, 10))
@@ -392,7 +392,7 @@ public class GiftCertificateHateoasMapper {
     private void defaultForPagedModelWithoutGetAllAndGetAllByTagNameAndGetByTagsName(PagedModel<GiftCertificate> pagedModel) {
         pagedModel
                 .add(linkTo(methodOn(GiftCertificateController.class)
-                        .createCertificate(new GiftCertificate()))
+                        .createCertificate(new GiftCertificateDTO()))
                         .withRel(() -> "create GiftCertificate"))
                 .add(linkTo(methodOn(GiftCertificateController.class)
                         .getGiftCertificatesSortedByName("DESC", 0, 10))
@@ -423,7 +423,7 @@ public class GiftCertificateHateoasMapper {
     private void defaultForPagedModelWithoutGetByPartOfDescriptionAndSortByNameAndSortByNameByDate(PagedModel<GiftCertificate> pagedModel) {
         pagedModel
                 .add(linkTo(methodOn(GiftCertificateController.class)
-                        .createCertificate(new GiftCertificate()))
+                        .createCertificate(new GiftCertificateDTO()))
                         .withRel(() -> "create GiftCertificate"))
                 .add(linkTo(methodOn(GiftCertificateController.class)
                         .getAllCertificates(0, 10))

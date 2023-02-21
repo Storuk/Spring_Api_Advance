@@ -35,10 +35,10 @@ public class TagController {
      * A controller post method for creating a new tag
      *
      * @param tag the Tag object that will be created in database
-     * @see TagService#createTag(Tag)
+     * @see TagService#createTag(TagDTO)
      */
     @PostMapping
-    public ResponseEntity<?> createTag(@RequestBody Tag tag) {
+    public ResponseEntity<?> createTag(@RequestBody TagDTO tag) {
         if (VerificationOfRequestsData.isTagCorrect(tag)) {
             Tag createdTag = tagService.createTag(tag);
             return new ResponseEntity<>(Map.of("createdTag",

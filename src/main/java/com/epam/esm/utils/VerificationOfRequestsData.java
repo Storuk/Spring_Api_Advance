@@ -1,8 +1,8 @@
 package com.epam.esm.utils;
 
 import com.epam.esm.exceptions.InvalidDataException;
-import com.epam.esm.giftcertificate.GiftCertificate;
-import com.epam.esm.tag.Tag;
+import com.epam.esm.giftcertificate.GiftCertificateDTO;
+import com.epam.esm.tag.TagDTO;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Set;
@@ -16,7 +16,7 @@ public class VerificationOfRequestsData {
      *
      * @return boolean
      */
-    public static boolean isGiftCertificateValidForUpdate(GiftCertificate giftCertificate) {
+    public static boolean isGiftCertificateValidForUpdate(GiftCertificateDTO giftCertificate) {
         if (giftCertificate != null) {
             if (giftCertificate.getName() != null && !isStringValuesCorrect(giftCertificate.getName())) {
                 throw new InvalidDataException("Invalid input name: " + giftCertificate.getName());
@@ -43,10 +43,10 @@ public class VerificationOfRequestsData {
      *
      * @return boolean
      */
-    public static boolean isNewCertificateCorrect(GiftCertificate giftCertificate) {
-        return giftCertificate != null && giftCertificate.getPrice() != null && giftCertificate.getPrice() > 0
-                && giftCertificate.getDuration() != null && giftCertificate.getDuration() > 0
-                && isStringValuesCorrect(giftCertificate.getName()) && isStringValuesCorrect(giftCertificate.getDescription());
+    public static boolean isNewCertificateCorrect(GiftCertificateDTO giftCertificateDTO) {
+        return giftCertificateDTO != null && giftCertificateDTO.getPrice() != null && giftCertificateDTO.getPrice() > 0
+                && giftCertificateDTO.getDuration() != null && giftCertificateDTO.getDuration() > 0
+                && isStringValuesCorrect(giftCertificateDTO.getName()) && isStringValuesCorrect(giftCertificateDTO.getDescription());
     }
 
     /**
@@ -102,7 +102,7 @@ public class VerificationOfRequestsData {
      *
      * @return boolean
      */
-    public static boolean isTagCorrect(Tag tag) {
+    public static boolean isTagCorrect(TagDTO tag) {
         return tag != null && isStringValuesCorrect(tag.getName());
     }
 
@@ -111,9 +111,9 @@ public class VerificationOfRequestsData {
      *
      * @return boolean
      */
-    public static boolean isSetOfTagsCorrect(Set<Tag> tags) {
+    public static boolean isSetOfTagsCorrect(Set<TagDTO> tags) {
         if (tags != null) {
-            for (Tag tag : tags) {
+            for (TagDTO tag : tags) {
                 if (!isTagCorrect(tag)) {
                     return false;
                 }

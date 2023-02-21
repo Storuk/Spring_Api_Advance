@@ -54,7 +54,8 @@ class TagControllerTest {
     @Test
     void createTagTest() throws Exception {
         Tag tag = Tag.builder().id(1L).name("tag").build();
-        when(tagService.createTag(tag)).thenReturn(tag);
+        TagDTO tagDTO = TagDTO.builder().name("tag").build();
+        when(tagService.createTag(tagDTO)).thenReturn(tag);
         when(tagHateoasMapper.createTagHateoas(tag)).thenReturn(CollectionModel.of(List.of(tag)));
         MockHttpServletResponse response = mvc.perform(post("/tags").contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(tag)).accept(MediaType.APPLICATION_JSON)).andReturn().getResponse();

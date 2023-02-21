@@ -62,7 +62,7 @@ public class TagHateoasMapper {
         defaultLinksForCollectionModel(tagCollectionModel);
         tagCollectionModel
                 .add(linkTo(methodOn(TagController.class)
-                        .createTag(new Tag()))
+                        .createTag(new TagDTO()))
                         .withRel(() -> "create tag"));
         return tagCollectionModel;
     }
@@ -84,7 +84,7 @@ public class TagHateoasMapper {
         defaultLinksForCollectionModel(tagCollectionModel);
         tagCollectionModel
                 .add(linkTo(methodOn(TagController.class)
-                        .createTag(new Tag()))
+                        .createTag(new TagDTO()))
                         .withRel(() -> "create tag"))
                 .add(linkTo(methodOn(TagController.class)
                         .getTheMostlyUsedTagInUserOrders())
@@ -110,7 +110,7 @@ public class TagHateoasMapper {
 
         tagsPagedModel
                 .add(linkTo(methodOn(TagController.class)
-                        .createTag(new Tag()))
+                        .createTag(new TagDTO()))
                         .withRel(() -> "create tag"))
                 .add(linkTo(methodOn(TagController.class)
                         .getTheMostlyUsedTagInUserOrders())

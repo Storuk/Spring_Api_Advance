@@ -65,10 +65,10 @@ public class GiftCertificateController {
      *
      * @param giftCertificate the GiftCertificate object that will be created in database
      * @return CollectionModel of GiftCertificate with links
-     * @see GiftCertificateService#createGiftCertificate(GiftCertificate)
+     * @see GiftCertificateService#createGiftCertificate(GiftCertificateDTO)
      */
     @PostMapping
-    public ResponseEntity<?> createCertificate(@RequestBody GiftCertificate giftCertificate) {
+    public ResponseEntity<?> createCertificate(@RequestBody GiftCertificateDTO giftCertificate) {
         if (VerificationOfRequestsData.isNewCertificateCorrect(giftCertificate)) {
             GiftCertificate createdGiftCertificate = giftCertificateService.createGiftCertificate(giftCertificate);
             return new ResponseEntity<>(Map.of("certificate",
@@ -83,12 +83,12 @@ public class GiftCertificateController {
      * @param id              - id of gift certificate (min value 1)
      * @param giftCertificate the GiftCertificate object for updating giftCertificate
      * @return CollectionModel of GiftCertificate with links
-     * @see GiftCertificateService#updateGiftCertificate(long, GiftCertificate)
+     * @see GiftCertificateService#updateGiftCertificate(long, GiftCertificateDTO)
      */
     @PatchMapping("/{id}")
     public ResponseEntity<?> updateGiftCertificate(@PathVariable("id")
                                                    @Min(value = 1, message = "Id should be >= 1") long id,
-                                                   @RequestBody GiftCertificate giftCertificate) {
+                                                   @RequestBody GiftCertificateDTO giftCertificate) {
         if (VerificationOfRequestsData.isGiftCertificateValidForUpdate(giftCertificate)) {
             GiftCertificate updatedGiftCertificate = giftCertificateService.updateGiftCertificate(id, giftCertificate);
             return ResponseEntity.ok(Map.of("giftCertificate",
