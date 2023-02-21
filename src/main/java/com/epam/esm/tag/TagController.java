@@ -41,11 +41,12 @@ public class TagController {
     public ResponseEntity<?> createTag(@RequestBody Tag tag) {
         if (VerificationOfRequestsData.isTagCorrect(tag)) {
             Tag createdTag = tagService.createTag(tag);
-            return new ResponseEntity<>(Map.of("CreatedTag",
+            return new ResponseEntity<>(Map.of("createdTag",
                     tagHateoasMapper.createTagHateoas(createdTag)), HttpStatus.CREATED);
         }
         throw new InvalidDataException("Invalid data. Check your fields.");
     }
+
 
     /**
      * A controller get method for getting all tags
@@ -60,7 +61,7 @@ public class TagController {
                                         @RequestParam(value = "size", defaultValue = "10")
                                         @Min(value = 1, message = "Size should be should be >= 1") int size) {
         Page<Tag> tags = tagService.getAllTags(page, size);
-        return ResponseEntity.ok(Map.of("allTags", tagHateoasMapper.getAllTagHateoas(tags)));
+        return ResponseEntity.ok(Map.of("tags", tagHateoasMapper.getAllTagHateoas(tags)));
     }
 
     /**
@@ -95,7 +96,7 @@ public class TagController {
     @GetMapping("/mostly-used-tag")
     public ResponseEntity<?> getTheMostlyUsedTagInUserOrders() {
         Tag getTheMostFrequentlyTag = tagService.getTheMostlyUsedTagInUserOrders();
-        return ResponseEntity.ok(Map.of("MostFrequentlyUsedTag",
+        return ResponseEntity.ok(Map.of("mostlyUsedTag",
                 tagHateoasMapper.getMostlyUsedTagHateoas(getTheMostFrequentlyTag)));
     }
 }

@@ -58,7 +58,7 @@ public class OrderController {
                                                @RequestParam(value = "size", defaultValue = "1")
                                                @Min(value = 1, message = "Size should be should be >= 1") int size) {
         Page<Order> order = orderService.getOrdersByUserId(user_id, page, size);
-        return ResponseEntity.ok(Map.of("order", orderHateoasMapper.getUserOrdersHateoasMapper(order)));
+        return ResponseEntity.ok(Map.of("userOrders", orderHateoasMapper.getUserOrdersHateoasMapper(order)));
     }
 
     /**

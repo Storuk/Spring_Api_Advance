@@ -42,6 +42,9 @@ public class GiftCertificateService {
     @Transactional
     public GiftCertificate createGiftCertificate(GiftCertificate giftCertificate) {
         if (!giftCertificateRepo.existsByName(giftCertificate.getName())) {
+            if(giftCertificate.getId() != null){
+                giftCertificate.setId(null);
+            }
             if (giftCertificate.getTags() != null) {
                 tagService.saveAllTags(giftCertificate.getTags());
             }

@@ -60,7 +60,7 @@ class TagControllerTest {
                 .content(objectMapper.writeValueAsString(tag)).accept(MediaType.APPLICATION_JSON)).andReturn().getResponse();
 
         assertEquals(HttpStatus.CREATED.value(), response.getStatus());
-        assertEquals(jsonTagCollectionModel.write(Map.of("CreatedTag", CollectionModel.of(List.of(tag)))).getJson(), response.getContentAsString());
+        assertEquals(jsonTagCollectionModel.write(Map.of("createdTag", CollectionModel.of(List.of(tag)))).getJson(), response.getContentAsString());
     }
 
     @Test
@@ -79,7 +79,7 @@ class TagControllerTest {
         when(tagHateoasMapper.getAllTagHateoas(tagList)).thenReturn(PagedModel.empty());
         MockHttpServletResponse response = mvc.perform(get("/tags?page=0&size=10")
                 .accept(MediaType.APPLICATION_JSON)).andReturn().getResponse();
-        assertEquals(jsonTagPagedModel.write(Map.of("allTags", PagedModel.empty())).getJson(), response.getContentAsString());
+        assertEquals(jsonTagPagedModel.write(Map.of("tags", PagedModel.empty())).getJson(), response.getContentAsString());
     }
 
     @Test
@@ -109,6 +109,6 @@ class TagControllerTest {
         MockHttpServletResponse response = mvc.perform(get("/tags/mostly-used-tag")
                 .accept(MediaType.APPLICATION_JSON)).andReturn().getResponse();
         assertEquals(HttpStatus.OK.value(), response.getStatus());
-        assertEquals(jsonTagCollectionModel.write(Map.of("MostFrequentlyUsedTag", CollectionModel.of(List.of(tag)))).getJson(), response.getContentAsString());
+        assertEquals(jsonTagCollectionModel.write(Map.of("mostlyUsedTag", CollectionModel.of(List.of(tag)))).getJson(), response.getContentAsString());
     }
 }

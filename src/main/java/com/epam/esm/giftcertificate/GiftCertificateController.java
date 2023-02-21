@@ -145,7 +145,7 @@ public class GiftCertificateController {
                                                 @Min(value = 1, message = "Size should be should be >= 1") int size) {
         Page<GiftCertificate> allGiftCertificates = giftCertificateService.getAllGiftCertificates(page, size);
         PagedModel<GiftCertificate> allCertificatesHateoasMapper = hateoasMapper.getAllCertificatesHateoasMapper(allGiftCertificates);
-        return ResponseEntity.ok(Map.of("AllGiftCertificates", allCertificatesHateoasMapper));
+        return ResponseEntity.ok(Map.of("giftCertificates", allCertificatesHateoasMapper));
     }
 
     /**
