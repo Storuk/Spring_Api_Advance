@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -183,7 +184,7 @@ public class GiftCertificateController {
      * @see GiftCertificateService#getGiftCertificatesByTags(Set, int, int)
      */
     @GetMapping("get-by-tag-names")
-    public ResponseEntity<?> getGiftCertificatesByTags(@RequestBody Set<String> tagNamesSet,
+    public ResponseEntity<?> getGiftCertificatesByTags(@RequestParam Set<String> tagNamesSet,
                                                        @RequestParam(value = "page", defaultValue = "0")
                                                        @Min(value = 0, message = "Page index should be >= 0") int page,
                                                        @RequestParam(value = "size", defaultValue = "20")
@@ -266,8 +267,8 @@ public class GiftCertificateController {
                                                                    @Min(value = 0, message = "Page index should be >= 0") int page,
                                                                    @RequestParam(value = "size", defaultValue = "20")
                                                                    @Min(value = 1, message = "Size should be should be >= 1") int size) {
-        if (VerificationOfRequestsData.isSetOfStringsCorrect(Set.of(sortingTypeName, sortingTypeDate))) {
-            if (VerificationOfRequestsData.isSetOfSortingTypesCorrect(Set.of(sortingTypeName, sortingTypeDate))) {
+        if (VerificationOfRequestsData.isStringValuesCorrect(sortingTypeName) && VerificationOfRequestsData.isStringValuesCorrect(sortingTypeDate)) {
+            if (VerificationOfRequestsData.isListOfSortingTypesCorrect(List.of(sortingTypeName, sortingTypeDate))) {
                 Page<GiftCertificate> giftCertificatesSortedByNameByDate = giftCertificateService
                         .getGiftCertificatesSortedByNameByDate(sortingTypeName, sortingTypeDate, page, size);
                 return ResponseEntity.ok(Map.of("giftCertificates",

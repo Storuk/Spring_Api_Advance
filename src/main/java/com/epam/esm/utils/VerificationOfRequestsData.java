@@ -5,6 +5,7 @@ import com.epam.esm.giftcertificate.GiftCertificateDTO;
 import com.epam.esm.tag.TagDTO;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -88,8 +89,8 @@ public class VerificationOfRequestsData {
      *
      * @return boolean
      */
-    public static boolean isSetOfSortingTypesCorrect(Set<String> sortingTypesSet) {
-        for (String sortingType : sortingTypesSet) {
+    public static boolean isListOfSortingTypesCorrect(List<String> sortingTypesList) {
+        for (String sortingType : sortingTypesList) {
             if (!isSortingTypeCorrect(sortingType)) {
                 return false;
             }

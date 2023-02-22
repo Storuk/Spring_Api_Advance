@@ -2,6 +2,7 @@ package com.epam.esm.orders;
 
 import jakarta.validation.constraints.Min;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -39,7 +40,7 @@ public class OrderController {
                                          @PathVariable("giftCertificateId")
                                          @Min(value = 1, message = "GiftCertificateId should be >= 1") long giftCertificateId) {
         Order order = orderService.createOrder(user_id, giftCertificateId);
-        return ResponseEntity.ok(Map.of("order", orderHateoasMapper.createOrderHateoasMapper(order)));
+        return new ResponseEntity<>(Map.of("order", orderHateoasMapper.createOrderHateoasMapper(order)), HttpStatus.CREATED);
     }
 
     /**

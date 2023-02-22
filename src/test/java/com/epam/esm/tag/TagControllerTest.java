@@ -10,7 +10,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.json.JacksonTester;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
@@ -75,7 +74,7 @@ class TagControllerTest {
 
     @Test
     void getAllTagsTest() throws Exception {
-        Page<Tag> tagList = new PageImpl<>(List.of());
+        Page<Tag> tagList = Page.empty();
         when(tagService.getAllTags(0, 10)).thenReturn(tagList);
         when(tagHateoasMapper.getAllTagHateoas(tagList)).thenReturn(PagedModel.empty());
         MockHttpServletResponse response = mvc.perform(get("/tags?page=0&size=10")

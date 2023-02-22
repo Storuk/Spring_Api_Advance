@@ -11,6 +11,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -71,15 +72,15 @@ class VerificationOfRequestsDataTest {
     }
 
     @Test
-    void isSetOfSortingTypesCorrectTrue() {
-        Set<String> sortingTypesSet = Set.of("AsC", "DesC", "asc", "desc", "ASC", "DESC");
-        assertTrue(VerificationOfRequestsData.isSetOfSortingTypesCorrect(sortingTypesSet));
+    void isListOfSortingTypesCorrectTrue() {
+        List<String> sortingTypesList = List.of("AsC", "DesC", "asc", "desc", "ASC", "DESC");
+        assertTrue(VerificationOfRequestsData.isListOfSortingTypesCorrect(sortingTypesList));
     }
 
     @Test
-    void isSetOfSortingTypesCorrectFalse() {
-        Set<String> sortingTypesSet = Set.of("AsC1", "Des1C", "123", "");
-        assertFalse(VerificationOfRequestsData.isSetOfSortingTypesCorrect(sortingTypesSet));
+    void isListOfSortingTypesCorrectFalse() {
+        List<String> sortingTypesList = List.of("AsC1", "Des1C", "123", "");
+        assertFalse(VerificationOfRequestsData.isListOfSortingTypesCorrect(sortingTypesList));
     }
 
     @Test
