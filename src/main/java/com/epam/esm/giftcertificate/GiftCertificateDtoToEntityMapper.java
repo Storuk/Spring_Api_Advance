@@ -9,17 +9,6 @@ import java.util.Set;
 
 @Component
 public class GiftCertificateDtoToEntityMapper {
-    public GiftCertificate convertGiftCertificateDtoToGiftCertificate(GiftCertificateDTO giftCertificateDTO) {
-        GiftCertificate giftCertificate = new GiftCertificate();
-        giftCertificate.setName(giftCertificateDTO.getName());
-        giftCertificate.setDescription(giftCertificateDTO.getDescription());
-        giftCertificate.setPrice(giftCertificateDTO.getPrice());
-        giftCertificate.setDuration(giftCertificateDTO.getDuration());
-        if (giftCertificateDTO.getTags() != null) {
-            giftCertificate.setTags(convertSetOfTagDtoToSetOfTag(giftCertificateDTO.getTags()));
-        }
-        return giftCertificate;
-    }
 
     public Set<Tag> convertSetOfTagDtoToSetOfTag(Set<TagDTO> tagDTOSet) {
         Set<Tag> tagSet = new HashSet<>();
@@ -27,5 +16,25 @@ public class GiftCertificateDtoToEntityMapper {
             tagSet.add(Tag.builder().name(tagDTO.getName()).build());
         }
         return tagSet;
+    }
+
+    public GiftCertificate convertGiftCertificateDtoToGiftCertificate(GiftCertificateDTO giftCertificateDTO) {
+        GiftCertificate giftCertificate = new GiftCertificate();
+        if(giftCertificateDTO.getDescription() != null) {
+            giftCertificate.setDescription(giftCertificateDTO.getDescription());
+        }
+        if(giftCertificateDTO.getName() != null) {
+            giftCertificate.setName(giftCertificateDTO.getName());
+        }
+        if(giftCertificateDTO.getPrice() != null) {
+            giftCertificate.setPrice(giftCertificateDTO.getPrice());
+        }
+        if(giftCertificateDTO.getDuration() != null) {
+            giftCertificate.setDuration(giftCertificateDTO.getDuration());
+        }
+        if (giftCertificateDTO.getTags() != null) {
+            giftCertificate.setTags(convertSetOfTagDtoToSetOfTag(giftCertificateDTO.getTags()));
+        }
+        return giftCertificate;
     }
 }

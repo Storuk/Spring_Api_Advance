@@ -24,33 +24,30 @@ import java.util.Set;
 public class GiftCertificateService {
     private final GiftCertificateRepo giftCertificateRepo;
     private final TagService tagService;
-    private final GiftCertificateDtoToEntityMapper dtoToEntityMapper;
 
-    public GiftCertificateService(GiftCertificateRepo giftCertificateRepo, TagService tagService, GiftCertificateDtoToEntityMapper dtoToEntityMapper) {
+    public GiftCertificateService(GiftCertificateRepo giftCertificateRepo, TagService tagService) {
         this.giftCertificateRepo = giftCertificateRepo;
         this.tagService = tagService;
-        this.dtoToEntityMapper = dtoToEntityMapper;
     }
 
     /**
      * A service method for creating gift certificate
      *
-     * @param giftCertificateDTO the GiftCertificate object that will be created in database
+     * @param giftCertificate the GiftCertificate object that will be created in database
      * @return saved GiftCertificate
      * @see GiftCertificateRepo#existsByName(String) for checking if GiftCertificate already exists
      * @see TagService#saveAllTags(Set) for saving all Tags
      * @see GiftCertificateRepo#save(Object) for saving GiftCertificate
      */
     @Transactional
-    public GiftCertificate createGiftCertificate(GiftCertificateDTO giftCertificateDTO) {
-        if (!giftCertificateRepo.existsByName(giftCertificateDTO.getName())) {
-            GiftCertificate giftCertificate = dtoToEntityMapper.convertGiftCertificateDtoToGiftCertificate(giftCertificateDTO);
-            if (giftCertificateDTO.getTags() != null) {
+    public GiftCertificate createGiftCertificate(GiftCertificate giftCertificate) {
+        if (!giftCertificateRepo.existsByName(giftCertificate.getName())) {
+            if (giftCertificate.getTags() != null) {
                 tagService.saveAllTags(giftCertificate.getTags());
             }
             return giftCertificateRepo.save(giftCertificate);
         } else {
-            throw new InvalidDataException("Certificate already exists: " + giftCertificateDTO.getName());
+            throw new InvalidDataException("Certificate already exists: " + giftCertificate.getName());
         }
     }
 
@@ -105,7 +102,7 @@ public class GiftCertificateService {
      */
     @Transactional
     @Modifying
-    public GiftCertificate updateGiftCertificate(long id, GiftCertificateDTO giftCertificate) {
+    public GiftCertificate updateGiftCertificate(long id, GiftCertificate giftCertificate) {
         if (giftCertificateRepo.existsByName(giftCertificate.getName())
                 && !giftCertificate.getName().equals(getGiftCertificateById(id).getName())) {
             throw new ItemNotFoundException("Gift certificate with such name already exists " + giftCertificate.getName());
@@ -123,7 +120,7 @@ public class GiftCertificateService {
      * @return GiftCertificate which already contain values from request
      * @see TagService#saveAllTags(Set)
      */
-    private GiftCertificate makeGiftCertificateForUpdate(GiftCertificateDTO giftCertificateWithUpdates, GiftCertificate giftCertificateForUpdates) {
+    private GiftCertificate makeGiftCertificateForUpdate(GiftCertificate giftCertificateWithUpdates, GiftCertificate giftCertificateForUpdates) {
         if (giftCertificateWithUpdates.getName() != null) {
             giftCertificateForUpdates.setName(giftCertificateWithUpdates.getName());
         }
@@ -137,7 +134,7 @@ public class GiftCertificateService {
             giftCertificateForUpdates.setDuration(giftCertificateWithUpdates.getDuration());
         }
         if (giftCertificateWithUpdates.getTags() != null) {
-            giftCertificateForUpdates.setTags(dtoToEntityMapper.convertSetOfTagDtoToSetOfTag(giftCertificateWithUpdates.getTags()));
+            giftCertificateForUpdates.setTags(giftCertificateWithUpdates.getTags());
             tagService.saveAllTags(giftCertificateForUpdates.getTags());
         }
         return giftCertificateForUpdates;
