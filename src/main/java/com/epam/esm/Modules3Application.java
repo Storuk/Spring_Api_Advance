@@ -34,7 +34,9 @@ public class Modules3Application {
             Faker faker = new Faker();
             for (int i = 0; i < 1000; i++) {
                 User user = new User();
-                user.setLogin(faker.name().fullName());
+                user.setEmail(faker.name().fullName());
+                user.setFirstName(faker.name().firstName());
+                user.setLastName(faker.name().lastName());
                 userRepo.save(user);
             }
 
