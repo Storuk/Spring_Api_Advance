@@ -1,4 +1,4 @@
-package com.epam.esm.auth;
+package com.epam.esm.auth.models;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,9 +9,10 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ChangeUserPasswordRequest {
+public class RegistrationRequest {
+    private String firstName;
+    private String lastName;
     private String email;
     private String password;
     private String repeatPassword;
-    private String verificationCode;
 }

@@ -1,16 +1,19 @@
 package com.epam.esm.auth;
 
+import com.epam.esm.auth.models.AuthenticationRequest;
+import com.epam.esm.auth.models.ChangeUserPasswordRequest;
+import com.epam.esm.auth.models.RegistrationRequest;
+import com.epam.esm.auth.models.TokensResponse;
 import com.epam.esm.config.JwtService;
 import com.epam.esm.enums.Role;
 import com.epam.esm.exceptions.InvalidDataException;
 import com.epam.esm.exceptions.ItemNotFoundException;
+import com.epam.esm.mailsender.MailSenderService;
 import com.epam.esm.user.User;
 import com.epam.esm.user.UserRepo;
 import com.epam.esm.verificationcode.VerificationCode;
 import com.epam.esm.verificationcode.VerificationCodeRepo;
 import lombok.RequiredArgsConstructor;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -26,10 +29,10 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
-    private final JavaMailSender mailSender;
+    private final MailSenderService mailSenderService;
     private final VerificationCodeRepo verificationCodeRepo;
 
-    public RegistrationAndAuthenticationResponse register(RegistrationRequest registrationRequest) {
+    public TokensResponse register(RegistrationRequest registrationRequest) {
         if (userRepo.findByEmail(registrationRequest.getEmail()).isEmpty()) {
             var user = User.builder()
                     .email(registrationRequest.getEmail())
@@ -39,7 +42,7 @@ public class AuthenticationService {
                     .role(Role.USER)
                     .build();
             userRepo.save(user);
-            return RegistrationAndAuthenticationResponse.builder()
+            return TokensResponse.builder()
                     .accessToken(jwtService.generateToken(user))
                     .refreshToken(jwtService.generateRefreshToken(user))
                     .build();
@@ -47,7 +50,7 @@ public class AuthenticationService {
         throw new InvalidDataException("User with such login already exists: " + registrationRequest.getEmail());
     }
 
-    public RegistrationAndAuthenticationResponse authenticate(AuthenticationRequest authenticationRequest) {
+    public TokensResponse authenticate(AuthenticationRequest authenticationRequest) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         authenticationRequest.getEmail(),
@@ -55,19 +58,19 @@ public class AuthenticationService {
                 )
         );
         var user = userRepo.findByEmail(authenticationRequest.getEmail()).orElseThrow(() -> new ItemNotFoundException("User not exist"));
-        return RegistrationAndAuthenticationResponse.builder()
+        return TokensResponse.builder()
                 .accessToken(jwtService.generateToken(user))
                 .refreshToken(jwtService.generateRefreshToken(user))
                 .build();
     }
 
-    public RegistrationAndAuthenticationResponse refreshToken(String request) {
-        User user = userRepo.findByEmail(jwtService.extractUserLogin(request))
-                .orElseThrow(() -> new ItemNotFoundException("error occurred during the request"));
+    public TokensResponse refreshToken(String request) {
+        User user = userRepo.findByEmail(jwtService.extractUserEmail(request))
+                .orElseThrow(() -> new ItemNotFoundException("There are no user with such email or invalid token"));
 
         if (jwtService.isTokenValid(request, user)) {
 
-            return RegistrationAndAuthenticationResponse.builder()
+            return TokensResponse.builder()
                     .accessToken(jwtService.generateToken(user))
                     .refreshToken(jwtService.generateRefreshToken(user))
                     .build();
@@ -76,7 +79,7 @@ public class AuthenticationService {
         throw new InvalidDataException("Invalid token");
     }
 
-    public User resetPassword(ChangeUserPasswordRequest request) {
+    public boolean resetPassword(ChangeUserPasswordRequest request) {
         User user = userRepo.findByEmail(request.getEmail())
                 .orElseThrow(() -> new ItemNotFoundException("User with such email is not exists"));
         VerificationCode verificationCode = verificationCodeRepo.findByUserId(user.getId())
@@ -90,37 +93,19 @@ public class AuthenticationService {
 
         verificationCodeRepo.deleteById(verificationCode.getId());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
-
-        return userRepo.save(user);
+        userRepo.save(user);
+        return true;
     }
 
     public boolean forgotPassword(String email) {
         User user = userRepo.findByEmail(email)
-                .orElseThrow(() -> new ItemNotFoundException("error occurred during the request"));
+                .orElseThrow(() -> new ItemNotFoundException("User with such email is not exists"));
         VerificationCode verificationCode = VerificationCode.builder()
                 .verificationCode(generateRandomCode())
                 .user(user).build();
         verificationCodeRepo.save(verificationCode);
-        sendForgotPasswordRandomStringToEmail(email, verificationCode.getVerificationCode());
+        mailSenderService.sendForgotPasswordRandomStringToEmail(user, verificationCode.getVerificationCode());
         return true;
-    }
-
-    private void sendForgotPasswordRandomStringToEmail(String email, String verificationCode) {
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom("vladstoroschuk1@gmail.com");
-        message.setTo(email);
-        message.setText(mailMessage(verificationCode));
-        message.setSubject("Reset Password Code");
-        mailSender.send(message);
-    }
-
-    private String mailMessage(String verificationCode) {
-        return "Dear [[name]],\n"
-                + "Here is code to reset and change your password:\n"
-                + verificationCode
-                + "\nCode expire in 60 minutes.\n"
-                + "Thank you,\n"
-                + "VladEntertainment.";
     }
 
     private String generateRandomCode() {

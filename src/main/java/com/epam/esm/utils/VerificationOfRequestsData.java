@@ -1,8 +1,8 @@
 package com.epam.esm.utils;
 
-import com.epam.esm.auth.AuthenticationRequest;
-import com.epam.esm.auth.ChangeUserPasswordRequest;
-import com.epam.esm.auth.RegistrationRequest;
+import com.epam.esm.auth.models.AuthenticationRequest;
+import com.epam.esm.auth.models.ChangeUserPasswordRequest;
+import com.epam.esm.auth.models.RegistrationRequest;
 import com.epam.esm.exceptions.InvalidDataException;
 import com.epam.esm.giftcertificate.GiftCertificateDTO;
 import com.epam.esm.tag.TagDTO;

@@ -1,4 +1,4 @@
-package com.epam.esm.auth;
+package com.epam.esm.auth.models;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class RegistrationAndAuthenticationResponse {
-    private String accessToken;
-    private String refreshToken;
+public class AuthenticationRequest {
+    private String email;
+    private String password;
 }
