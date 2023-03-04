@@ -56,7 +56,6 @@ public class UserController {
     public ResponseEntity<?> getUserById(@PathVariable("id")
                                          @Min(value = 1, message = "Id should be >= 1. ") long id) {
         User user = userService.getUserById(id);
-        System.out.println(user.getPassword());
         CollectionModel<User> userByIdModel = userHateoasMapper
                 .getUserByIdHateoas(user);
         return ResponseEntity.ok(Map.of("user", userByIdModel));

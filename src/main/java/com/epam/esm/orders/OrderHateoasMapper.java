@@ -4,6 +4,7 @@ import com.epam.esm.giftcertificate.GiftCertificateController;
 import com.epam.esm.giftcertificate.GiftCertificateDTO;
 import com.epam.esm.giftcertificate.GiftCertificateHateoasMapper;
 import com.epam.esm.tag.TagController;
+import com.epam.esm.user.User;
 import com.epam.esm.user.UserController;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +44,7 @@ public class OrderHateoasMapper {
                             .getUserById((order.getUser().getId())))
                             .withRel(() -> "get user"))
                     .add(linkTo(methodOn(OrderController.class)
-                            .getOrdersByUserId(order.getUser().getId(), 0, 10))
+                            .getOrdersByUserId(new User(), 0, 10))
                             .withRel(() -> "get orders by user id"));
         }
 
@@ -73,7 +74,7 @@ public class OrderHateoasMapper {
                                         .getUserById((order.getUser().getId())))
                                         .withRel(() -> "get user"))
                                 .add(linkTo(methodOn(OrderController.class)
-                                        .createOrder(order.getUser().getId(), 0))
+                                        .createOrder(new User(), 0))
                                         .withRel(() -> "create order"));
                     }
 
@@ -110,10 +111,10 @@ public class OrderHateoasMapper {
                                         .getUserById((order.getUser().getId())))
                                         .withRel(() -> "get user"))
                                 .add(linkTo(methodOn(OrderController.class)
-                                        .createOrder(order.getUser().getId(), 0))
+                                        .createOrder(new User(), 0))
                                         .withRel(() -> "create order"))
                                 .add(linkTo(methodOn(OrderController.class)
-                                        .getOrdersByUserId(order.getUser().getId(), 0, 10))
+                                        .getOrdersByUserId(new User(), 0, 10))
                                         .withRel(() -> "get orders by user id"));
                     }
 

@@ -1,9 +1,6 @@
 package com.epam.esm.auth;
 
-import com.epam.esm.auth.models.AuthenticationRequest;
-import com.epam.esm.auth.models.ChangeUserPasswordRequest;
-import com.epam.esm.auth.models.RegistrationRequest;
-import com.epam.esm.auth.models.TokensResponse;
+import com.epam.esm.auth.models.*;
 import com.epam.esm.exceptions.InvalidDataException;
 import com.epam.esm.utils.VerificationOfRequestsData;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +14,15 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class AuthenticationController {
     private final AuthenticationService authenticationService;
+
+    @PostMapping("/authenticate-google")
+    public ResponseEntity<?> authenticateWithGoogle(@RequestParam String googleToken) {
+
+        if (VerificationOfRequestsData.isStringValuesCorrect(googleToken)) {
+            return ResponseEntity.ok(authenticationService.authenticateWithGoogle(googleToken));
+        }
+        throw new InvalidDataException("Invalid token format. Check your input");
+    }
 
     @PostMapping("/register")
     public ResponseEntity<TokensResponse> register(@RequestBody RegistrationRequest registrationRequest) {

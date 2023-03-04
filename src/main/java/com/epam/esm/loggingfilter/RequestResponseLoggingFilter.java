@@ -1,4 +1,4 @@
-package com.epam.esm.filters;
+package com.epam.esm.loggingfilter;
 
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;

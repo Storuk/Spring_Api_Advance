@@ -4,10 +4,12 @@ import com.epam.esm.auth.models.AuthenticationRequest;
 import com.epam.esm.auth.models.ChangeUserPasswordRequest;
 import com.epam.esm.auth.models.RegistrationRequest;
 import com.epam.esm.auth.models.TokensResponse;
-import com.epam.esm.config.JwtService;
 import com.epam.esm.enums.Role;
 import com.epam.esm.exceptions.InvalidDataException;
 import com.epam.esm.exceptions.ItemNotFoundException;
+import com.epam.esm.exceptions.UserNotFoundException;
+import com.epam.esm.jwt.GoogleTokenService;
+import com.epam.esm.jwt.JwtService;
 import com.epam.esm.mailsender.MailSenderService;
 import com.epam.esm.user.User;
 import com.epam.esm.user.UserRepo;
@@ -20,6 +22,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.Optional;
 import java.util.Random;
 
 @Service
@@ -31,10 +34,11 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
     private final MailSenderService mailSenderService;
     private final VerificationCodeRepo verificationCodeRepo;
+    private final GoogleTokenService googleTokenService;
 
     public TokensResponse register(RegistrationRequest registrationRequest) {
         if (userRepo.findByEmail(registrationRequest.getEmail()).isEmpty()) {
-            var user = User.builder()
+            User user = User.builder()
                     .email(registrationRequest.getEmail())
                     .password(passwordEncoder.encode(registrationRequest.getPassword()))
                     .firstName(registrationRequest.getFirstName())
@@ -57,31 +61,30 @@ public class AuthenticationService {
                         authenticationRequest.getPassword()
                 )
         );
-        var user = userRepo.findByEmail(authenticationRequest.getEmail()).orElseThrow(() -> new ItemNotFoundException("User not exist"));
+        User user = userRepo.findByEmail(authenticationRequest.getEmail())
+                .orElseThrow(() -> new UserNotFoundException("User not exist"));
         return TokensResponse.builder()
                 .accessToken(jwtService.generateToken(user))
                 .refreshToken(jwtService.generateRefreshToken(user))
                 .build();
     }
 
-    public TokensResponse refreshToken(String request) {
-        User user = userRepo.findByEmail(jwtService.extractUserEmail(request))
-                .orElseThrow(() -> new ItemNotFoundException("There are no user with such email or invalid token"));
+    public TokensResponse refreshToken(String token) {
+        User user = userRepo.findByEmail(jwtService.extractUserEmail(token))
+                .orElseThrow(() -> new UserNotFoundException("Invalid token"));
 
-        if (jwtService.isTokenValid(request, user)) {
-
+        if (jwtService.isTokenValid(token, user)) {
             return TokensResponse.builder()
                     .accessToken(jwtService.generateToken(user))
                     .refreshToken(jwtService.generateRefreshToken(user))
                     .build();
-
         }
         throw new InvalidDataException("Invalid token");
     }
 
     public boolean resetPassword(ChangeUserPasswordRequest request) {
         User user = userRepo.findByEmail(request.getEmail())
-                .orElseThrow(() -> new ItemNotFoundException("User with such email is not exists"));
+                .orElseThrow(() -> new UserNotFoundException("There are no user with such email"));
         VerificationCode verificationCode = verificationCodeRepo.findByUserId(user.getId())
                 .orElseThrow(() -> new ItemNotFoundException("This user were not trying to change password"));
 
@@ -99,7 +102,7 @@ public class AuthenticationService {
 
     public boolean forgotPassword(String email) {
         User user = userRepo.findByEmail(email)
-                .orElseThrow(() -> new ItemNotFoundException("User with such email is not exists"));
+                .orElseThrow(() -> new UserNotFoundException("User with such email is not exists"));
         VerificationCode verificationCode = VerificationCode.builder()
                 .verificationCode(generateRandomCode())
                 .user(user).build();
@@ -119,5 +122,24 @@ public class AuthenticationService {
 
     private boolean isVerificationCodeExpired(VerificationCode verificationCode) {
         return new Date().before(new Date(verificationCode.getCreateDate().getTime() + 1000 * 60 * 60));
+    }
+
+    public TokensResponse authenticateWithGoogle(String googleToken) {
+        if (googleTokenService.isTokenValid(googleToken)) {
+            User extractedUser = googleTokenService.extractUser(googleToken);
+            if (extractedUser.getEmail() != null) {
+                Optional<User> user = userRepo.findByEmail(extractedUser.getEmail())
+                        .or(() -> Optional.of(userRepo.save(User.builder().email(extractedUser.getEmail().trim())
+                                .firstName(extractedUser.getFirstName()).lastName(extractedUser.getLastName())
+                                .role(Role.USER).build())));
+
+                return TokensResponse.builder()
+                        .accessToken(jwtService.generateToken(user.get()))
+                        .refreshToken(jwtService.generateRefreshToken(user.get()))
+                        .build();
+            }
+            throw new InvalidDataException("bad token signature");
+        }
+        throw new InvalidDataException("Invalid token");
     }
 }

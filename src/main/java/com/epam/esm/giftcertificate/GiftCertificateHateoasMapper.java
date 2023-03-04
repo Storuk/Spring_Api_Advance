@@ -3,6 +3,7 @@ package com.epam.esm.giftcertificate;
 import com.epam.esm.orders.OrderController;
 import com.epam.esm.tag.Tag;
 import com.epam.esm.tag.TagController;
+import com.epam.esm.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -167,7 +168,7 @@ public class GiftCertificateHateoasMapper {
                         .createCertificate(new GiftCertificateDTO()))
                         .withRel(() -> "create GiftCertificate"))
                 .add(linkTo(methodOn(OrderController.class)
-                        .createOrder(0, 0))
+                        .createOrder(new User(), 0))
                         .withRel(() -> "create order"));
         return giftCertificateCollectionModel;
     }
@@ -200,7 +201,7 @@ public class GiftCertificateHateoasMapper {
                         .createCertificate(new GiftCertificateDTO()))
                         .withRel(() -> "create GiftCertificate"))
                 .add(linkTo(methodOn(OrderController.class)
-                        .createOrder(0, 0))
+                        .createOrder(new User(), 0))
                         .withRel(() -> "create order"));
         return giftCertificateCollectionModel;
     }
@@ -233,7 +234,7 @@ public class GiftCertificateHateoasMapper {
                         .createCertificate(new GiftCertificateDTO()))
                         .withRel(() -> "create GiftCertificate"))
                 .add(linkTo(methodOn(OrderController.class)
-                        .createOrder(0, 0))
+                        .createOrder(new User(), 0))
                         .withRel(() -> "create order"));
         return giftCertificateCollectionModel;
     }
@@ -266,7 +267,7 @@ public class GiftCertificateHateoasMapper {
                         .createCertificate(new GiftCertificateDTO()))
                         .withRel(() -> "create GiftCertificate"))
                 .add(linkTo(methodOn(OrderController.class)
-                        .createOrder(0, 0))
+                        .createOrder(new User(), 0))
                         .withRel(() -> "create order"));
         return giftCertificateCollectionModel;
     }
@@ -284,7 +285,7 @@ public class GiftCertificateHateoasMapper {
         tagsDefaultLinks(giftCertificate);
         giftCertificateCollectionModel
                 .add(linkTo(methodOn(OrderController.class)
-                        .createOrder(0, 0))
+                        .createOrder(new User(), 0))
                         .withRel(() -> "create order"));
         return giftCertificateCollectionModel;
     }
@@ -410,7 +411,7 @@ public class GiftCertificateHateoasMapper {
                         .getTheMostlyUsedTagInUserOrders())
                         .withRel(() -> "get the mostly used tag from user with highest sum of orders"))
                 .add(linkTo(methodOn(OrderController.class)
-                        .createOrder(0, 0))
+                        .createOrder(new User(), 0))
                         .withRel(() -> "create order"));
     }
 
@@ -441,7 +442,7 @@ public class GiftCertificateHateoasMapper {
                         .getGiftCertificatesByTags(Set.of(), 0, 10))
                         .withRel(() -> "get gift certificates by tags names"))
                 .add(linkTo(methodOn(OrderController.class)
-                        .createOrder(0, 0))
+                        .createOrder(new User(), 0))
                         .withRel(() -> "create order"));
     }
 }

@@ -35,10 +35,10 @@ public class UserHateoasMapper {
                             .getUserById((user.getId())))
                             .withRel(() -> "get user"));
                     user.add(linkTo(methodOn(OrderController.class)
-                            .getOrdersByUserId((user.getId()), 0, 10))
+                            .getOrdersByUserId(new User(), 0, 10))
                             .withRel(() -> "get orders"));
                     user.add(linkTo(methodOn(OrderController.class)
-                            .createOrder(user.getId(), 0))
+                            .createOrder(new User(), 0))
                             .withRel(() -> "create order"));
                     return user;
                 });
@@ -56,10 +56,10 @@ public class UserHateoasMapper {
      */
     public CollectionModel<User> getUserByIdHateoas(User user) {
         user.add(linkTo(methodOn(OrderController.class)
-                .getOrdersByUserId((user.getId()), 0, 10))
+                .getOrdersByUserId(new User(), 0, 10))
                 .withRel(() -> "get user orders"));
         user.add(linkTo(methodOn(OrderController.class)
-                .createOrder(user.getId(), 0))
+                .createOrder(new User(), 0))
                 .withRel(() -> "create order"));
         return CollectionModel.of(List.of(user))
                 .add(linkTo(methodOn(OrderController.class)

@@ -1,8 +1,11 @@
 package com.epam.esm.config;
 
+import com.epam.esm.enums.Role;
+import com.epam.esm.jwt.filter.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -25,6 +28,14 @@ public class SecurityConfig {
                 .authorizeHttpRequests()
                 .requestMatchers("/authentication/**")
                 .permitAll()
+                .requestMatchers(HttpMethod.GET, "/gift-certificates", "/gift-certificates/**", "/tags", "/tags/**")
+                .permitAll()
+                .requestMatchers(HttpMethod.GET, "/orders", "/users").hasAuthority(Role.ADMIN.name())
+                .requestMatchers(HttpMethod.GET, "/users/**", "/orders/**").hasAnyAuthority(Role.USER.name(), Role.ADMIN.name())
+                .requestMatchers(HttpMethod.POST, "/gift-certificates", "/tags").hasAuthority(Role.ADMIN.name())
+                .requestMatchers(HttpMethod.POST, "/orders/**").hasAnyAuthority(Role.USER.name(), Role.ADMIN.name())
+                .requestMatchers(HttpMethod.PATCH, "/gift-certificates/**").hasAuthority(Role.ADMIN.name())
+                .requestMatchers(HttpMethod.DELETE, "/gift-certificates/**", "/tags/**").hasAuthority(Role.ADMIN.name())
                 .anyRequest()
                 .authenticated()
                 .and()
