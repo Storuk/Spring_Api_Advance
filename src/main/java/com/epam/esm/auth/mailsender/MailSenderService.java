@@ -26,7 +26,7 @@ public class MailSenderService {
                 + verificationCode
                 + "\nCode expire in 60 minutes.\n"
                 + "Thank you,\n"
-                + "VladEntertainment.";
+                + "CertificatesEntertainment.";
     }
 
     public void sendCreatedAccountMessage(User user) {
@@ -42,6 +42,6 @@ public class MailSenderService {
         return "Dear" + user.getFirstName() + " " + user.getLastName() + ",\n"
                 + "Your account created successfully:\n"
                 + "Thank you,\n"
-                + "VladEntertainment.";
+                + "CertificatesEntertainment.";
     }
 }

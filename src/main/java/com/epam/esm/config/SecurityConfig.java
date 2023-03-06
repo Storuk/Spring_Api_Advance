@@ -1,8 +1,8 @@
 package com.epam.esm.config;
 
 import com.epam.esm.enums.Role;
-import com.epam.esm.exceptions.controlleradvice.DelegatedAuthenticationEntryPoint;
-import com.epam.esm.exceptions.controlleradvice.RestAccessDeniedHandler;
+import com.epam.esm.exceptions.exceptionhandler.DelegatedAuthenticationEntryPoint;
+import com.epam.esm.exceptions.exceptionhandler.RestAccessDeniedHandler;
 import com.epam.esm.jwt.filter.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;

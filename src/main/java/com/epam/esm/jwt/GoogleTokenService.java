@@ -1,40 +1,36 @@
 package com.epam.esm.jwt;
 
+import com.epam.esm.jwt.FeignClient.FeignClient;
 import com.epam.esm.user.User;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.security.access.AccessDeniedException;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
-import java.util.Base64;
 import java.util.Map;
 
 @Service
 public class GoogleTokenService {
-    private Map<String, String> getMapOfClaimsFromToken(String token) {
-        String[] chunks = token.split("\\.");
-        Base64.Decoder decoder = Base64.getUrlDecoder();
-        String payload = new String(decoder.decode(chunks[1]));
-        try {
-            return new ObjectMapper().readValue(payload, new TypeReference<>() {
-            });
-        } catch (JsonProcessingException e) {
-            throw new AccessDeniedException(e.getMessage());
-        }
+    private final FeignClient feignClient;
+    @Value("${spring.security.oauth2.client.registration.google.client-id}")
+    private String aud;
+    public GoogleTokenService(FeignClient feignClient) {
+        this.feignClient = feignClient;
+    }
+
+    private Map<String, String> getClaimsFromToken(String token) {
+        return feignClient.verifyToken(token);
     }
 
     public String extractEmail(String token) {
-        return getMapOfClaimsFromToken(token).get("email");
+        return getClaimsFromToken(token).get("email");
     }
 
     private String extractFirstName(String token) {
-        return getMapOfClaimsFromToken(token).get("given_name");
+        return getClaimsFromToken(token).get("given_name");
     }
 
     private String extractLastName(String token) {
-        return getMapOfClaimsFromToken(token).get("family_name");
+        return getClaimsFromToken(token).get("family_name");
     }
 
     public User extractUser(String token) {
@@ -45,14 +41,18 @@ public class GoogleTokenService {
     }
 
     public boolean isTokenValid(String token) {
-        return isTokenExpired(token);
+        return isValidTokenAud(token) && isTokenExpired(token);
     }
 
-    private Long extractExpiration(String token) {
-        return Long.parseLong(getMapOfClaimsFromToken(token).get("exp"));
+    private Long extractExpirationTime(String token) {
+        return Long.parseLong(getClaimsFromToken(token).get("exp"));
     }
 
     private boolean isTokenExpired(String token) {
-        return extractExpiration(token) + 3 * 3600 >= Instant.now().getEpochSecond();
+        return extractExpirationTime(token) + 60 * 60 * 3 >= Instant.now().getEpochSecond();
+    }
+
+    private boolean isValidTokenAud(String token) {
+        return getClaimsFromToken(token).get("aud").equals(aud);
     }
 }

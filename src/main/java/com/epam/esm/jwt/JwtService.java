@@ -23,16 +23,12 @@ public class JwtService {
     }
 
     public <T> T extractClaim(String token, Function<Claims, T> claimResolver) {
-        final Claims claims = extractAllClaims(token);
+        final Claims claims = extractClaims(token);
         return claimResolver.apply(claims);
     }
 
     public String generateToken(UserDetails userDetails) {
         return generateToken(new HashMap<>(), userDetails);
-    }
-
-    public String generateRefreshToken(UserDetails userDetails) {
-        return generateRefreshToken(new HashMap<>(), userDetails);
     }
 
     private String generateToken(Map<String, Object> claims, UserDetails userDetails) {
@@ -43,6 +39,10 @@ public class JwtService {
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 30))
                 .signWith(getSingInKey(), SignatureAlgorithm.HS256)
                 .compact();
+    }
+
+    public String generateRefreshToken(UserDetails userDetails) {
+        return generateRefreshToken(new HashMap<>(), userDetails);
     }
 
     private String generateRefreshToken(Map<String, Object> claims, UserDetails userDetails) {
@@ -61,19 +61,15 @@ public class JwtService {
     }
 
     private boolean isTokenExpired(String token) {
-        return extractExpiration(token).before(new Date());
+        return extractExpirationTime(token).before(new Date());
     }
 
-    private Date extractExpiration(String token) {
+    private Date extractExpirationTime(String token) {
         return extractClaim(token, Claims::getExpiration);
     }
 
-    private Claims extractAllClaims(String token) {
-        return Jwts.parserBuilder()
-                .setSigningKey(getSingInKey())
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
+    private Claims extractClaims(String token) {
+        return Jwts.parserBuilder().setSigningKey(getSingInKey()).build().parseClaimsJws(token).getBody();
     }
 
     private Key getSingInKey() {

@@ -25,7 +25,7 @@ import java.util.Map;
 public class ControllerAdvisor extends ResponseEntityExceptionHandler {
 
     /**
-     * Method for handling ItemNotFoundException
+     * Method for handling ItemNotFoundException, UserNotFoundException
      */
     @ExceptionHandler(value = {ItemNotFoundException.class, UserNotFoundException.class})
     protected ResponseEntity<?> handleNotFoundException(RuntimeException ex, WebRequest request) {
@@ -35,7 +35,7 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
     }
 
     /**
-     * Method for handling NullPointerException, SQLSyntaxErrorException, InvalidDataException, ConstraintViolationException
+     * Method for handling InvalidDataException, ConstraintViolationException
      */
     @ExceptionHandler(value = {ConstraintViolationException.class, InvalidDataException.class})
     protected ResponseEntity<?> handleInvalidDataException(RuntimeException ex, WebRequest request) {
@@ -44,15 +44,18 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
                 new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
     }
 
+    /**
+     * Method for handling AccessDeniedException, FeignException
+     */
     @ExceptionHandler({AccessDeniedException.class, FeignException.class})
-    protected ResponseEntity<?> handleUserInvalidDataException(AccessDeniedException ex, WebRequest request) {
+    protected ResponseEntity<?> handleAccessDeniedAndFeignException(AccessDeniedException ex, WebRequest request) {
         return handleExceptionInternal(ex,
                 Map.of("HTTP Status", HttpStatus.FORBIDDEN, "response body", Map.of("message", ex.getLocalizedMessage())),
                 new HttpHeaders(), HttpStatus.FORBIDDEN, request);
     }
 
     @ExceptionHandler(value = {Exception.class})
-    protected ResponseEntity<?> handleNullPointerException(Exception ex, WebRequest request) {
+    protected ResponseEntity<?> handleAnyException(Exception ex, WebRequest request) {
         return handleExceptionInternal(ex,
                 Map.of("HTTP Status", HttpStatus.INTERNAL_SERVER_ERROR, "response body", Map.of("message", ex.getLocalizedMessage())),
                 new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR, request);

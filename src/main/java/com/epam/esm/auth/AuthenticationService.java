@@ -72,7 +72,7 @@ public class AuthenticationService {
             mailSenderService.sendForgotPasswordVerificationCodeToEmail(user, verificationCode.getVerificationCode());
             return true;
         }
-        throw new NoAccessException("You were Authenticated with google, so you can`t reset your password");
+        throw new NoAccessException("You were authenticated with google, so you can`t reset your password");
     }
 
     public boolean resetPassword(ChangeUserPasswordRequest request) {
@@ -101,7 +101,7 @@ public class AuthenticationService {
                 )
         );
         User user = userRepo.findByEmail(authenticationRequest.getEmail())
-                .orElseThrow(() -> new UserNotFoundException("Invalid User Credentials"));
+                .orElseThrow(() -> new UserNotFoundException("Invalid user credentials"));
         return TokensResponse.builder()
                 .accessToken(jwtService.generateToken(user))
                 .refreshToken(jwtService.generateRefreshToken(user))
