@@ -1,5 +1,6 @@
 package com.epam.esm.auth;
 
+import com.epam.esm.auth.mailsender.MailSenderService;
 import com.epam.esm.auth.models.AuthenticationRequest;
 import com.epam.esm.auth.models.ChangeUserPasswordRequest;
 import com.epam.esm.auth.models.RegistrationRequest;
@@ -7,15 +8,16 @@ import com.epam.esm.auth.models.TokensResponse;
 import com.epam.esm.enums.Role;
 import com.epam.esm.exceptions.InvalidDataException;
 import com.epam.esm.exceptions.ItemNotFoundException;
+import com.epam.esm.exceptions.NoAccessException;
 import com.epam.esm.exceptions.UserNotFoundException;
 import com.epam.esm.jwt.GoogleTokenService;
 import com.epam.esm.jwt.JwtService;
-import com.epam.esm.mailsender.MailSenderService;
 import com.epam.esm.user.User;
 import com.epam.esm.user.UserRepo;
 import com.epam.esm.verificationcode.VerificationCode;
 import com.epam.esm.verificationcode.VerificationCodeRepo;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -37,49 +39,40 @@ public class AuthenticationService {
     private final GoogleTokenService googleTokenService;
 
     public TokensResponse register(RegistrationRequest registrationRequest) {
-        if (userRepo.findByEmail(registrationRequest.getEmail()).isEmpty()) {
-            User user = User.builder()
+        Optional<User> userByEmail = userRepo.findByEmail(registrationRequest.getEmail());
+        User user = new User();
+        if (userByEmail.isEmpty()) {
+            user = User.builder()
                     .email(registrationRequest.getEmail())
                     .password(passwordEncoder.encode(registrationRequest.getPassword()))
                     .firstName(registrationRequest.getFirstName())
                     .lastName(registrationRequest.getLastName())
                     .role(Role.USER)
                     .build();
-            userRepo.save(user);
-            return TokensResponse.builder()
-                    .accessToken(jwtService.generateToken(user))
-                    .refreshToken(jwtService.generateRefreshToken(user))
-                    .build();
+        } else if (wereUserRegisteredWithGoogleAccount(userByEmail, registrationRequest)) {
+            user = userByEmail.get();
+            user.setPassword(passwordEncoder.encode(registrationRequest.getPassword()));
         }
-        throw new InvalidDataException("User with such login already exists: " + registrationRequest.getEmail());
-    }
-
-    public TokensResponse authenticate(AuthenticationRequest authenticationRequest) {
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        authenticationRequest.getEmail(),
-                        authenticationRequest.getPassword()
-                )
-        );
-        User user = userRepo.findByEmail(authenticationRequest.getEmail())
-                .orElseThrow(() -> new UserNotFoundException("User not exist"));
+        mailSenderService.sendCreatedAccountMessage(user);
+        userRepo.save(user);
         return TokensResponse.builder()
                 .accessToken(jwtService.generateToken(user))
                 .refreshToken(jwtService.generateRefreshToken(user))
                 .build();
     }
 
-    public TokensResponse refreshToken(String token) {
-        User user = userRepo.findByEmail(jwtService.extractUserEmail(token))
-                .orElseThrow(() -> new UserNotFoundException("Invalid token"));
-
-        if (jwtService.isTokenValid(token, user)) {
-            return TokensResponse.builder()
-                    .accessToken(jwtService.generateToken(user))
-                    .refreshToken(jwtService.generateRefreshToken(user))
-                    .build();
+    public boolean forgotPassword(String email) {
+        User user = userRepo.findByEmail(email)
+                .orElseThrow(() -> new UserNotFoundException("User with such email is not exists"));
+        if (user.getPassword() != null) {
+            VerificationCode verificationCode = VerificationCode.builder()
+                    .verificationCode(generateRandomCode())
+                    .user(user).build();
+            verificationCodeRepo.save(verificationCode);
+            mailSenderService.sendForgotPasswordVerificationCodeToEmail(user, verificationCode.getVerificationCode());
+            return true;
         }
-        throw new InvalidDataException("Invalid token");
+        throw new NoAccessException("You were Authenticated with google, so you can`t reset your password");
     }
 
     public boolean resetPassword(ChangeUserPasswordRequest request) {
@@ -100,15 +93,51 @@ public class AuthenticationService {
         return true;
     }
 
-    public boolean forgotPassword(String email) {
-        User user = userRepo.findByEmail(email)
-                .orElseThrow(() -> new UserNotFoundException("User with such email is not exists"));
-        VerificationCode verificationCode = VerificationCode.builder()
-                .verificationCode(generateRandomCode())
-                .user(user).build();
-        verificationCodeRepo.save(verificationCode);
-        mailSenderService.sendForgotPasswordRandomStringToEmail(user, verificationCode.getVerificationCode());
-        return true;
+    public TokensResponse authenticate(AuthenticationRequest authenticationRequest) {
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        authenticationRequest.getEmail(),
+                        authenticationRequest.getPassword()
+                )
+        );
+        User user = userRepo.findByEmail(authenticationRequest.getEmail())
+                .orElseThrow(() -> new UserNotFoundException("Invalid User Credentials"));
+        return TokensResponse.builder()
+                .accessToken(jwtService.generateToken(user))
+                .refreshToken(jwtService.generateRefreshToken(user))
+                .build();
+    }
+
+    public TokensResponse refreshToken(String token) {
+        User user = userRepo.findByEmail(jwtService.extractUserEmail(token))
+                .orElseThrow(() -> new UserNotFoundException("Invalid token"));
+
+        if (jwtService.isTokenValid(token, user)) {
+            return TokensResponse.builder()
+                    .accessToken(jwtService.generateToken(user))
+                    .refreshToken(jwtService.generateRefreshToken(user))
+                    .build();
+        }
+        throw new InvalidDataException("Invalid token");
+    }
+
+    public TokensResponse authenticateWithGoogle(String googleToken) {
+        if (googleTokenService.isTokenValid(googleToken)) {
+            User extractedUser = googleTokenService.extractUser(googleToken);
+            if (extractedUser.getEmail() != null) {
+                Optional<User> user = userRepo.findByEmail(extractedUser.getEmail())
+                        .or(() -> Optional.of(userRepo.save(User.builder().email(extractedUser.getEmail().trim())
+                                .firstName(extractedUser.getFirstName().trim()).lastName(extractedUser.getLastName().trim())
+                                .role(Role.USER).build())));
+
+                return TokensResponse.builder()
+                        .accessToken(jwtService.generateToken(user.get()))
+                        .refreshToken(jwtService.generateRefreshToken(user.get()))
+                        .build();
+            }
+            throw new InvalidDataException("There is problem in token signature");
+        }
+        throw new InvalidDataException("Invalid token");
     }
 
     private String generateRandomCode() {
@@ -124,22 +153,18 @@ public class AuthenticationService {
         return new Date().before(new Date(verificationCode.getCreateDate().getTime() + 1000 * 60 * 60));
     }
 
-    public TokensResponse authenticateWithGoogle(String googleToken) {
-        if (googleTokenService.isTokenValid(googleToken)) {
-            User extractedUser = googleTokenService.extractUser(googleToken);
-            if (extractedUser.getEmail() != null) {
-                Optional<User> user = userRepo.findByEmail(extractedUser.getEmail())
-                        .or(() -> Optional.of(userRepo.save(User.builder().email(extractedUser.getEmail().trim())
-                                .firstName(extractedUser.getFirstName()).lastName(extractedUser.getLastName())
-                                .role(Role.USER).build())));
-
-                return TokensResponse.builder()
-                        .accessToken(jwtService.generateToken(user.get()))
-                        .refreshToken(jwtService.generateRefreshToken(user.get()))
-                        .build();
+    private boolean wereUserRegisteredWithGoogleAccount(Optional<User> userByEmail, RegistrationRequest registrationRequest){
+        if (userByEmail.isPresent()) {
+            if (userByEmail.get().getPassword() == null) {
+                if (registrationRequest.getGoogleToken() != null
+                        && googleTokenService.isTokenValid(registrationRequest.getGoogleToken())
+                        && googleTokenService.extractEmail(registrationRequest.getGoogleToken()).equals(userByEmail.get().getEmail())) {
+                    return true;
+                }
+                throw new AccessDeniedException("There is problem in token signature");
             }
-            throw new InvalidDataException("bad token signature");
+            throw new InvalidDataException("User with such email already exists: " + registrationRequest.getEmail());
         }
-        throw new InvalidDataException("Invalid token");
+        return false;
     }
 }

@@ -1,6 +1,7 @@
 package com.epam.esm.user;
 
 import com.epam.esm.enums.Role;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
@@ -37,38 +38,38 @@ public class User extends RepresentationModel<User> implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Override
+    @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role.name()));
     }
 
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Override
+    @JsonIgnore
     public String getUsername() {
         return email;
     }
 
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Override
+    @JsonIgnore
     public boolean isAccountNonExpired() {
         return true;
     }
 
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Override
+    @JsonIgnore
     public boolean isAccountNonLocked() {
         return true;
     }
 
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Override
+    @JsonIgnore
     public boolean isCredentialsNonExpired() {
         return true;
     }
 
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Override
+    @JsonIgnore
     public boolean isEnabled() {
         return true;
     }

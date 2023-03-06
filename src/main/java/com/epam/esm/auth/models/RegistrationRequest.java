@@ -15,4 +15,5 @@ public class RegistrationRequest {
     private String email;
     private String password;
     private String repeatPassword;
+    private String googleToken;
 }

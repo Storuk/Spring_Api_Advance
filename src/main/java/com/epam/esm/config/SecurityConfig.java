@@ -1,6 +1,8 @@
 package com.epam.esm.config;
 
 import com.epam.esm.enums.Role;
+import com.epam.esm.exceptions.controlleradvice.DelegatedAuthenticationEntryPoint;
+import com.epam.esm.exceptions.controlleradvice.RestAccessDeniedHandler;
 import com.epam.esm.jwt.filter.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -19,7 +21,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
     private final JwtAuthenticationFilter jwtAuthFilter;
     private final AuthenticationProvider authenticationProvider;
-
+    private final RestAccessDeniedHandler restAccessDeniedHandler;
+    private final DelegatedAuthenticationEntryPoint delegatedAuthenticationEntryPoint;
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
@@ -31,7 +34,8 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET, "/gift-certificates", "/gift-certificates/**", "/tags", "/tags/**")
                 .permitAll()
                 .requestMatchers(HttpMethod.GET, "/orders", "/users").hasAuthority(Role.ADMIN.name())
-                .requestMatchers(HttpMethod.GET, "/users/**", "/orders/**").hasAnyAuthority(Role.USER.name(), Role.ADMIN.name())
+                .requestMatchers(HttpMethod.GET, "/users/by-user-id", "/orders/by-user-id").hasAnyAuthority(Role.USER.name(), Role.ADMIN.name())
+                .requestMatchers(HttpMethod.GET, "/users/by-user-id-for-admin/**", "/orders/by-user-id-for-admin/**").hasAuthority(Role.ADMIN.name())
                 .requestMatchers(HttpMethod.POST, "/gift-certificates", "/tags").hasAuthority(Role.ADMIN.name())
                 .requestMatchers(HttpMethod.POST, "/orders/**").hasAnyAuthority(Role.USER.name(), Role.ADMIN.name())
                 .requestMatchers(HttpMethod.PATCH, "/gift-certificates/**").hasAuthority(Role.ADMIN.name())
@@ -43,7 +47,10 @@ public class SecurityConfig {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authenticationProvider(authenticationProvider)
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+                .exceptionHandling()
+                .authenticationEntryPoint(delegatedAuthenticationEntryPoint)
+                .accessDeniedHandler(restAccessDeniedHandler);
         return httpSecurity.build();
     }
 }

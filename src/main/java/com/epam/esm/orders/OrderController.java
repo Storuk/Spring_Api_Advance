@@ -43,13 +43,13 @@ public class OrderController {
     }
 
     /**
-     * A controller get method for getting orders by user id
+     * A controller get method for getting user orders
      *
-     * @param page    - number of page (min value 0)
-     * @param size    - count of tags (min value 1)
+     * @param page - number of page (min value 0)
+     * @param size - count of tags (min value 1)
      * @see OrderService#getOrdersByUserId(long, int, int)
      */
-    @GetMapping("by-user-id")
+    @GetMapping("/by-user-id")
     public ResponseEntity<?> getOrdersByUserId(@AuthenticationPrincipal User user,
                                                @RequestParam(value = "page", defaultValue = "0")
                                                @Min(value = 0, message = "Page index should be >= 0") int page,
@@ -60,13 +60,31 @@ public class OrderController {
     }
 
     /**
+     * A controller get method for getting orders by user id
+     *
+     * @param page - number of page (min value 0)
+     * @param size - count of tags (min value 1)
+     * @see OrderService#getOrdersByUserId(long, int, int)
+     */
+    @GetMapping("/by-user-id-for-admin/{id}")
+    public ResponseEntity<?> getOrdersByUserIdAdminTool(@PathVariable("id")
+                                               @Min(value = 1, message = "Id should be >= 1") long id,
+                                               @RequestParam(value = "page", defaultValue = "0")
+                                               @Min(value = 0, message = "Page index should be >= 0") int page,
+                                               @RequestParam(value = "size", defaultValue = "10")
+                                               @Min(value = 1, message = "Size should be should be >= 1") int size) {
+        Page<Order> order = orderService.getOrdersByUserId(id, page, size);
+        return ResponseEntity.ok(Map.of("userOrders", orderHateoasMapper.getUserOrdersAdminToolHateoasMapper(order)));
+    }
+
+    /**
      * A controller get method for getting all orders
      *
      * @param page - number of page (min value 0)
      * @param size - count of tags (min value 1)
      * @see OrderService#getAllOrders(int, int)
      */
-    @GetMapping()
+    @GetMapping
     public ResponseEntity<?> getAllOrders(@RequestParam(value = "page", defaultValue = "0")
                                           @Min(value = 0, message = "Page index should be >= 0") int page,
                                           @RequestParam(value = "size", defaultValue = "20")

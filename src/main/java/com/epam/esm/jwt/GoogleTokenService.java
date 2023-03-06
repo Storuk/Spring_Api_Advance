@@ -55,9 +55,4 @@ public class GoogleTokenService {
     private boolean isTokenExpired(String token) {
         return extractExpiration(token) + 3 * 3600 >= Instant.now().getEpochSecond();
     }
-
-//    private boolean isTokenHaveNormPayment(String token) {
-//        Map<String, String> mapOfClaimsFromToken = getMapOfClaimsFromToken(token);
-//        return mapOfClaimsFromToken.get(AUDIENCE).equals(aud) && mapOfClaimsFromToken.get(ISSUER).equals(iss);
-//    }
 }
