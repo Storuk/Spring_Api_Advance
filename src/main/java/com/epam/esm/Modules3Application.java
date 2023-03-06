@@ -12,7 +12,10 @@ import com.epam.esm.user.UserRepo;
 import com.github.javafaker.Faker;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.openfeign.EnableFeignClients;
+import org.springframework.cloud.openfeign.FeignAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
@@ -20,6 +23,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Set;
 
+@EnableFeignClients
+@ImportAutoConfiguration(FeignAutoConfiguration.class)
 @SpringBootApplication
 @EnableJpaAuditing
 public class Modules3Application {
