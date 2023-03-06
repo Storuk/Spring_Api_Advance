@@ -47,11 +47,18 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
     /**
      * Method for handling AccessDeniedException, FeignException
      */
-    @ExceptionHandler({AccessDeniedException.class, FeignException.class})
+    @ExceptionHandler({AccessDeniedException.class})
     protected ResponseEntity<?> handleAccessDeniedAndFeignException(AccessDeniedException ex, WebRequest request) {
         return handleExceptionInternal(ex,
                 Map.of("HTTP Status", HttpStatus.FORBIDDEN, "response body", Map.of("message", ex.getLocalizedMessage())),
                 new HttpHeaders(), HttpStatus.FORBIDDEN, request);
+    }
+
+    @ExceptionHandler({FeignException.class})
+    public ResponseEntity<?> handleAuthenticationException(FeignException ex, WebRequest request) {
+        return handleExceptionInternal(ex,
+                Map.of("HTTP Status", HttpStatus.INTERNAL_SERVER_ERROR, "response body", Map.of("message", "invalid token")),
+                new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR, request);
     }
 
     @ExceptionHandler(value = {Exception.class})
