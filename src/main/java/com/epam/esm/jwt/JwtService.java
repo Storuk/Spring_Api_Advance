@@ -22,7 +22,7 @@ public class JwtService {
         return extractClaim(token, Claims::getSubject);
     }
 
-    public <T> T extractClaim(String token, Function<Claims, T> claimResolver) {
+    private  <T> T extractClaim(String token, Function<Claims, T> claimResolver) {
         final Claims claims = extractClaims(token);
         return claimResolver.apply(claims);
     }

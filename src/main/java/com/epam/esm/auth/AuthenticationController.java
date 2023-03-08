@@ -1,6 +1,9 @@
 package com.epam.esm.auth;
 
-import com.epam.esm.auth.models.*;
+import com.epam.esm.auth.models.AuthenticationRequest;
+import com.epam.esm.auth.models.ChangeUserPasswordRequest;
+import com.epam.esm.auth.models.RegistrationRequest;
+import com.epam.esm.auth.models.TokensResponse;
 import com.epam.esm.exceptions.InvalidDataException;
 import com.epam.esm.utils.VerificationOfRequestsData;
 import lombok.RequiredArgsConstructor;

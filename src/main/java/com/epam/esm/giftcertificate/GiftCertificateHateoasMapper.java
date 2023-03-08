@@ -297,7 +297,7 @@ public class GiftCertificateHateoasMapper {
      *
      * @param giftCertificate GiftCertificate
      */
-    public void tagsDefaultLinks(GiftCertificate giftCertificate) {
+    public static void tagsDefaultLinks(GiftCertificate giftCertificate) {
         if (giftCertificate.getTags() != null) {
             for (Tag tag : giftCertificate.getTags()) {
                 if (!tag.hasLinks()) {
@@ -318,7 +318,7 @@ public class GiftCertificateHateoasMapper {
      *
      * @param giftCertificate GiftCertificate
      */
-    public GiftCertificate giftCertificateDefaultLinks(GiftCertificate giftCertificate) {
+    public static GiftCertificate giftCertificateDefaultLinks(GiftCertificate giftCertificate) {
         return giftCertificate
                 .add(linkTo(methodOn(GiftCertificateController.class)
                         .getGiftCertificateById(giftCertificate.getId()))

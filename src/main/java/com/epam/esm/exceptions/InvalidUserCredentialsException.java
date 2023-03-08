@@ -5,8 +5,8 @@ package com.epam.esm.exceptions;
  *
  * @author Vlad Storoshchuk
  */
-public class UserNotFoundException extends RuntimeException{
-    public UserNotFoundException(String message) {
+public class InvalidUserCredentialsException extends RuntimeException{
+    public InvalidUserCredentialsException(String message) {
         super(message);
     }
 }

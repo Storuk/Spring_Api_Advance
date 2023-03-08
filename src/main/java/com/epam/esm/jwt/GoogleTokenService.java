@@ -5,8 +5,6 @@ import com.epam.esm.user.User;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.time.Instant;
-
 @Service
 public class GoogleTokenService {
     private final FeignClient feignClient;
@@ -17,7 +15,7 @@ public class GoogleTokenService {
         this.feignClient = feignClient;
     }
 
-    public String extractEmail(String token) {
+    private String extractEmail(String token) {
         return feignClient.verifyTokenAndGetMapOfClaims(token).get("email");
     }
 
@@ -37,15 +35,7 @@ public class GoogleTokenService {
     }
 
     public boolean isTokenValid(String token) {
-        return isValidTokenAud(token) && isTokenExpired(token);
-    }
-
-    private Long extractExpirationTime(String token) {
-        return Long.parseLong(feignClient.verifyTokenAndGetMapOfClaims(token).get("exp"));
-    }
-
-    private boolean isTokenExpired(String token) {
-        return extractExpirationTime(token) + 60 * 60 * 3 >= Instant.now().getEpochSecond();
+        return isValidTokenAud(token);
     }
 
     private boolean isValidTokenAud(String token) {

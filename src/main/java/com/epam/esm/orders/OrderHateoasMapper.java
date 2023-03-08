@@ -28,8 +28,6 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 public class OrderHateoasMapper {
     private final PagedResourcesAssembler<Order> pagedResourcesAssembler;
 
-    private final GiftCertificateHateoasMapper giftCertificateHateoasMapper;
-
     /**
      * A component method for adding links to created Order
      *
@@ -49,11 +47,11 @@ public class OrderHateoasMapper {
         }
 
         if (order.getGiftCertificate().getLinks().isEmpty()) {
-            giftCertificateHateoasMapper.giftCertificateDefaultLinks(order.getGiftCertificate());
+            GiftCertificateHateoasMapper.giftCertificateDefaultLinks(order.getGiftCertificate());
         }
 
         if (order.getGiftCertificate().getTags() != null) {
-            giftCertificateHateoasMapper.tagsDefaultLinks(order.getGiftCertificate());
+            GiftCertificateHateoasMapper.tagsDefaultLinks(order.getGiftCertificate());
         }
         defaultLinksForCollectionModel(createdOrder);
         return createdOrder;
@@ -109,11 +107,11 @@ public class OrderHateoasMapper {
                     }
 
                     if (order.getGiftCertificate().getLinks().isEmpty()) {
-                        giftCertificateHateoasMapper.giftCertificateDefaultLinks(order.getGiftCertificate());
+                        GiftCertificateHateoasMapper.giftCertificateDefaultLinks(order.getGiftCertificate());
                     }
 
                     if (order.getGiftCertificate().getTags() != null) {
-                        giftCertificateHateoasMapper.tagsDefaultLinks(order.getGiftCertificate());
+                        GiftCertificateHateoasMapper.tagsDefaultLinks(order.getGiftCertificate());
                     }
                     return order;
                 });
@@ -222,11 +220,11 @@ public class OrderHateoasMapper {
                     }
 
                     if (order.getGiftCertificate().getLinks().isEmpty()) {
-                        giftCertificateHateoasMapper.giftCertificateDefaultLinks(order.getGiftCertificate());
+                        GiftCertificateHateoasMapper.giftCertificateDefaultLinks(order.getGiftCertificate());
                     }
 
                     if (order.getGiftCertificate().getTags() != null) {
-                        giftCertificateHateoasMapper.tagsDefaultLinks(order.getGiftCertificate());
+                        GiftCertificateHateoasMapper.tagsDefaultLinks(order.getGiftCertificate());
                     }
                     return order;
                 });

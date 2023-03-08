@@ -7,9 +7,8 @@ import com.epam.esm.auth.models.RegistrationRequest;
 import com.epam.esm.auth.models.TokensResponse;
 import com.epam.esm.enums.Role;
 import com.epam.esm.exceptions.InvalidDataException;
+import com.epam.esm.exceptions.InvalidUserCredentialsException;
 import com.epam.esm.exceptions.ItemNotFoundException;
-import com.epam.esm.exceptions.NoAccessException;
-import com.epam.esm.exceptions.UserNotFoundException;
 import com.epam.esm.jwt.GoogleTokenService;
 import com.epam.esm.jwt.JwtService;
 import com.epam.esm.user.User;
@@ -63,7 +62,7 @@ public class AuthenticationService {
 
     public boolean forgotPassword(String email) {
         User user = userRepo.findByEmail(email)
-                .orElseThrow(() -> new UserNotFoundException("User with such email is not exists"));
+                .orElseThrow(() -> new InvalidUserCredentialsException("User with such email is not exists"));
         if (user.getPassword() != null) {
             VerificationCode verificationCode = VerificationCode.builder()
                     .verificationCode(generateRandomCode())
@@ -72,12 +71,12 @@ public class AuthenticationService {
             mailSenderService.sendForgotPasswordVerificationCodeToEmail(user, verificationCode.getVerificationCode());
             return true;
         }
-        throw new NoAccessException("You were authenticated with google, so you can`t reset your password");
+        throw new AccessDeniedException("You were registered with google, so you can`t reset your password");
     }
 
     public boolean resetPassword(ChangeUserPasswordRequest request) {
         User user = userRepo.findByEmail(request.getEmail())
-                .orElseThrow(() -> new UserNotFoundException("There are no user with such email"));
+                .orElseThrow(() -> new InvalidUserCredentialsException("There are no user with such email"));
         VerificationCode verificationCode = verificationCodeRepo.findByUserId(user.getId())
                 .orElseThrow(() -> new ItemNotFoundException("This user were not trying to change password"));
 
@@ -101,7 +100,7 @@ public class AuthenticationService {
                 )
         );
         User user = userRepo.findByEmail(authenticationRequest.getEmail())
-                .orElseThrow(() -> new UserNotFoundException("Invalid user credentials"));
+                .orElseThrow(() -> new InvalidUserCredentialsException("Invalid user credentials"));
         return TokensResponse.builder()
                 .accessToken(jwtService.generateToken(user))
                 .refreshToken(jwtService.generateRefreshToken(user))
@@ -110,7 +109,7 @@ public class AuthenticationService {
 
     public TokensResponse refreshToken(String token) {
         User user = userRepo.findByEmail(jwtService.extractUserEmail(token))
-                .orElseThrow(() -> new UserNotFoundException("Invalid token"));
+                .orElseThrow(() -> new InvalidUserCredentialsException("Invalid token or user not exists"));
 
         if (jwtService.isTokenValid(token, user)) {
             return TokensResponse.builder()
@@ -153,12 +152,12 @@ public class AuthenticationService {
         return new Date().before(new Date(verificationCode.getCreateDate().getTime() + 1000 * 60 * 60));
     }
 
-    private boolean wereUserRegisteredWithGoogleAccount(Optional<User> userByEmail, RegistrationRequest registrationRequest){
+    private boolean wereUserRegisteredWithGoogleAccount(Optional<User> userByEmail, RegistrationRequest registrationRequest) {
         if (userByEmail.isPresent()) {
             if (userByEmail.get().getPassword() == null) {
                 if (registrationRequest.getGoogleToken() != null
                         && googleTokenService.isTokenValid(registrationRequest.getGoogleToken())
-                        && googleTokenService.extractEmail(registrationRequest.getGoogleToken()).equals(userByEmail.get().getEmail())) {
+                        && googleTokenService.extractUser(registrationRequest.getGoogleToken()).getEmail().equals(userByEmail.get().getEmail())) {
                     return true;
                 }
                 throw new AccessDeniedException("There is problem in token signature");

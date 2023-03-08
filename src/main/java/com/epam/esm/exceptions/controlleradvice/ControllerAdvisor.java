@@ -2,7 +2,7 @@ package com.epam.esm.exceptions.controlleradvice;
 
 import com.epam.esm.exceptions.InvalidDataException;
 import com.epam.esm.exceptions.ItemNotFoundException;
-import com.epam.esm.exceptions.UserNotFoundException;
+import com.epam.esm.exceptions.InvalidUserCredentialsException;
 import feign.FeignException;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpHeaders;
@@ -25,9 +25,9 @@ import java.util.Map;
 public class ControllerAdvisor extends ResponseEntityExceptionHandler {
 
     /**
-     * Method for handling ItemNotFoundException, UserNotFoundException
+     * Method for handling ItemNotFoundException
      */
-    @ExceptionHandler(value = {ItemNotFoundException.class, UserNotFoundException.class})
+    @ExceptionHandler(value = {ItemNotFoundException.class})
     protected ResponseEntity<?> handleNotFoundException(RuntimeException ex, WebRequest request) {
         return handleExceptionInternal(ex,
                 Map.of("HTTP Status", HttpStatus.NOT_FOUND, "response body", Map.of("message", ex.getLocalizedMessage())),
@@ -47,8 +47,8 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
     /**
      * Method for handling AccessDeniedException, FeignException
      */
-    @ExceptionHandler({AccessDeniedException.class})
-    protected ResponseEntity<?> handleAccessDeniedAndFeignException(AccessDeniedException ex, WebRequest request) {
+    @ExceptionHandler({AccessDeniedException.class, InvalidUserCredentialsException.class})
+    protected ResponseEntity<?> handleAccessDeniedAndFeignException(Exception ex, WebRequest request) {
         return handleExceptionInternal(ex,
                 Map.of("HTTP Status", HttpStatus.FORBIDDEN, "response body", Map.of("message", ex.getLocalizedMessage())),
                 new HttpHeaders(), HttpStatus.FORBIDDEN, request);
@@ -62,7 +62,7 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(value = {Exception.class})
-    protected ResponseEntity<?> handleAnyException(Exception ex, WebRequest request) {
+    protected ResponseEntity<?> handleOtherException(Exception ex, WebRequest request) {
         return handleExceptionInternal(ex,
                 Map.of("HTTP Status", HttpStatus.INTERNAL_SERVER_ERROR, "response body", Map.of("message", ex.getLocalizedMessage())),
                 new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR, request);

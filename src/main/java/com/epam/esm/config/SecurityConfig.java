@@ -23,6 +23,7 @@ public class SecurityConfig {
     private final AuthenticationProvider authenticationProvider;
     private final RestAccessDeniedHandler restAccessDeniedHandler;
     private final DelegatedAuthenticationEntryPoint delegatedAuthenticationEntryPoint;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity

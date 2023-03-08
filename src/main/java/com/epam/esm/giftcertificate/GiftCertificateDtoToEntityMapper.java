@@ -20,16 +20,16 @@ public class GiftCertificateDtoToEntityMapper {
 
     public GiftCertificate convertGiftCertificateDtoToGiftCertificate(GiftCertificateDTO giftCertificateDTO) {
         GiftCertificate giftCertificate = new GiftCertificate();
-        if(giftCertificateDTO.getDescription() != null) {
+        if (giftCertificateDTO.getDescription() != null) {
             giftCertificate.setDescription(giftCertificateDTO.getDescription());
         }
-        if(giftCertificateDTO.getName() != null) {
+        if (giftCertificateDTO.getName() != null) {
             giftCertificate.setName(giftCertificateDTO.getName());
         }
-        if(giftCertificateDTO.getPrice() != null) {
+        if (giftCertificateDTO.getPrice() != null) {
             giftCertificate.setPrice(giftCertificateDTO.getPrice());
         }
-        if(giftCertificateDTO.getDuration() != null) {
+        if (giftCertificateDTO.getDuration() != null) {
             giftCertificate.setDuration(giftCertificateDTO.getDuration());
         }
         if (giftCertificateDTO.getTags() != null) {
