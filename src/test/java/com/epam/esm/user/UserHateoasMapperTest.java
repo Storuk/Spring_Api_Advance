@@ -43,21 +43,23 @@ class UserHateoasMapperTest {
         PagedModel<User> result = userHateoasMapper.getAllUsersHateoas(users);
 
         assertEquals(userPagedModel, result);
-        verify(result, times(1)).add(argumentCaptor.capture());
+        verify(result, times(3)).add(argumentCaptor.capture());
         assertEquals(argumentCaptor.getAllValues().get(0).getRel().value(), "get all orders");
+        assertEquals(argumentCaptor.getAllValues().get(1).getRel().value(), "get user by id (Admin Tool)");
+        assertEquals(argumentCaptor.getAllValues().get(2).getRel().value(), "get user orders (Admin Tool)");
     }
 
     @Test
     void getUserByIdHateoasTest() {
-        User user = User.builder().id(1L).login("login").build();
-        User userForTest = User.builder().id(1L).login("login").build();
+        User user = User.builder().id(1L).email("email").build();
+        User userForTest = User.builder().id(1L).email("email").build();
 
         CollectionModel<User> collectionModelUser = CollectionModel.of(List.of(user));
         user.add(linkTo(methodOn(OrderController.class)
-                .getOrdersByUserId((user.getId()), 0, 10))
+                .getOrdersByUserId(new User(), 0, 10))
                 .withRel(() -> "get user orders"));
         user.add(linkTo(methodOn(OrderController.class)
-                .createOrder(user.getId(), 0))
+                .createOrder(new User(), 0))
                 .withRel(() -> "create order"));
 
         collectionModelUser
@@ -66,10 +68,43 @@ class UserHateoasMapperTest {
                         .withRel(() -> "get all orders"))
                 .add(linkTo(methodOn(UserController.class)
                         .getAllUsers(0, 10))
-                        .withRel(() -> "get all users"));
+                        .withRel(() -> "get all users"))
+                .add(linkTo(methodOn(UserController.class)
+                        .getUserByIdAdminTool(1))
+                        .withRel(() -> "get user by id (Admin Tool)"))
+                .add(linkTo(methodOn(OrderController.class)
+                        .getOrdersByUserIdAdminTool(1, 0, 10))
+                        .withRel(() -> "get user orders (Admin Tool)"));
 
         assertEquals(collectionModelUser.getContent().stream().toList(),
                 userHateoasMapper.getUserByIdHateoas(userForTest).getContent().stream().toList());
+    }
 
+    @Test
+    void getUserByIdAdminToolHateoasTest() {
+        User user = User.builder().id(1L).email("email").build();
+        User userForTest = User.builder().id(1L).email("email").build();
+
+        CollectionModel<User> collectionModelUser = CollectionModel.of(List.of(user));
+        user.add(linkTo(methodOn(OrderController.class)
+                .getOrdersByUserId(new User(), 0, 10))
+                .withRel(() -> "get user orders"));
+        user.add(linkTo(methodOn(OrderController.class)
+                .createOrder(new User(), 0))
+                .withRel(() -> "create order"));
+
+        collectionModelUser
+                .add(linkTo(methodOn(OrderController.class)
+                        .getAllOrders(0, 10))
+                        .withRel(() -> "get all orders"))
+                .add(linkTo(methodOn(UserController.class)
+                        .getAllUsers(0, 10))
+                        .withRel(() -> "get all users"))
+                .add(linkTo(methodOn(OrderController.class)
+                        .getOrdersByUserIdAdminTool(1, 0, 10))
+                        .withRel(() -> "get user orders (Admin Tool)"));
+
+        assertEquals(collectionModelUser.getContent().stream().toList(),
+                userHateoasMapper.getUserByIdAdminToolHateoas(userForTest).getContent().stream().toList());
     }
 }

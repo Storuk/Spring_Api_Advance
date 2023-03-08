@@ -1,5 +1,6 @@
 package com.epam.esm.user;
 
+import com.epam.esm.enums.Role;
 import com.epam.esm.exceptions.controlleradvice.ControllerAdvisor;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -57,11 +58,11 @@ class UserControllerTest {
     }
 
     @Test
-    void getUserById() throws Exception {
-        User user = User.builder().id(1L).login("user").build();
+    void getUserByIdAdminTool() throws Exception {
+        User user = User.builder().id(1L).email("user").password(null).firstName("name").lastName("lastName").role(Role.USER).build();
         when(userService.getUserById(1L)).thenReturn(user);
-        when(userHateoasMapper.getUserByIdHateoas(user)).thenReturn(CollectionModel.of(List.of(user)));
-        MockHttpServletResponse response = mvc.perform(get("/users/1")
+        when(userHateoasMapper.getUserByIdAdminToolHateoas(user)).thenReturn(CollectionModel.of(List.of(user)));
+        MockHttpServletResponse response = mvc.perform(get("/users/by-user-id-for-admin/1")
                 .accept(MediaType.APPLICATION_JSON)).andReturn().getResponse();
         assertEquals(HttpStatus.OK.value(), response.getStatus());
         assertEquals(jsonUserCollectionModel.write(Map.of("user", CollectionModel.of(List.of(user)))).getJson(), response.getContentAsString());

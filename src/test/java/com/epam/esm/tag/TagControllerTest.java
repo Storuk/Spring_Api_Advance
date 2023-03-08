@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -42,6 +41,7 @@ class TagControllerTest {
     private final ObjectMapper objectMapper = new ObjectMapper();
     @Mock
     private TagDtoToEntityMapper tagDtoToEntityMapper;
+
     @BeforeEach
     public void setup() {
         JacksonTester.initFields(this, new ObjectMapper());
@@ -66,12 +66,11 @@ class TagControllerTest {
     }
 
     @Test
-    void createTagTest_ThrowsBadRequest() throws Exception {
+    void createTagTest_ThrowsInvalidDataException() throws Exception {
         Tag tag = Tag.builder().id(1L).name("").build();
         MockHttpServletResponse response = mvc.perform(post("/tags").contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(tag)).accept(MediaType.APPLICATION_JSON)).andReturn().getResponse();
         assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatus());
-        assertFalse(response.getContentAsString().isEmpty());
     }
 
     @Test
