@@ -50,21 +50,30 @@ class OrderControllerTest {
     @Test
     void createOrder() throws Exception {
         Order order = new Order();
-        when(orderService.createOrder(1L, 1L)).thenReturn(new Order());
+        when(orderService.createOrder(0L, 1L)).thenReturn(order);
         when(orderHateoasMapper.createOrderHateoasMapper(order)).thenReturn(CollectionModel.of(List.of(order)));
-        MockHttpServletResponse response = mvc.perform(post("/orders/1/1").contentType(MediaType.APPLICATION_JSON)
+        MockHttpServletResponse response = mvc.perform(post("/orders/1")
                 .accept(MediaType.APPLICATION_JSON)).andReturn().getResponse();
-
         assertEquals(HttpStatus.CREATED.value(), response.getStatus());
         assertEquals(jsonOrderCollectionModel.write(Map.of("order", CollectionModel.of(List.of(order)))).getJson(), response.getContentAsString());
     }
 
     @Test
-    void getOrdersByUserId() throws Exception {
+    void getOrdersByUserIdAdminTool() throws Exception {
         Page<Order> orderPage = Page.empty();
         when(orderService.getOrdersByUserId(1L, 0, 10)).thenReturn(orderPage);
+        when(orderHateoasMapper.getUserOrdersAdminToolHateoasMapper(orderPage)).thenReturn(PagedModel.empty());
+        MockHttpServletResponse response = mvc.perform(get("/orders/by-user-id-for-admin/1?page=0&size=10")
+                .accept(MediaType.APPLICATION_JSON)).andReturn().getResponse();
+        assertEquals(jsonOrderPagedModel.write(Map.of("userOrders", PagedModel.empty())).getJson(), response.getContentAsString());
+    }
+
+    @Test
+    void getOrdersByUserId() throws Exception {
+        Page<Order> orderPage = Page.empty();
+        when(orderService.getOrdersByUserId(0L, 0, 10)).thenReturn(orderPage);
         when(orderHateoasMapper.getUserOrdersHateoasMapper(orderPage)).thenReturn(PagedModel.empty());
-        MockHttpServletResponse response = mvc.perform(get("/orders/by-user-id/1?page=0&size=10")
+        MockHttpServletResponse response = mvc.perform(get("/orders/by-user-id?page=0&size=10")
                 .accept(MediaType.APPLICATION_JSON)).andReturn().getResponse();
         assertEquals(jsonOrderPagedModel.write(Map.of("userOrders", PagedModel.empty())).getJson(), response.getContentAsString());
     }

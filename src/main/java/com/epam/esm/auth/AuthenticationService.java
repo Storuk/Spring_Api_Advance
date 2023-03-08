@@ -83,6 +83,7 @@ public class AuthenticationService {
         if (!request.getVerificationCode().equals(verificationCode.getVerificationCode())) {
             throw new InvalidDataException("Invalid verificationCode.");
         } else if (!isVerificationCodeExpired(verificationCode)) {
+            verificationCodeRepo.deleteById(verificationCode.getId());
             throw new InvalidDataException("Verification code is expired.");
         }
 
@@ -134,7 +135,7 @@ public class AuthenticationService {
                         .refreshToken(jwtService.generateRefreshToken(user.get()))
                         .build();
             }
-            throw new InvalidDataException("There is problem in token signature");
+            throw new InvalidDataException("There is problem in token structure");
         }
         throw new InvalidDataException("Invalid token");
     }
@@ -160,7 +161,7 @@ public class AuthenticationService {
                         && googleTokenService.extractUser(registrationRequest.getGoogleToken()).getEmail().equals(userByEmail.get().getEmail())) {
                     return true;
                 }
-                throw new AccessDeniedException("There is problem in token signature");
+                throw new AccessDeniedException("There is problem in token structure");
             }
             throw new InvalidDataException("User with such email already exists: " + registrationRequest.getEmail());
         }
