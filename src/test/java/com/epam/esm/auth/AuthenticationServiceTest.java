@@ -32,6 +32,8 @@ import java.util.Optional;
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(SpringRunner.class)
@@ -79,6 +81,7 @@ class AuthenticationServiceTest {
         when(jwtServiceMock.generateToken(user)).thenReturn(tokensResponse.getAccessToken());
         when(jwtServiceMock.generateRefreshToken(user)).thenReturn(tokensResponse.getRefreshToken());
         assertEquals(tokensResponse, authenticationServiceMock.register(registrationRequest));
+        verify(mailSenderService).sendCreatedAccountMessage(user);
     }
 
     @Test
@@ -108,6 +111,7 @@ class AuthenticationServiceTest {
         when(jwtServiceMock.generateToken(user)).thenReturn(tokensResponse.getAccessToken());
         when(jwtServiceMock.generateRefreshToken(user)).thenReturn(tokensResponse.getRefreshToken());
         assertEquals(tokensResponse, authenticationServiceMock.register(registrationRequest));
+        verify(mailSenderService).sendCreatedAccountMessage(userForSave);
     }
 
     @Test
@@ -228,6 +232,21 @@ class AuthenticationServiceTest {
         InvalidDataException message = assertThrows(InvalidDataException.class,
                 () -> authenticationServiceMock.resetPassword(changeUserPasswordRequest));
         assertEquals("Verification code is expired.", message.getMessage());
+    }
+
+    @Test
+    void forgotPasswordTest() {
+        User user = User.builder()
+                .id(1L)
+                .firstName("Name")
+                .lastName("LastName")
+                .email("vladstoroschuk@gmail.com")
+                .password("password")
+                .role(Role.USER).build();
+        when(userRepoMock.findByEmail(user.getEmail())).thenReturn(Optional.of(user));
+        authenticationServiceMock.forgotPassword(user.getEmail());
+        verify(verificationCodeRepo).save(any());
+        verify(mailSenderService).sendForgotPasswordVerificationCodeToEmail(any(), any());
     }
 
     @Test

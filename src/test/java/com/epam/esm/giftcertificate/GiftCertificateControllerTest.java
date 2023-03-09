@@ -41,6 +41,7 @@ class GiftCertificateControllerTest {
     private final ObjectMapper objectMapper = new ObjectMapper();
     @Mock
     private GiftCertificateDtoToEntityMapper giftCertificateDtoToEntityMapper;
+
     @BeforeEach
     public void setup() {
         JacksonTester.initFields(this, new ObjectMapper());
