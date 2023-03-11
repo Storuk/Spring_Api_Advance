@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+import org.springframework.security.core.AuthenticationException;
 
 import java.util.Map;
 
@@ -45,22 +46,45 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
     }
 
     /**
-     * Method for handling AccessDeniedException, FeignException
+     * Method for handling AccessDeniedException
      */
-    @ExceptionHandler({AccessDeniedException.class, InvalidUserCredentialsException.class})
-    protected ResponseEntity<?> handleAccessDeniedAndFeignException(Exception ex, WebRequest request) {
+    @ExceptionHandler({AccessDeniedException.class})
+    protected ResponseEntity<?> handleAccessDeniedException(Exception ex, WebRequest request) {
         return handleExceptionInternal(ex,
                 Map.of("HTTP Status", HttpStatus.FORBIDDEN, "response body", Map.of("message", ex.getLocalizedMessage())),
                 new HttpHeaders(), HttpStatus.FORBIDDEN, request);
     }
 
+    /**
+     * Method for handling AuthenticationException
+     */
+    @ExceptionHandler({AuthenticationException.class})
+    public ResponseEntity<?> handleAuthenticationException(Exception ex, WebRequest request) {
+        return handleExceptionInternal(ex,
+                Map.of("HTTP Status", HttpStatus.UNAUTHORIZED, "response body", Map.of("message", ex.getLocalizedMessage())),
+                new HttpHeaders(), HttpStatus.UNAUTHORIZED, request);
+    }
+    /**
+     * Method for handling InvalidUserCredentialsException
+     */
+    @ExceptionHandler({InvalidUserCredentialsException.class})
+    public ResponseEntity<?> handleInvalidUserCredentialsException(InvalidUserCredentialsException ex, WebRequest request) {
+        return handleExceptionInternal(ex,
+                Map.of("HTTP Status", HttpStatus.INTERNAL_SERVER_ERROR, "response body", Map.of("message", ex.getLocalizedMessage())),
+                new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR, request);
+    }
+    /**
+     * Method for handling FeignException
+     */
     @ExceptionHandler({FeignException.class})
-    public ResponseEntity<?> handleAuthenticationException(FeignException ex, WebRequest request) {
+    public ResponseEntity<?> handleFeignException(FeignException ex, WebRequest request) {
         return handleExceptionInternal(ex,
                 Map.of("HTTP Status", HttpStatus.INTERNAL_SERVER_ERROR, "response body", Map.of("message", "invalid token")),
                 new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR, request);
     }
-
+    /**
+     * Method for handling others Exception
+     */
     @ExceptionHandler(value = {Exception.class})
     protected ResponseEntity<?> handleOtherException(Exception ex, WebRequest request) {
         return handleExceptionInternal(ex,

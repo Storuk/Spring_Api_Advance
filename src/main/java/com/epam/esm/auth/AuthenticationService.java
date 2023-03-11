@@ -135,7 +135,7 @@ public class AuthenticationService {
                         .refreshToken(jwtService.generateRefreshToken(user.get()))
                         .build();
             }
-            throw new InvalidDataException("There is problem in token structure");
+            throw new AccessDeniedException("There is problem in token structure");
         }
         throw new InvalidDataException("Invalid token");
     }

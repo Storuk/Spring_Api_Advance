@@ -367,7 +367,7 @@ class AuthenticationServiceTest {
         String token = "googleToken";
         when(googleTokenServiceMock.isTokenValid(token)).thenReturn(true);
         when(googleTokenServiceMock.extractUser(token)).thenReturn(new User());
-        InvalidDataException message = assertThrows(InvalidDataException.class,
+        AccessDeniedException message = assertThrows(AccessDeniedException.class,
                 () -> authenticationServiceMock.authenticateWithGoogle(token));
         assertEquals("There is problem in token structure", message.getMessage());
     }
