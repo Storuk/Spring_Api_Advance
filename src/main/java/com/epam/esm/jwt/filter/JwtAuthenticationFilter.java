@@ -26,39 +26,50 @@ import java.util.Map;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
+    private static final String AUTHORIZATION = "Authorization";
+    private static final String HEADER = "Bearer ";
+    private static final int HEADER_BEARER_LENGTH = 7;
 
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request,
                                     @NonNull HttpServletResponse response,
                                     @NonNull FilterChain filterChain) throws IOException {
 
-        final String authHeader = request.getHeader("Authorization");
+        final String authHeader = request.getHeader(AUTHORIZATION);
         final String jwtToken;
         final String userEmail;
         try {
-            if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            if (authHeader == null || !authHeader.startsWith(HEADER)) {
                 filterChain.doFilter(request, response);
                 return;
             }
-            jwtToken = authHeader.substring(7);
+            jwtToken = authHeader.substring(HEADER_BEARER_LENGTH);
             userEmail = jwtService.extractUserEmail(jwtToken);
             if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
                 if (jwtService.isTokenValid(jwtToken, userDetails)) {
-                    UsernamePasswordAuthenticationToken authenticationToken =
-                            new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-                    authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                    SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+                    authenticate(userDetails, request);
                 }
             }
             filterChain.doFilter(request, response);
         } catch (Exception e) {
-            response.setHeader("error", e.getMessage());
-            response.setStatus(HttpStatus.FORBIDDEN.value());
-            Map<String, String> error = new HashMap<>();
-            error.put("error_message", e.getMessage());
-            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-            new ObjectMapper().writeValue(response.getOutputStream(), error);
+            exceptionResponse(e, response);
         }
+    }
+
+    private void authenticate(UserDetails userDetails, HttpServletRequest request) {
+        UsernamePasswordAuthenticationToken authenticationToken =
+                new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+        authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+        SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+    }
+
+    private void exceptionResponse(Exception e, HttpServletResponse response) throws IOException {
+        response.setHeader("error", e.getMessage());
+        response.setStatus(HttpStatus.FORBIDDEN.value());
+        Map<String, String> error = new HashMap<>();
+        error.put("error_message", e.getMessage());
+        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+        new ObjectMapper().writeValue(response.getOutputStream(), error);
     }
 }

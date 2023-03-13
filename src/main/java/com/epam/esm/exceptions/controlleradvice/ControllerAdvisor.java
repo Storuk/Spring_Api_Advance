@@ -29,7 +29,7 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
      * Method for handling ItemNotFoundException
      */
     @ExceptionHandler(value = {ItemNotFoundException.class})
-    protected ResponseEntity<?> handleNotFoundException(RuntimeException ex, WebRequest request) {
+    protected ResponseEntity<?> handleNotFoundException(ItemNotFoundException ex, WebRequest request) {
         return handleExceptionInternal(ex,
                 Map.of("HTTP Status", HttpStatus.NOT_FOUND, "response body", Map.of("message", ex.getLocalizedMessage())),
                 new HttpHeaders(), HttpStatus.NOT_FOUND, request);
@@ -49,7 +49,7 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
      * Method for handling AccessDeniedException
      */
     @ExceptionHandler({AccessDeniedException.class})
-    protected ResponseEntity<?> handleAccessDeniedException(Exception ex, WebRequest request) {
+    protected ResponseEntity<?> handleAccessDeniedException(AccessDeniedException ex, WebRequest request) {
         return handleExceptionInternal(ex,
                 Map.of("HTTP Status", HttpStatus.FORBIDDEN, "response body", Map.of("message", ex.getLocalizedMessage())),
                 new HttpHeaders(), HttpStatus.FORBIDDEN, request);

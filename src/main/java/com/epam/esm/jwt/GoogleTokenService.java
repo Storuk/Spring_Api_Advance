@@ -8,6 +8,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class GoogleTokenService {
     private final FeignClient feignClient;
+    private static final String EMAIL = "email";
+    private static final String FIRST_NAME = "given_name";
+    private static final String LAST_NAME = "family_name";
+    private static final String AUD = "aud";
     @Value("${spring.security.oauth2.client.registration.google.client-id}")
     private String aud;
 
@@ -16,15 +20,15 @@ public class GoogleTokenService {
     }
 
     private String extractEmail(String token) {
-        return feignClient.verifyTokenAndGetMapOfClaims(token).get("email");
+        return feignClient.verifyTokenAndGetMapOfClaims(token).get(EMAIL);
     }
 
     private String extractFirstName(String token) {
-        return feignClient.verifyTokenAndGetMapOfClaims(token).get("given_name");
+        return feignClient.verifyTokenAndGetMapOfClaims(token).get(FIRST_NAME);
     }
 
     private String extractLastName(String token) {
-        return feignClient.verifyTokenAndGetMapOfClaims(token).get("family_name");
+        return feignClient.verifyTokenAndGetMapOfClaims(token).get(LAST_NAME);
     }
 
     public User extractUser(String token) {
@@ -39,6 +43,7 @@ public class GoogleTokenService {
     }
 
     private boolean isValidTokenAud(String token) {
-        return feignClient.verifyTokenAndGetMapOfClaims(token).get("aud").equals(aud);
+        System.out.println(aud);
+        return feignClient.verifyTokenAndGetMapOfClaims(token).get(AUD).equals(aud);
     }
 }

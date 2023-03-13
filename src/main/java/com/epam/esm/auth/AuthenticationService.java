@@ -126,10 +126,12 @@ public class AuthenticationService {
             User extractedUser = googleTokenService.extractUser(googleToken);
             if (extractedUser.getEmail() != null) {
                 Optional<User> user = userRepo.findByEmail(extractedUser.getEmail())
-                        .or(() -> Optional.of(userRepo.save(User.builder().email(extractedUser.getEmail().trim())
-                                .firstName(extractedUser.getFirstName().trim()).lastName(extractedUser.getLastName().trim())
-                                .role(Role.USER).build())));
-
+                        .or(() -> Optional.of(userRepo.save(User.builder()
+                                .email(extractedUser.getEmail().trim())
+                                .firstName(extractedUser.getFirstName().trim())
+                                .lastName(extractedUser.getLastName().trim())
+                                .role(Role.USER)
+                                .build())));
                 return TokensResponse.builder()
                         .accessToken(jwtService.generateToken(user.get()))
                         .refreshToken(jwtService.generateRefreshToken(user.get()))
@@ -157,8 +159,8 @@ public class AuthenticationService {
         if (userByEmail.isPresent()) {
             if (userByEmail.get().getPassword() == null) {
                 if (registrationRequest.getGoogleToken() != null
-                        && googleTokenService.isTokenValid(registrationRequest.getGoogleToken())
-                        && googleTokenService.extractUser(registrationRequest.getGoogleToken()).getEmail().equals(userByEmail.get().getEmail())) {
+                        && validateToken(registrationRequest)
+                        && isRegistrationRequestUserEqualsToExtractedUserFromToken(userByEmail.get(), registrationRequest)) {
                     return true;
                 }
                 throw new AccessDeniedException("There is problem in token structure");
@@ -166,5 +168,13 @@ public class AuthenticationService {
             throw new InvalidDataException("User with such email already exists: " + registrationRequest.getEmail());
         }
         return false;
+    }
+
+    private boolean validateToken(RegistrationRequest registrationRequest) {
+        return googleTokenService.isTokenValid(registrationRequest.getGoogleToken());
+    }
+
+    private boolean isRegistrationRequestUserEqualsToExtractedUserFromToken(User userByEmail, RegistrationRequest registrationRequest) {
+        return googleTokenService.extractUser(registrationRequest.getGoogleToken()).getEmail().equals(userByEmail.getEmail());
     }
 }

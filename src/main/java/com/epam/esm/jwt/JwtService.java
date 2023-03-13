@@ -17,12 +17,14 @@ import java.util.function.Function;
 @Service
 public class JwtService {
     private static final String SECRET_KEY = "4528482B4D6251655368566D597133743677397A24432646294A404E63526655";
+    private static final int ACCESS_TOKEN_EXPIRATION_30_MIN = 1000 * 60 * 30;
+    private static final int REFRESH_TOKEN_EXPIRATION_2_HOURS = 1000 * 60 * 60 * 2;
 
     public String extractUserEmail(String token) {
         return extractClaim(token, Claims::getSubject);
     }
 
-    private  <T> T extractClaim(String token, Function<Claims, T> claimResolver) {
+    private <T> T extractClaim(String token, Function<Claims, T> claimResolver) {
         final Claims claims = extractClaims(token);
         return claimResolver.apply(claims);
     }
@@ -36,7 +38,7 @@ public class JwtService {
                 .setClaims(claims)
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 30))
+                .setExpiration(new Date(System.currentTimeMillis() + ACCESS_TOKEN_EXPIRATION_30_MIN))
                 .signWith(getSingInKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
@@ -50,7 +52,7 @@ public class JwtService {
                 .setClaims(claims)
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 2))
+                .setExpiration(new Date(System.currentTimeMillis() + REFRESH_TOKEN_EXPIRATION_2_HOURS))
                 .signWith(getSingInKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
