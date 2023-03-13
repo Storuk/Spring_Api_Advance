@@ -159,8 +159,8 @@ public class AuthenticationService {
         if (userByEmail.isPresent()) {
             if (userByEmail.get().getPassword() == null) {
                 if (registrationRequest.getGoogleToken() != null
-                        && validateToken(registrationRequest)
-                        && isRegistrationRequestUserEqualsToExtractedUserFromToken(userByEmail.get(), registrationRequest)) {
+                    && validateToken(registrationRequest)
+                    && isRegistrationRequestUserEqualsToExtractedUserFromToken(userByEmail.get(), registrationRequest)) {
                     return true;
                 }
                 throw new AccessDeniedException("There is problem in token structure");

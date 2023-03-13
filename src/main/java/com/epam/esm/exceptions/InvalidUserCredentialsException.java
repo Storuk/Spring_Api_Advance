@@ -5,7 +5,7 @@ package com.epam.esm.exceptions;
  *
  * @author Vlad Storoshchuk
  */
-public class InvalidUserCredentialsException extends RuntimeException{
+public class InvalidUserCredentialsException extends RuntimeException {
     public InvalidUserCredentialsException(String message) {
         super(message);
     }

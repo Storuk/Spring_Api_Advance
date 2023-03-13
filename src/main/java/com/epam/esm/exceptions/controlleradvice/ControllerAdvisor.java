@@ -1,19 +1,19 @@
 package com.epam.esm.exceptions.controlleradvice;
 
 import com.epam.esm.exceptions.InvalidDataException;
-import com.epam.esm.exceptions.ItemNotFoundException;
 import com.epam.esm.exceptions.InvalidUserCredentialsException;
+import com.epam.esm.exceptions.ItemNotFoundException;
 import feign.FeignException;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-import org.springframework.security.core.AuthenticationException;
 
 import java.util.Map;
 
@@ -64,6 +64,7 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
                 Map.of("HTTP Status", HttpStatus.UNAUTHORIZED, "response body", Map.of("message", ex.getLocalizedMessage())),
                 new HttpHeaders(), HttpStatus.UNAUTHORIZED, request);
     }
+
     /**
      * Method for handling InvalidUserCredentialsException
      */
@@ -73,6 +74,7 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
                 Map.of("HTTP Status", HttpStatus.INTERNAL_SERVER_ERROR, "response body", Map.of("message", ex.getLocalizedMessage())),
                 new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR, request);
     }
+
     /**
      * Method for handling FeignException
      */
@@ -82,6 +84,7 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
                 Map.of("HTTP Status", HttpStatus.INTERNAL_SERVER_ERROR, "response body", Map.of("message", "invalid token")),
                 new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR, request);
     }
+
     /**
      * Method for handling others Exception
      */

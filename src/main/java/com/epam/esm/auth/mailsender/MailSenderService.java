@@ -13,6 +13,7 @@ public class MailSenderService {
     private final JavaMailSender mailSender;
     @Value("${spring.mail.username}")
     private String emailFrom;
+
     public void sendForgotPasswordVerificationCodeToEmail(User user, String verificationCode) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom(emailFrom);
