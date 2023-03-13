@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @ExtendWith(MockitoExtension.class)
 class JwtServiceTest {
     @InjectMocks
-    private JwtService jwtService;
+    private JwtService jwtService = new JwtService("4528482B4D6251655368566D597133743677397A24432646294A404E63526655");
     private String token;
     private final User user = User.builder()
             .firstName("Name")
