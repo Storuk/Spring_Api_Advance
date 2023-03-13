@@ -2,6 +2,7 @@ package com.epam.esm.auth.mailsender;
 
 import com.epam.esm.user.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -10,10 +11,11 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class MailSenderService {
     private final JavaMailSender mailSender;
-
+    @Value("${spring.mail.username}")
+    private String emailFrom;
     public void sendForgotPasswordVerificationCodeToEmail(User user, String verificationCode) {
         SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom("vladstoroschuk1@gmail.com");
+        message.setFrom(emailFrom);
         message.setTo(user.getEmail());
         message.setText(getForgotPasswordMailMessage(verificationCode, user));
         message.setSubject("Reset Password Code");
@@ -21,17 +23,20 @@ public class MailSenderService {
     }
 
     private String getForgotPasswordMailMessage(String verificationCode, User user) {
-        return "Dear" + user.getFirstName() + " " + user.getLastName() + ",\n"
-                + "Here is code to reset and change your password:\n"
-                + verificationCode
-                + "\nCode expire in 60 minutes.\n"
-                + "Thank you,\n"
-                + "CertificatesEntertainment.";
+        return new StringBuilder()
+                .append("Dear").append(user.getFirstName())
+                .append(" ").append(user.getLastName()).append(",").append(System.getProperty("line.separator"))
+                .append("Here is code to reset and change your password:").append(System.getProperty("line.separator"))
+                .append(verificationCode).append(System.getProperty("line.separator"))
+                .append("Code expire in 60 minutes.").append(System.getProperty("line.separator"))
+                .append("Thank you,").append(System.getProperty("line.separator"))
+                .append("CertificatesEntertainment.")
+                .toString();
     }
 
     public void sendCreatedAccountMessage(User user) {
         SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom("vladstoroschuk1@gmail.com");
+        message.setFrom(emailFrom);
         message.setTo(user.getEmail());
         message.setText(getCreatedAccountMessage(user));
         message.setSubject("Reset Password Code");
@@ -39,9 +44,11 @@ public class MailSenderService {
     }
 
     private String getCreatedAccountMessage(User user) {
-        return "Dear" + user.getFirstName() + " " + user.getLastName() + ",\n"
-                + "Your account created successfully:\n"
-                + "Thank you,\n"
-                + "CertificatesEntertainment.";
+        return new StringBuilder().append("Dear").append(user.getFirstName())
+                .append(" ").append(user.getLastName()).append(",").append(System.getProperty("line.separator"))
+                .append("Your account created successfully:").append(System.getProperty("line.separator"))
+                .append("Thank you,").append(System.getProperty("line.separator"))
+                .append("CertificatesEntertainment.")
+                .toString();
     }
 }
