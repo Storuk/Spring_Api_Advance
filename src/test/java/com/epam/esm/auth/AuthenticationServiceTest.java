@@ -244,6 +244,7 @@ class AuthenticationServiceTest {
                 .password("password")
                 .role(Role.USER).build();
         when(userRepoMock.findByEmail(user.getEmail())).thenReturn(Optional.of(user));
+        when(verificationCodeRepo.findByUserId(1L)).thenReturn(Optional.empty());
         authenticationServiceMock.forgotPassword(user.getEmail());
         verify(verificationCodeRepo).save(any());
         verify(mailSenderService).sendForgotPasswordVerificationCodeToEmail(any(), any());

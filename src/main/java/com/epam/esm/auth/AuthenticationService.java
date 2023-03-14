@@ -67,11 +67,17 @@ public class AuthenticationService {
             VerificationCode verificationCode = VerificationCode.builder()
                     .verificationCode(generateRandomCode())
                     .user(user).build();
+            checkIfVerificationCodeAlreadyExists(user);
             verificationCodeRepo.save(verificationCode);
             mailSenderService.sendForgotPasswordVerificationCodeToEmail(user, verificationCode.getVerificationCode());
             return true;
         }
         throw new AccessDeniedException("You were registered with google, so you can`t reset your password");
+    }
+
+    private void checkIfVerificationCodeAlreadyExists(User user){
+        Optional<VerificationCode> verificationCodeFromDB = verificationCodeRepo.findByUserId(user.getId());
+        verificationCodeFromDB.ifPresent(verificationCode -> verificationCodeRepo.deleteById(verificationCode.getId()));
     }
 
     public boolean resetPassword(ChangeUserPasswordRequest request) {
