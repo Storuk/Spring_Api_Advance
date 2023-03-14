@@ -55,7 +55,7 @@ public class AuthenticationController {
     public ResponseEntity<?> forgotPassword(@RequestParam String email) {
         if (VerificationOfRequestsData.isEmailCorrect(email)) {
             authenticationService.forgotPassword(email);
-            return ResponseEntity.ok(Map.of("message:",
+            return ResponseEntity.ok(Map.of("message",
                     "Verification code for resetting password sent to your email:" + email));
         }
         throw new InvalidDataException("Invalid email. Check your input");
@@ -65,7 +65,7 @@ public class AuthenticationController {
     public ResponseEntity<?> resetPassword(@RequestBody ChangeUserPasswordRequest changeUserPasswordRequest) {
         if (VerificationOfRequestsData.isChangeUserPasswordRequestCorrect(changeUserPasswordRequest)) {
             authenticationService.resetPassword(changeUserPasswordRequest);
-            return ResponseEntity.ok(Map.of("message:", "password successfully changed"));
+            return ResponseEntity.ok(Map.of("message", "password successfully changed"));
         }
         throw new InvalidDataException("Invalid data. Check your inputs");
     }
