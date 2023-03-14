@@ -3,6 +3,7 @@ package com.epam.esm.giftcertificate;
 import com.epam.esm.orders.OrderController;
 import com.epam.esm.tag.Tag;
 import com.epam.esm.tag.TagController;
+import com.epam.esm.user.User;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
@@ -100,7 +101,7 @@ class GiftCertificateHateoasMapperTest {
                         .getGiftCertificatesByTags(Set.of(), 0, 10))
                         .withRel(() -> "get gift certificates by tags names"))
                 .add(linkTo(methodOn(OrderController.class)
-                        .createOrder(0, 0))
+                        .createOrder(new User(), 0))
                         .withRel(() -> "create order"))
                 .add(linkTo(methodOn(GiftCertificateController.class)
                         .createCertificate(new GiftCertificateDTO()))
@@ -175,7 +176,7 @@ class GiftCertificateHateoasMapperTest {
                         .getGiftCertificatesByTags(Set.of(), 0, 10))
                         .withRel(() -> "get gift certificates by tags names"))
                 .add(linkTo(methodOn(OrderController.class)
-                        .createOrder(0, 0))
+                        .createOrder(new User(), 0))
                         .withRel(() -> "create order"))
                 .add(linkTo(methodOn(GiftCertificateController.class)
                         .createCertificate(new GiftCertificateDTO()))
@@ -250,7 +251,7 @@ class GiftCertificateHateoasMapperTest {
                         .getGiftCertificatesByTags(Set.of(), 0, 10))
                         .withRel(() -> "get gift certificates by tags names"))
                 .add(linkTo(methodOn(OrderController.class)
-                        .createOrder(0, 0))
+                        .createOrder(new User(), 0))
                         .withRel(() -> "create order"))
                 .add(linkTo(methodOn(GiftCertificateController.class)
                         .createCertificate(new GiftCertificateDTO()))
@@ -325,7 +326,7 @@ class GiftCertificateHateoasMapperTest {
                         .getGiftCertificatesByTags(Set.of(), 0, 10))
                         .withRel(() -> "get gift certificates by tags names"))
                 .add(linkTo(methodOn(OrderController.class)
-                        .createOrder(0, 0))
+                        .createOrder(new User(), 0))
                         .withRel(() -> "create order"))
                 .add(linkTo(methodOn(GiftCertificateController.class)
                         .createCertificate(new GiftCertificateDTO()))
@@ -403,7 +404,7 @@ class GiftCertificateHateoasMapperTest {
                         .getGiftCertificatesByTags(Set.of(), 0, 10))
                         .withRel(() -> "get gift certificates by tags names"))
                 .add(linkTo(methodOn(OrderController.class)
-                        .createOrder(0, 0))
+                        .createOrder(new User(), 0))
                         .withRel(() -> "create order"));
 
         CollectionModel<GiftCertificate> result = giftCertificateHateoasMapper.getGiftCertificateForCreateHateoasMapper(giftCertificateForTest);
@@ -441,7 +442,7 @@ class GiftCertificateHateoasMapperTest {
                         .withRel(() -> "update duration in gift certificate"));
 
         assertEquals(giftCertificate.getLinks().toString(),
-                giftCertificateHateoasMapper.giftCertificateDefaultLinks(giftCertificateForTest).getLinks().toString());
+                GiftCertificateHateoasMapper.giftCertificateDefaultLinks(giftCertificateForTest).getLinks().toString());
     }
 
     @Test

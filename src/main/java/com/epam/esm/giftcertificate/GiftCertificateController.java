@@ -27,11 +27,12 @@ import java.util.Set;
 public class GiftCertificateController {
     private final GiftCertificateService giftCertificateService;
     private final GiftCertificateHateoasMapper hateoasMapper;
-
+    private final GiftCertificateDtoToEntityMapper dtoToEntityMapper;
     @Autowired
-    public GiftCertificateController(GiftCertificateService giftCertificateService, GiftCertificateHateoasMapper hateoasMapper) {
+    public GiftCertificateController(GiftCertificateService giftCertificateService, GiftCertificateHateoasMapper hateoasMapper, GiftCertificateDtoToEntityMapper dtoToEntityMapper) {
         this.giftCertificateService = giftCertificateService;
         this.hateoasMapper = hateoasMapper;
+        this.dtoToEntityMapper = dtoToEntityMapper;
     }
 
     /**
@@ -66,12 +67,13 @@ public class GiftCertificateController {
      *
      * @param giftCertificate the GiftCertificate object that will be created in database
      * @return CollectionModel of GiftCertificate with links
-     * @see GiftCertificateService#createGiftCertificate(GiftCertificateDTO)
+     * @see GiftCertificateService#createGiftCertificate(GiftCertificate)
      */
     @PostMapping
     public ResponseEntity<?> createCertificate(@RequestBody GiftCertificateDTO giftCertificate) {
         if (VerificationOfRequestsData.isNewCertificateCorrect(giftCertificate)) {
-            GiftCertificate createdGiftCertificate = giftCertificateService.createGiftCertificate(giftCertificate);
+            GiftCertificate giftCertificateFromDTO = dtoToEntityMapper.convertGiftCertificateDtoToGiftCertificate(giftCertificate);
+            GiftCertificate createdGiftCertificate = giftCertificateService.createGiftCertificate(giftCertificateFromDTO);
             return new ResponseEntity<>(Map.of("certificate",
                     hateoasMapper.getGiftCertificateForCreateHateoasMapper(createdGiftCertificate)), HttpStatus.CREATED);
         }
@@ -82,16 +84,17 @@ public class GiftCertificateController {
      * A controller patch method for updating GiftCertificate
      *
      * @param id              - id of gift certificate (min value 1)
-     * @param giftCertificate the GiftCertificate object for updating giftCertificate
+     * @param giftCertificateDTO the GiftCertificate object for updating giftCertificate
      * @return CollectionModel of GiftCertificate with links
-     * @see GiftCertificateService#updateGiftCertificate(long, GiftCertificateDTO)
+     * @see GiftCertificateService#updateGiftCertificate(long, GiftCertificate)
      */
     @PatchMapping("/{id}")
     public ResponseEntity<?> updateGiftCertificate(@PathVariable("id")
                                                    @Min(value = 1, message = "Id should be >= 1") long id,
-                                                   @RequestBody GiftCertificateDTO giftCertificate) {
-        if (VerificationOfRequestsData.isGiftCertificateValidForUpdate(giftCertificate)) {
-            GiftCertificate updatedGiftCertificate = giftCertificateService.updateGiftCertificate(id, giftCertificate);
+                                                   @RequestBody GiftCertificateDTO giftCertificateDTO) {
+        if (VerificationOfRequestsData.isGiftCertificateValidForUpdate(giftCertificateDTO)) {
+            GiftCertificate giftCertificateFromDTO = dtoToEntityMapper.convertGiftCertificateDtoToGiftCertificate(giftCertificateDTO);
+            GiftCertificate updatedGiftCertificate = giftCertificateService.updateGiftCertificate(id, giftCertificateFromDTO);
             return ResponseEntity.ok(Map.of("giftCertificate",
                     hateoasMapper.getGiftCertificateForUpdateHateoasMapper(updatedGiftCertificate)));
         }

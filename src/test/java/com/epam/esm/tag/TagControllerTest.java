@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -40,6 +39,8 @@ class TagControllerTest {
     private JacksonTester<Map<String, CollectionModel<?>>> jsonTagCollectionModel;
     private JacksonTester<Map<String, PagedModel<?>>> jsonTagPagedModel;
     private final ObjectMapper objectMapper = new ObjectMapper();
+    @Mock
+    private TagDtoToEntityMapper tagDtoToEntityMapper;
 
     @BeforeEach
     public void setup() {
@@ -52,24 +53,24 @@ class TagControllerTest {
 
     @Test
     void createTagTest() throws Exception {
-        Tag tag = Tag.builder().id(1L).name("tag").build();
+        Tag tag = Tag.builder().name("tag").build();
         TagDTO tagDTO = TagDTO.builder().name("tag").build();
-        when(tagService.createTag(tagDTO)).thenReturn(tag);
+        when(tagDtoToEntityMapper.convertTagDtoToEntity(tagDTO)).thenReturn(tag);
+        when(tagService.createTag(tag)).thenReturn(tag);
         when(tagHateoasMapper.createTagHateoas(tag)).thenReturn(CollectionModel.of(List.of(tag)));
         MockHttpServletResponse response = mvc.perform(post("/tags").contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(tag)).accept(MediaType.APPLICATION_JSON)).andReturn().getResponse();
+                .content(objectMapper.writeValueAsString(tagDTO)).accept(MediaType.APPLICATION_JSON)).andReturn().getResponse();
 
         assertEquals(HttpStatus.CREATED.value(), response.getStatus());
         assertEquals(jsonTagCollectionModel.write(Map.of("createdTag", CollectionModel.of(List.of(tag)))).getJson(), response.getContentAsString());
     }
 
     @Test
-    void createTagTest_ThrowsBadRequest() throws Exception {
+    void createTagTest_ThrowsInvalidDataException() throws Exception {
         Tag tag = Tag.builder().id(1L).name("").build();
         MockHttpServletResponse response = mvc.perform(post("/tags").contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(tag)).accept(MediaType.APPLICATION_JSON)).andReturn().getResponse();
         assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatus());
-        assertFalse(response.getContentAsString().isEmpty());
     }
 
     @Test

@@ -3,7 +3,6 @@ package com.epam.esm.giftcertificate;
 import com.epam.esm.exceptions.InvalidDataException;
 import com.epam.esm.exceptions.ItemNotFoundException;
 import com.epam.esm.tag.Tag;
-import com.epam.esm.tag.TagDTO;
 import com.epam.esm.tag.TagService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -36,25 +35,20 @@ class GiftCertificateServiceTest {
     private TagService tagServiceMock;
     @InjectMocks
     private GiftCertificateService giftCertificateServiceMock;
-    @Mock
-    private GiftCertificateDtoToEntityMapper giftCertificateDtoToEntityMapper;
 
     @Test
     void createGiftCertificateTest_ReturnCreatedGiftCertificate() {
         GiftCertificate giftCertificate = GiftCertificate.builder()
                 .name("giftCertificate").tags(Set.of(Tag.builder().name("tag").build())).build();
-        GiftCertificateDTO giftCertificateDTO = GiftCertificateDTO.builder()
-                .name("giftCertificate").tags(Set.of(TagDTO.builder().name("tag").build())).build();
         when(giftCertificateRepoMock.existsByName(giftCertificate.getName())).thenReturn(false);
         when(giftCertificateRepoMock.save(giftCertificate)).thenReturn(giftCertificate);
         when(tagServiceMock.saveAllTags(giftCertificate.getTags())).thenReturn(true);
-        when(giftCertificateDtoToEntityMapper.convertGiftCertificateDtoToGiftCertificate(giftCertificateDTO)).thenReturn(giftCertificate);
-        assertEquals(giftCertificate, giftCertificateServiceMock.createGiftCertificate(giftCertificateDTO));
+        assertEquals(giftCertificate, giftCertificateServiceMock.createGiftCertificate(giftCertificate));
     }
 
     @Test
     void createGiftCertificateTest_InvalidDataException_WhenNameHasAlreadyExisted() {
-        GiftCertificateDTO giftCertificate = GiftCertificateDTO.builder().name("giftCertificate").build();
+        GiftCertificate giftCertificate = GiftCertificate.builder().name("giftCertificate").build();
         when(giftCertificateRepoMock.existsByName(giftCertificate.getName())).thenReturn(true);
         InvalidDataException exception = assertThrows(InvalidDataException.class,
                 () -> giftCertificateServiceMock.createGiftCertificate(giftCertificate));
@@ -109,11 +103,10 @@ class GiftCertificateServiceTest {
     @Test
     void updateGiftCertificateTest_ReturnUpdatedCertificateWithoutTags() {
         GiftCertificate giftCertificate = GiftCertificate.builder().name("giftCertificate").build();
-        GiftCertificateDTO giftCertificateDTO = GiftCertificateDTO.builder().name("giftCertificate").build();
         when(giftCertificateRepoMock.existsByName(giftCertificate.getName())).thenReturn(false);
         when(giftCertificateRepoMock.findById(1L)).thenReturn(Optional.of(giftCertificate));
         when(giftCertificateRepoMock.save(giftCertificate)).thenReturn(giftCertificate);
-        assertEquals(giftCertificate, giftCertificateServiceMock.updateGiftCertificate(1L, giftCertificateDTO));
+        assertEquals(giftCertificate, giftCertificateServiceMock.updateGiftCertificate(1L, giftCertificate));
     }
 
     @Test
@@ -121,26 +114,21 @@ class GiftCertificateServiceTest {
         Set<Tag> tags = Set.of(Tag.builder().name("2ha2rd1").build(), Tag.builder().name("exp12").build());
         GiftCertificate giftCertificate = GiftCertificate.builder().name("giftCertificate")
                 .description("description").price(1).duration(1).tags(tags).build();
-        Set<TagDTO> tagsDTO = Set.of(TagDTO.builder().name("2ha2rd1").build(), TagDTO.builder().name("exp12").build());
-        GiftCertificateDTO giftCertificateDTO = GiftCertificateDTO.builder().name("giftCertificate")
-                .description("description").price(1).duration(1).tags(tagsDTO).build();
         when(giftCertificateRepoMock.existsByName(giftCertificate.getName())).thenReturn(false);
         when(giftCertificateRepoMock.findById(1L)).thenReturn(Optional.of(giftCertificate));
         when(giftCertificateRepoMock.save(giftCertificate)).thenReturn(giftCertificate);
         when(tagServiceMock.saveAllTags(tags)).thenReturn(true);
-        when(giftCertificateDtoToEntityMapper.convertSetOfTagDtoToSetOfTag(tagsDTO)).thenReturn(tags);
-        assertEquals(giftCertificate, giftCertificateServiceMock.updateGiftCertificate(1L, giftCertificateDTO));
+        assertEquals(giftCertificate, giftCertificateServiceMock.updateGiftCertificate(1L, giftCertificate));
     }
 
     @Test
     void updateGiftCertificateTest_ItemNotFoundException() {
         GiftCertificate giftCertificate = GiftCertificate.builder().name("giftCertificate").build();
-        GiftCertificateDTO giftCertificateDTO = GiftCertificateDTO.builder().name("giftCertificate").build();
         when(giftCertificateRepoMock.existsByName(giftCertificate.getName())).thenReturn(true);
         when(giftCertificateRepoMock.findById(1L))
                 .thenReturn(Optional.of(GiftCertificate.builder().name("secondGiftCertificate").build()));
         ItemNotFoundException exception = assertThrows(ItemNotFoundException.class,
-                () -> giftCertificateServiceMock.updateGiftCertificate(1L, giftCertificateDTO));
+                () -> giftCertificateServiceMock.updateGiftCertificate(1L, giftCertificate));
         assertEquals("Gift certificate with such name already exists " + giftCertificate.getName(), exception.getMessage());
     }
 
