@@ -113,8 +113,6 @@ public class VerificationOfRequestsData {
     public static boolean isRegistrationRequestCorrect(RegistrationRequest request){
         return request.getEmail() != null && isEmailCorrect(request.getEmail())
                 && request.getPassword() != null && isPasswordCorrect(request.getPassword())
-                && request.getFirstName() != null && isStringValuesCorrect(request.getFirstName())
-                && request.getLastName() != null && isStringValuesCorrect(request.getLastName())
                 && request.getRepeatPassword() != null && request.getPassword().equals(request.getRepeatPassword());
     }
 

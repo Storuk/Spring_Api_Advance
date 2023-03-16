@@ -16,6 +16,7 @@ import com.epam.esm.user.UserRepo;
 import com.epam.esm.verificationcode.VerificationCode;
 import com.epam.esm.verificationcode.VerificationCodeRepo;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -41,6 +42,7 @@ public class AuthenticationService {
         Optional<User> userByEmail = userRepo.findByEmail(registrationRequest.getEmail());
         User user = new User();
         if (userByEmail.isEmpty()) {
+            isFirstAndLastNameValid(registrationRequest);
             user = User.builder()
                     .email(registrationRequest.getEmail())
                     .password(passwordEncoder.encode(registrationRequest.getPassword()))
@@ -60,6 +62,16 @@ public class AuthenticationService {
                 .build();
     }
 
+    public void isFirstAndLastNameValid(RegistrationRequest registrationRequest) {
+        if (registrationRequest.getFirstName() == null || StringUtils.isBlank(registrationRequest.getFirstName())
+            || StringUtils.isNumeric(registrationRequest.getFirstName())) {
+            throw new InvalidDataException("Invalid input firstName");
+        } else if (registrationRequest.getLastName() == null || StringUtils.isBlank(registrationRequest.getFirstName())
+                   || StringUtils.isNumeric(registrationRequest.getFirstName())) {
+            throw new InvalidDataException("Invalid input lastName");
+        }
+    }
+
     public boolean forgotPassword(String email) {
         User user = userRepo.findByEmail(email)
                 .orElseThrow(() -> new InvalidUserCredentialsException("User with such email is not exists"));
@@ -75,7 +87,7 @@ public class AuthenticationService {
         throw new AccessDeniedException("You were registered with google, so you can`t reset your password");
     }
 
-    private void checkIfVerificationCodeAlreadyExists(User user){
+    private void checkIfVerificationCodeAlreadyExists(User user) {
         Optional<VerificationCode> verificationCodeFromDB = verificationCodeRepo.findByUserId(user.getId());
         verificationCodeFromDB.ifPresent(verificationCode -> verificationCodeRepo.deleteById(verificationCode.getId()));
     }

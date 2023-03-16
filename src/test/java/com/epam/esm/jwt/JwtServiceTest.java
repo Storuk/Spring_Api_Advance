@@ -1,5 +1,6 @@
 package com.epam.esm.jwt;
 
+import com.epam.esm.enums.Role;
 import com.epam.esm.user.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,6 +22,7 @@ class JwtServiceTest {
             .firstName("Name")
             .lastName("LastName")
             .email("email")
+            .role(Role.USER)
             .build();
 
     @BeforeEach
