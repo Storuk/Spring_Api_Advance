@@ -26,7 +26,7 @@ import java.util.Map;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
-    private static final String AUTHORIZATION = "Authorization";
+    private static final String AUTHORIZATION_HEADER = "Authorization";
     private static final String AUTHORIZATION_HEADER_PREFIX = "Bearer ";
     private static final int HEADER_BEARER_LENGTH = AUTHORIZATION_HEADER_PREFIX.length();
 
@@ -35,7 +35,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                     @NonNull HttpServletResponse response,
                                     @NonNull FilterChain filterChain) throws IOException {
         try {
-            final String authHeader = request.getHeader(AUTHORIZATION);
+            final String authHeader = request.getHeader(AUTHORIZATION_HEADER);
             if (isAuthHeaderNotValid(authHeader)) {
                 filterChain.doFilter(request, response);
                 return;
