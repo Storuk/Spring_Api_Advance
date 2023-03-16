@@ -88,7 +88,7 @@ public class AuthenticationService {
 
         if (!request.getVerificationCode().equals(verificationCode.getVerificationCode())) {
             throw new InvalidDataException("Invalid verificationCode.");
-        } else if (!isVerificationCodeExpired(verificationCode)) {
+        } else if (isVerificationCodeExpired(verificationCode)) {
             verificationCodeRepo.deleteById(verificationCode.getId());
             throw new InvalidDataException("Verification code is expired.");
         }
@@ -158,7 +158,7 @@ public class AuthenticationService {
     }
 
     private boolean isVerificationCodeExpired(VerificationCode verificationCode) {
-        return new Date().before(new Date(verificationCode.getCreateDate().getTime() + 1000 * 60 * 60));
+        return new Date(verificationCode.getCreateDate().getTime() + 1000 * 60 * 60).before(new Date());
     }
 
     private boolean wereUserRegisteredWithGoogleAccount(Optional<User> userByEmail, RegistrationRequest registrationRequest) {

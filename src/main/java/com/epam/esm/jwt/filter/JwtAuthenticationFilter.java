@@ -27,33 +27,38 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
     private static final String AUTHORIZATION = "Authorization";
-    private static final String HEADER = "Bearer ";
-    private static final int HEADER_BEARER_LENGTH = 7;
+    private static final String AUTHORIZATION_HEADER_PREFIX = "Bearer ";
+    private static final int HEADER_BEARER_LENGTH = AUTHORIZATION_HEADER_PREFIX.length();
 
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request,
                                     @NonNull HttpServletResponse response,
                                     @NonNull FilterChain filterChain) throws IOException {
-
-        final String authHeader = request.getHeader(AUTHORIZATION);
-        final String jwtToken;
-        final String userEmail;
         try {
-            if (authHeader == null || !authHeader.startsWith(HEADER)) {
+            final String authHeader = request.getHeader(AUTHORIZATION);
+            if (isAuthHeaderNotValid(authHeader)) {
                 filterChain.doFilter(request, response);
                 return;
             }
-            jwtToken = authHeader.substring(HEADER_BEARER_LENGTH);
-            userEmail = jwtService.extractUserEmail(jwtToken);
-            if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-                UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
-                if (jwtService.isTokenValid(jwtToken, userDetails)) {
-                    authenticate(userDetails, request);
-                }
-            }
+            validateAndAuthenticateToken(authHeader, request);
             filterChain.doFilter(request, response);
         } catch (Exception e) {
             exceptionResponse(e, response);
+        }
+    }
+
+    private boolean isAuthHeaderNotValid(String authHeader){
+        return authHeader == null || !authHeader.startsWith(AUTHORIZATION_HEADER_PREFIX);
+    }
+
+    private void validateAndAuthenticateToken(String authHeader, HttpServletRequest request){
+        final String jwtToken = authHeader.substring(HEADER_BEARER_LENGTH);
+        final String userEmail = jwtService.extractUserEmail(jwtToken);
+        if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
+            if (jwtService.isTokenValid(jwtToken, userDetails)) {
+                authenticate(userDetails, request);
+            }
         }
     }
 
