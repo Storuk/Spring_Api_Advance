@@ -32,7 +32,7 @@ public class Order extends RepresentationModel<Order> {
     @Min(value = 1, message = "Cost should not be less than 1")
     private int cost;
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id")
     private User user;
     @CreatedDate
     private Date purchaseDate;

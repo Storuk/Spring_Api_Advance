@@ -39,6 +39,8 @@ class GiftCertificateControllerTest {
     private JacksonTester<Map<String, CollectionModel<?>>> jsonGiftCertificateCollectionModel;
     private JacksonTester<Map<String, PagedModel<?>>> jsonGiftCertificatePagedModel;
     private final ObjectMapper objectMapper = new ObjectMapper();
+    @Mock
+    private GiftCertificateDtoToEntityMapper giftCertificateDtoToEntityMapper;
 
     @BeforeEach
     public void setup() {
@@ -74,7 +76,8 @@ class GiftCertificateControllerTest {
                 name("certificate").description("certificate").price(1).duration(1).build();
         GiftCertificateDTO giftCertificateDTO = GiftCertificateDTO.builder().
                 name("certificate").description("certificate").price(1).duration(1).build();
-        when(giftCertificateService.createGiftCertificate(giftCertificateDTO)).thenReturn(giftCertificate);
+        when(giftCertificateDtoToEntityMapper.convertGiftCertificateDtoToGiftCertificate(giftCertificateDTO)).thenReturn(giftCertificate);
+        when(giftCertificateService.createGiftCertificate(giftCertificate)).thenReturn(giftCertificate);
         when(giftCertificateHateoasMapper.getGiftCertificateForCreateHateoasMapper(giftCertificate)).thenReturn(CollectionModel.of(List.of(giftCertificate)));
         MockHttpServletResponse response = mvc.perform(post("/gift-certificates").contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(giftCertificateDTO)).accept(MediaType.APPLICATION_JSON)).andReturn().getResponse();
@@ -97,7 +100,8 @@ class GiftCertificateControllerTest {
                 name("certificate").description("certificate").price(1).duration(1).build();
         GiftCertificateDTO giftCertificateDTO = GiftCertificateDTO.builder().
                 name("certificate").description("certificate").price(1).duration(1).build();
-        when(giftCertificateService.updateGiftCertificate(1L, giftCertificateDTO)).thenReturn(giftCertificate);
+        when(giftCertificateDtoToEntityMapper.convertGiftCertificateDtoToGiftCertificate(giftCertificateDTO)).thenReturn(giftCertificate);
+        when(giftCertificateService.updateGiftCertificate(1L, giftCertificate)).thenReturn(giftCertificate);
         when(giftCertificateHateoasMapper.getGiftCertificateForUpdateHateoasMapper(giftCertificate)).thenReturn(CollectionModel.of(List.of(giftCertificate)));
         MockHttpServletResponse response = mvc.perform(patch("/gift-certificates/1").contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(giftCertificateDTO)).accept(MediaType.APPLICATION_JSON)).andReturn().getResponse();

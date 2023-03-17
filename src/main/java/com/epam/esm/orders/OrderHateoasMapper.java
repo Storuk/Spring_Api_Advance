@@ -4,6 +4,7 @@ import com.epam.esm.giftcertificate.GiftCertificateController;
 import com.epam.esm.giftcertificate.GiftCertificateDTO;
 import com.epam.esm.giftcertificate.GiftCertificateHateoasMapper;
 import com.epam.esm.tag.TagController;
+import com.epam.esm.user.User;
 import com.epam.esm.user.UserController;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,8 +28,6 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 public class OrderHateoasMapper {
     private final PagedResourcesAssembler<Order> pagedResourcesAssembler;
 
-    private final GiftCertificateHateoasMapper giftCertificateHateoasMapper;
-
     /**
      * A component method for adding links to created Order
      *
@@ -40,19 +39,19 @@ public class OrderHateoasMapper {
         if (!order.getUser().hasLinks()) {
             order.getUser()
                     .add(linkTo(methodOn(UserController.class)
-                            .getUserById((order.getUser().getId())))
+                            .getUserById(new User()))
                             .withRel(() -> "get user"))
                     .add(linkTo(methodOn(OrderController.class)
-                            .getOrdersByUserId(order.getUser().getId(), 0, 10))
+                            .getOrdersByUserId(new User(), 0, 10))
                             .withRel(() -> "get orders by user id"));
         }
 
         if (order.getGiftCertificate().getLinks().isEmpty()) {
-            giftCertificateHateoasMapper.giftCertificateDefaultLinks(order.getGiftCertificate());
+            GiftCertificateHateoasMapper.giftCertificateDefaultLinks(order.getGiftCertificate());
         }
 
         if (order.getGiftCertificate().getTags() != null) {
-            giftCertificateHateoasMapper.tagsDefaultLinks(order.getGiftCertificate());
+            GiftCertificateHateoasMapper.tagsDefaultLinks(order.getGiftCertificate());
         }
         defaultLinksForCollectionModel(createdOrder);
         return createdOrder;
@@ -65,32 +64,22 @@ public class OrderHateoasMapper {
      * @return PagedModel of Order with links
      */
     public PagedModel<Order> getUserOrdersHateoasMapper(Page<Order> pagedOrders) {
-        PagedModel<Order> orders = pagedResourcesAssembler
-                .toModel(pagedOrders, order -> {
-                    if (!order.getUser().hasLinks()) {
-                        order.getUser()
-                                .add(linkTo(methodOn(UserController.class)
-                                        .getUserById((order.getUser().getId())))
-                                        .withRel(() -> "get user"))
-                                .add(linkTo(methodOn(OrderController.class)
-                                        .createOrder(order.getUser().getId(), 0))
-                                        .withRel(() -> "create order"));
-                    }
-
-                    if (order.getGiftCertificate().getLinks().isEmpty()) {
-                        giftCertificateHateoasMapper.giftCertificateDefaultLinks(order.getGiftCertificate());
-                    }
-
-                    if (order.getGiftCertificate().getTags() != null) {
-                        giftCertificateHateoasMapper.tagsDefaultLinks(order.getGiftCertificate());
-                    }
-                    return order;
-                });
-
+        PagedModel<Order> orders = defaultLinksForGetUserOrders(pagedOrders);
         orders.add(linkTo(methodOn(OrderController.class)
-                .getAllOrders(0, 10))
-                .withRel(() -> "get all orders"));
+                .getOrdersByUserIdAdminTool(1, 0, 10))
+                .withRel(() -> "get user orders (Admin Tool)"));
+        defaultLinksForGetAllOrders(orders);
+        return orders;
+    }
 
+    /**
+     * A component method for adding links to user Orders (Admin Tool)
+     *
+     * @param pagedOrders user Orders
+     * @return PagedModel of Order with links
+     */
+    public PagedModel<Order> getUserOrdersAdminToolHateoasMapper(Page<Order> pagedOrders) {
+        PagedModel<Order> orders = defaultLinksForGetUserOrders(pagedOrders);
         defaultLinksForGetAllOrders(orders);
         return orders;
     }
@@ -107,25 +96,28 @@ public class OrderHateoasMapper {
                     if (!order.getUser().hasLinks()) {
                         order.getUser()
                                 .add(linkTo(methodOn(UserController.class)
-                                        .getUserById((order.getUser().getId())))
+                                        .getUserById(new User()))
                                         .withRel(() -> "get user"))
                                 .add(linkTo(methodOn(OrderController.class)
-                                        .createOrder(order.getUser().getId(), 0))
+                                        .createOrder(new User(), 0))
                                         .withRel(() -> "create order"))
                                 .add(linkTo(methodOn(OrderController.class)
-                                        .getOrdersByUserId(order.getUser().getId(), 0, 10))
+                                        .getOrdersByUserId(new User(), 0, 10))
                                         .withRel(() -> "get orders by user id"));
                     }
 
                     if (order.getGiftCertificate().getLinks().isEmpty()) {
-                        giftCertificateHateoasMapper.giftCertificateDefaultLinks(order.getGiftCertificate());
+                        GiftCertificateHateoasMapper.giftCertificateDefaultLinks(order.getGiftCertificate());
                     }
 
                     if (order.getGiftCertificate().getTags() != null) {
-                        giftCertificateHateoasMapper.tagsDefaultLinks(order.getGiftCertificate());
+                        GiftCertificateHateoasMapper.tagsDefaultLinks(order.getGiftCertificate());
                     }
                     return order;
                 });
+        orders.add(linkTo(methodOn(OrderController.class)
+                .getOrdersByUserIdAdminTool(1, 0, 10))
+                .withRel(() -> "get user orders (Admin Tool)"));
         defaultLinksForGetAllOrders(orders);
         return orders;
     }
@@ -163,7 +155,10 @@ public class OrderHateoasMapper {
                         .withRel(() -> "get gift certificates by tag name"))
                 .add(linkTo(methodOn(GiftCertificateController.class)
                         .getGiftCertificatesByTags(Set.of(), 0, 10))
-                        .withRel(() -> "get gift certificates by tags names"));
+                        .withRel(() -> "get gift certificates by tags names"))
+                .add(linkTo(methodOn(UserController.class)
+                        .getUserByIdAdminTool(1))
+                        .withRel(() -> "get user by id (Admin Tool)"));
     }
 
     /**
@@ -202,6 +197,41 @@ public class OrderHateoasMapper {
                         .withRel(() -> "get gift certificates by tag name"))
                 .add(linkTo(methodOn(GiftCertificateController.class)
                         .getGiftCertificatesByTags(Set.of(), 0, 10))
-                        .withRel(() -> "get gift certificates by tags names"));
+                        .withRel(() -> "get gift certificates by tags names"))
+                .add(linkTo(methodOn(UserController.class)
+                        .getUserByIdAdminTool(1))
+                        .withRel(() -> "get user by id (Admin Tool)"))
+                .add(linkTo(methodOn(OrderController.class)
+                        .getOrdersByUserIdAdminTool(1, 0, 10))
+                        .withRel(() -> "get user orders (Admin Tool)"));
+    }
+
+    private PagedModel<Order> defaultLinksForGetUserOrders(Page<Order> pagedOrders) {
+        PagedModel<Order> orders = pagedResourcesAssembler
+                .toModel(pagedOrders, order -> {
+                    if (!order.getUser().hasLinks()) {
+                        order.getUser()
+                                .add(linkTo(methodOn(UserController.class)
+                                        .getUserById(new User()))
+                                        .withRel(() -> "get user"))
+                                .add(linkTo(methodOn(OrderController.class)
+                                        .createOrder(new User(), 0))
+                                        .withRel(() -> "create order"));
+                    }
+
+                    if (order.getGiftCertificate().getLinks().isEmpty()) {
+                        GiftCertificateHateoasMapper.giftCertificateDefaultLinks(order.getGiftCertificate());
+                    }
+
+                    if (order.getGiftCertificate().getTags() != null) {
+                        GiftCertificateHateoasMapper.tagsDefaultLinks(order.getGiftCertificate());
+                    }
+                    return order;
+                });
+
+        orders.add(linkTo(methodOn(OrderController.class)
+                .getAllOrders(0, 10))
+                .withRel(() -> "get all orders"));
+        return orders;
     }
 }

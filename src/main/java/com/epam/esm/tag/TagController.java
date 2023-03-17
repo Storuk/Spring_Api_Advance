@@ -25,22 +25,25 @@ public class TagController {
 
     private final TagService tagService;
     private final TagHateoasMapper tagHateoasMapper;
+    private final TagDtoToEntityMapper dtoToEntityMapper;
 
-    public TagController(TagService tagService, TagHateoasMapper tagHateoasMapper) {
+    public TagController(TagService tagService, TagHateoasMapper tagHateoasMapper, TagDtoToEntityMapper dtoToEntityMapper) {
         this.tagService = tagService;
         this.tagHateoasMapper = tagHateoasMapper;
+        this.dtoToEntityMapper = dtoToEntityMapper;
     }
 
     /**
      * A controller post method for creating a new tag
      *
      * @param tag the Tag object that will be created in database
-     * @see TagService#createTag(TagDTO)
+     * @see TagService#createTag(Tag)
      */
     @PostMapping
     public ResponseEntity<?> createTag(@RequestBody TagDTO tag) {
         if (VerificationOfRequestsData.isTagCorrect(tag)) {
-            Tag createdTag = tagService.createTag(tag);
+
+            Tag createdTag = tagService.createTag(dtoToEntityMapper.convertTagDtoToEntity(tag));
             return new ResponseEntity<>(Map.of("createdTag",
                     tagHateoasMapper.createTagHateoas(createdTag)), HttpStatus.CREATED);
         }

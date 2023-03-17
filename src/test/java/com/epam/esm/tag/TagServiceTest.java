@@ -29,27 +29,23 @@ class TagServiceTest {
     private TagRepo tagRepoMock;
     @InjectMocks
     private TagService tagServiceMock;
-    @Mock
-    private TagDtoToEntityMapper tagDtoToEntityMapper;
 
     @Test
     void createTagTest_TrueWhenTagWithSuchNameAlreadyExist() {
         Tag tag = Tag.builder().name("tag").build();
-        TagDTO tagDTO = TagDTO.builder().name("tag").build();
         when(tagRepoMock.existsByName(tag.getName())).thenReturn(false);
         when(tagRepoMock.save(tag)).thenReturn(tag);
-        when(tagDtoToEntityMapper.convertTagDtoToEntity(tagDTO)).thenReturn(tag);
-        assertEquals(tag, tagServiceMock.createTag(tagDTO));
+        assertEquals(tag, tagServiceMock.createTag(tag));
     }
 
     @Test
     void createTagTest_FalseWhenTagWithSuchNameNotExist() {
-        TagDTO tagDTO = TagDTO.builder().name("tag").build();
-        when(tagRepoMock.existsByName(tagDTO.getName())).thenReturn(true);
+        Tag tag = Tag.builder().name("tag").build();
+        when(tagRepoMock.existsByName(tag.getName())).thenReturn(true);
         InvalidDataException exception = assertThrows(InvalidDataException.class,
-                () -> tagServiceMock.createTag(tagDTO));
+                () -> tagServiceMock.createTag(tag));
 
-        assertEquals("Tag already exist: " + tagDTO.getName(), exception.getMessage());
+        assertEquals("Tag already exist: " + tag.getName(), exception.getMessage());
     }
 
     @Test

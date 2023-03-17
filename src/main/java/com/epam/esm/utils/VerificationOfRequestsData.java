@@ -1,5 +1,8 @@
 package com.epam.esm.utils;
 
+import com.epam.esm.auth.models.AuthenticationRequest;
+import com.epam.esm.auth.models.ChangeUserPasswordRequest;
+import com.epam.esm.auth.models.RegistrationRequest;
 import com.epam.esm.exceptions.InvalidDataException;
 import com.epam.esm.giftcertificate.GiftCertificateDTO;
 import com.epam.esm.tag.TagDTO;
@@ -7,6 +10,8 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @author Vlad Storoshchuk
@@ -96,6 +101,43 @@ public class VerificationOfRequestsData {
             }
         }
         return true;
+    }
+
+    public static boolean isChangeUserPasswordRequestCorrect(ChangeUserPasswordRequest request){
+        return request.getEmail() != null && isEmailCorrect(request.getEmail())
+                && request.getPassword() != null && isPasswordCorrect(request.getPassword())
+                && request.getRepeatPassword() != null && request.getPassword().equals(request.getRepeatPassword())
+                && request.getVerificationCode() != null;
+    }
+
+    public static boolean isRegistrationRequestCorrect(RegistrationRequest request){
+        return request.getEmail() != null && isEmailCorrect(request.getEmail())
+                && request.getPassword() != null && isPasswordCorrect(request.getPassword())
+                && request.getRepeatPassword() != null && request.getPassword().equals(request.getRepeatPassword());
+    }
+
+    public static boolean isAuthenticationRequestCorrect(AuthenticationRequest request){
+        return request.getEmail() != null && isEmailCorrect(request.getEmail())
+                && request.getPassword() != null && isPasswordCorrect(request.getPassword());
+    }
+
+    public static boolean isEmailCorrect(String email){
+        String regexPattern = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@"
+                + "[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";
+        Pattern pattern = Pattern.compile(regexPattern);
+        Matcher matcher = pattern.matcher(email);
+        return matcher.matches();
+    }
+
+    public static boolean isPasswordCorrect(String password)
+    {
+        if (password != null) {
+            String regex = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&+-=])(?=\\S+$).{8,20}$";
+            Pattern p = Pattern.compile(regex);
+            Matcher m = p.matcher(password);
+            return m.matches();
+        }
+        return false;
     }
 
     /**

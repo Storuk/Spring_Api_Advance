@@ -76,8 +76,8 @@ class TagRepoTest {
                 .name("third").description("third").price(1).duration(1).tags(thirdTagSet).build();
         giftCertificateRepo.saveAll(Set.of(firstGiftCertificate, secondGiftCertificate, thirdGiftCertificate));
 
-        User firstUser = User.builder().login("firstUser").build();
-        User secondUser = User.builder().login("secondUser").build();
+        User firstUser = User.builder().email("firstUser").firstName("name").lastName("lastName").build();
+        User secondUser = User.builder().email("secondUser").firstName("name").lastName("lastName").build();
         userRepo.saveAll(Set.of(firstUser, secondUser));
 
         Order firstOrder = Order.builder().user(firstUser).giftCertificate(firstGiftCertificate).cost(firstGiftCertificate.getPrice()).build();

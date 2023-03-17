@@ -41,23 +41,27 @@ class OrderHateoasMapperTest {
 
     @Test
     void createOrderHateoasMapperTest() {
-        User user = User.builder().id(1L).login("user").build();
+        User user = User.builder().id(1L).email("user").build();
         GiftCertificate giftCertificate = GiftCertificate.builder().id(1L)
                 .name("certificate").description(null).price(1).duration(1)
                 .tags(null).createDate(null).lastUpdateDate(null).build();
         Order order = Order.builder().id(1L).purchaseDate(null).giftCertificate(giftCertificate)
                 .user(user).cost(1).build();
 
-        Order orderForTest = Order.builder().id(1L).purchaseDate(null).giftCertificate(giftCertificate)
-                .user(user).cost(1).build();
+        User userForTest = User.builder().id(1L).email("user").build();
+        GiftCertificate giftCertificateForTest = GiftCertificate.builder().id(1L)
+                .name("certificate").description(null).price(1).duration(1)
+                .tags(null).createDate(null).lastUpdateDate(null).build();
+        Order orderForTest = Order.builder().id(1L).purchaseDate(null).giftCertificate(giftCertificateForTest)
+                .user(userForTest).cost(1).build();
 
         CollectionModel<Order> createdOrder = CollectionModel.of(List.of(order));
         order.getUser()
                 .add(linkTo(methodOn(UserController.class)
-                        .getUserById((order.getUser().getId())))
+                        .getUserById(new User()))
                         .withRel(() -> "get user"))
                 .add(linkTo(methodOn(OrderController.class)
-                        .getOrdersByUserId(order.getUser().getId(), 0, 10))
+                        .getOrdersByUserId(new User(), 0, 10))
                         .withRel(() -> "get orders by user id"));
 
         order.getGiftCertificate()
@@ -82,11 +86,11 @@ class OrderHateoasMapperTest {
                         .getAllOrders(0, 10))
                         .withRel(() -> "get all orders"))
                 .add(linkTo(methodOn(GiftCertificateController.class)
+                        .createCertificate(new GiftCertificateDTO()))
+                        .withRel(() -> "create GiftCertificate"))
+                .add(linkTo(methodOn(GiftCertificateController.class)
                         .getAllCertificates(0, 10))
                         .withRel(() -> "get all gift-certificates"))
-                .add(linkTo(methodOn(GiftCertificateController.class)
-                        .getGiftCertificatesByPartOfDescription("Description", 0, 10))
-                        .withRel(() -> "get all gift certificates by part of description"))
                 .add(linkTo(methodOn(GiftCertificateController.class)
                         .getGiftCertificatesSortedByName("DESC", 0, 10))
                         .withRel(() -> "get all gift certificates sorted by name"))
@@ -94,8 +98,8 @@ class OrderHateoasMapperTest {
                         .getGiftCertificatesSortedByNameByDate("DESC", "DESC", 0, 10))
                         .withRel(() -> "get all gift certificates sorted by name and by date"))
                 .add(linkTo(methodOn(GiftCertificateController.class)
-                        .createCertificate(new GiftCertificateDTO()))
-                        .withRel(() -> "create GiftCertificate"))
+                        .getGiftCertificatesByPartOfDescription("Description", 0, 10))
+                        .withRel(() -> "get all gift certificates by part of description"))
                 .add(linkTo(methodOn(TagController.class)
                         .getAllTags(0, 10))
                         .withRel(() -> "get all tags"))
@@ -107,7 +111,13 @@ class OrderHateoasMapperTest {
                         .withRel(() -> "get gift certificates by tag name"))
                 .add(linkTo(methodOn(GiftCertificateController.class)
                         .getGiftCertificatesByTags(Set.of(), 0, 10))
-                        .withRel(() -> "get gift certificates by tags names"));
+                        .withRel(() -> "get gift certificates by tags names"))
+                .add(linkTo(methodOn(UserController.class)
+                        .getUserByIdAdminTool(1))
+                        .withRel(() -> "get user by id (Admin Tool)"))
+                .add(linkTo(methodOn(OrderController.class)
+                        .getOrdersByUserIdAdminTool(1, 0, 10))
+                        .withRel(() -> "get user orders (Admin Tool)"));
 
         assertEquals(createdOrder.getContent().stream().toList(),
                 orderHateoasMapper.createOrderHateoasMapper(orderForTest).getContent().stream().toList());
@@ -124,7 +134,33 @@ class OrderHateoasMapperTest {
         PagedModel<Order> result = orderHateoasMapper.getUserOrdersHateoasMapper(orders);
 
         assertEquals(result, orderPagedModel);
-        verify(result, times(10)).add(argumentCaptor.capture());
+        verify(result, times(12)).add(argumentCaptor.capture());
+        assertEquals(argumentCaptor.getAllValues().get(0).getRel().value(), "get all orders");
+        assertEquals(argumentCaptor.getAllValues().get(1).getRel().value(), "get user orders (Admin Tool)");
+        assertEquals(argumentCaptor.getAllValues().get(2).getRel().value(), "get all gift certificates");
+        assertEquals(argumentCaptor.getAllValues().get(3).getRel().value(), "get all gift certificates by part of description");
+        assertEquals(argumentCaptor.getAllValues().get(4).getRel().value(), "get all gift certificates sorted by name");
+        assertEquals(argumentCaptor.getAllValues().get(5).getRel().value(), "get all gift certificates sorted by name and by date");
+        assertEquals(argumentCaptor.getAllValues().get(6).getRel().value(), "create GiftCertificate");
+        assertEquals(argumentCaptor.getAllValues().get(7).getRel().value(), "get all tags");
+        assertEquals(argumentCaptor.getAllValues().get(8).getRel().value(), "get the mostly used tag from user with highest sum of orders");
+        assertEquals(argumentCaptor.getAllValues().get(9).getRel().value(), "get gift certificates by tag name");
+        assertEquals(argumentCaptor.getAllValues().get(10).getRel().value(), "get gift certificates by tags names");
+        assertEquals(argumentCaptor.getAllValues().get(11).getRel().value(), "get user by id (Admin Tool)");
+    }
+
+    @Test
+    void getUserOrdersAdminToolHateoasMapperTest() {
+        Page<Order> orders = new PageImpl<>(List.of(new Order()));
+        PagedModel<Order> orderPagedModel = mock(PagedModel.class);
+
+        when(orderPagedModel.add(ArgumentMatchers.<Link>any())).thenReturn(orderPagedModel);
+        when(orderPagedResourcesAssembler.toModel(eq(orders), ArgumentMatchers.<RepresentationModelAssembler<Order, Order>>any())).thenReturn(orderPagedModel);
+
+        PagedModel<Order> result = orderHateoasMapper.getUserOrdersAdminToolHateoasMapper(orders);
+
+        assertEquals(result, orderPagedModel);
+        verify(result, times(11)).add(argumentCaptor.capture());
         assertEquals(argumentCaptor.getAllValues().get(0).getRel().value(), "get all orders");
         assertEquals(argumentCaptor.getAllValues().get(1).getRel().value(), "get all gift certificates");
         assertEquals(argumentCaptor.getAllValues().get(2).getRel().value(), "get all gift certificates by part of description");
@@ -135,6 +171,7 @@ class OrderHateoasMapperTest {
         assertEquals(argumentCaptor.getAllValues().get(7).getRel().value(), "get the mostly used tag from user with highest sum of orders");
         assertEquals(argumentCaptor.getAllValues().get(8).getRel().value(), "get gift certificates by tag name");
         assertEquals(argumentCaptor.getAllValues().get(9).getRel().value(), "get gift certificates by tags names");
+        assertEquals(argumentCaptor.getAllValues().get(10).getRel().value(), "get user by id (Admin Tool)");
     }
 
     @Test
@@ -149,15 +186,17 @@ class OrderHateoasMapperTest {
         PagedModel<Order> result = orderHateoasMapper.getAllOrdersHateoasMapper(orders);
 
         assertEquals(result, orderPagedModel);
-        verify(result, times(9)).add(argumentCaptor.capture());
-        assertEquals(argumentCaptor.getAllValues().get(0).getRel().value(), "get all gift certificates");
-        assertEquals(argumentCaptor.getAllValues().get(1).getRel().value(), "get all gift certificates by part of description");
-        assertEquals(argumentCaptor.getAllValues().get(2).getRel().value(), "get all gift certificates sorted by name");
-        assertEquals(argumentCaptor.getAllValues().get(3).getRel().value(), "get all gift certificates sorted by name and by date");
-        assertEquals(argumentCaptor.getAllValues().get(4).getRel().value(), "create GiftCertificate");
-        assertEquals(argumentCaptor.getAllValues().get(5).getRel().value(), "get all tags");
-        assertEquals(argumentCaptor.getAllValues().get(6).getRel().value(), "get the mostly used tag from user with highest sum of orders");
-        assertEquals(argumentCaptor.getAllValues().get(7).getRel().value(), "get gift certificates by tag name");
-        assertEquals(argumentCaptor.getAllValues().get(8).getRel().value(), "get gift certificates by tags names");
+        verify(result, times(11)).add(argumentCaptor.capture());
+        assertEquals(argumentCaptor.getAllValues().get(0).getRel().value(), "get user orders (Admin Tool)");
+        assertEquals(argumentCaptor.getAllValues().get(1).getRel().value(), "get all gift certificates");
+        assertEquals(argumentCaptor.getAllValues().get(2).getRel().value(), "get all gift certificates by part of description");
+        assertEquals(argumentCaptor.getAllValues().get(3).getRel().value(), "get all gift certificates sorted by name");
+        assertEquals(argumentCaptor.getAllValues().get(4).getRel().value(), "get all gift certificates sorted by name and by date");
+        assertEquals(argumentCaptor.getAllValues().get(5).getRel().value(), "create GiftCertificate");
+        assertEquals(argumentCaptor.getAllValues().get(6).getRel().value(), "get all tags");
+        assertEquals(argumentCaptor.getAllValues().get(7).getRel().value(), "get the mostly used tag from user with highest sum of orders");
+        assertEquals(argumentCaptor.getAllValues().get(8).getRel().value(), "get gift certificates by tag name");
+        assertEquals(argumentCaptor.getAllValues().get(9).getRel().value(), "get gift certificates by tags names");
+        assertEquals(argumentCaptor.getAllValues().get(10).getRel().value(), "get user by id (Admin Tool)");
     }
 }

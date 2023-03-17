@@ -58,7 +58,7 @@ class OrderRepoTest {
                 .name("third").description("third").price(1).duration(1).tags(thirdTagSet).build();
         giftCertificateRepo.saveAll(List.of(firstGiftCertificate, secondGiftCertificate, thirdGiftCertificate));
 
-        User firstUser = User.builder().login("firstUser").build();
+        User firstUser = User.builder().email("firstUser").firstName("name").lastName("lastName").build();
         userRepo.save(firstUser);
 
         Order firstOrder = Order.builder().user(firstUser).giftCertificate(firstGiftCertificate).cost(firstGiftCertificate.getPrice()).build();
