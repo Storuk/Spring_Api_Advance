@@ -1,7 +1,7 @@
 com.epam.esm
 com.epam.esm.exceptions
 com.epam.esm.exceptions.controlleradvice
-com.epam.esm.filters
+com.epam.esm.loggingfilter
 com.epam.esm.giftcertificate
 com.epam.esm.orders
 com.epam.esm.tag
