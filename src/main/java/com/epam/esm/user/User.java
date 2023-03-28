@@ -1,5 +1,6 @@
 package com.epam.esm.user;
 
+import com.epam.esm.ExcludeCoverage;
 import com.epam.esm.enums.Role;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -25,6 +26,7 @@ import java.util.List;
 @Data
 @Table(name = "users")
 @EntityListeners(AuditingEntityListener.class)
+@ExcludeCoverage
 public class User extends RepresentationModel<User> implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -1,5 +1,6 @@
 package com.epam.esm.giftcertificate;
 
+import com.epam.esm.ExcludeCoverage;
 import com.epam.esm.tag.Tag;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
@@ -22,6 +23,7 @@ import java.util.Set;
 @NoArgsConstructor
 @Builder
 @EntityListeners(AuditingEntityListener.class)
+@ExcludeCoverage
 public class GiftCertificate extends RepresentationModel<GiftCertificate> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
