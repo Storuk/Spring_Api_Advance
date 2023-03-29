@@ -1,6 +1,6 @@
 package com.epam.esm.verificationcode;
 
-import com.epam.esm.ExcludeCoverage;
+import com.epam.esm.anotations.ExcludeModelsCoverage;
 import com.epam.esm.user.User;
 import jakarta.persistence.*;
 import lombok.*;
@@ -17,7 +17,7 @@ import java.util.Date;
 @Builder
 @Data
 @EntityListeners(AuditingEntityListener.class)
-@ExcludeCoverage
+@ExcludeModelsCoverage
 public class VerificationCode extends RepresentationModel<VerificationCode> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
