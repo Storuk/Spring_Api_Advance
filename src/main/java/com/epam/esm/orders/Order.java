@@ -1,6 +1,6 @@
 package com.epam.esm.orders;
 
-import com.epam.esm.anotations.ExcludeModelsCoverage;
+import com.epam.esm.ExcludeCoverage;
 import com.epam.esm.giftcertificate.GiftCertificate;
 import com.epam.esm.user.User;
 import jakarta.persistence.*;
@@ -23,7 +23,7 @@ import java.util.Date;
 @Builder
 @Table(name = "orders")
 @EntityListeners(AuditingEntityListener.class)
-@ExcludeModelsCoverage
+@ExcludeCoverage
 public class Order extends RepresentationModel<Order> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

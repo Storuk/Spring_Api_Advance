@@ -1,6 +1,6 @@
 package com.epam.esm.tag;
 
-import com.epam.esm.anotations.ExcludeModelsCoverage;
+import com.epam.esm.ExcludeCoverage;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -16,7 +16,7 @@ import org.springframework.hateoas.RepresentationModel;
 @NoArgsConstructor
 @Builder
 @EntityListeners(AuditingEntityListener.class)
-@ExcludeModelsCoverage
+@ExcludeCoverage
 public class Tag extends RepresentationModel<Tag> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

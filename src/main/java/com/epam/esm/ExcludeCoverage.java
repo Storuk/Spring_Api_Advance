@@ -1,4 +1,4 @@
-package com.epam.esm.anotations;
+package com.epam.esm;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
@@ -10,5 +10,5 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Documented
 @Retention(RUNTIME)
 @Target({TYPE, METHOD, CONSTRUCTOR})
-public @interface ExcludeModelsCoverage {
+public @interface ExcludeCoverage {
 }
