@@ -18,9 +18,14 @@ pipeline {
             }
         }
 
+        stage('Shutdown'){
+            steps{
+                 bat 'mvn spring-boot:stop'
+            }
+        }
+
         stage('Run-test') {
             steps{
-                bat 'mvn spring-boot:stop'
                 bat 'mvn test'
                 echo "Test runned"
             }
