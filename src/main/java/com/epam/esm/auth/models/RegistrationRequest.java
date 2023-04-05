@@ -1,5 +1,6 @@
 package com.epam.esm.auth.models;
 
+import com.epam.esm.annotations.ExcludeModelsCoverage;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,6 +10,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@ExcludeModelsCoverage
 public class RegistrationRequest {
     private String firstName;
     private String lastName;

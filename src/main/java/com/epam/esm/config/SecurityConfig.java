@@ -32,7 +32,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests()
                 .requestMatchers("/authentication/**")
                 .permitAll()
-                .requestMatchers(HttpMethod.GET, "/gift-certificates", "/gift-certificates/**", "/tags", "/tags/**")
+                .requestMatchers(HttpMethod.GET, "/gift-certificates", "/gift-certificates/**", "/tags", "/tags/**", "/actuator/health")
                 .permitAll()
                 .requestMatchers(HttpMethod.GET, "/orders", "/users").hasAuthority(Role.ADMIN.name())
                 .requestMatchers(HttpMethod.GET, "/users/by-user-id", "/orders/by-user-id").hasAnyAuthority(Role.USER.name(), Role.ADMIN.name())
