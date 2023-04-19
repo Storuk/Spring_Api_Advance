@@ -19,10 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static java.util.Comparator.comparing;
@@ -163,7 +160,7 @@ public class CommerceToolsGiftCertificateRepoImpl implements CommerceToolsGiftCe
     }
 
     private String getNameSort(String sortingTypeName) {
-        return "masterData.current.name.en " + sortingTypeName.toLowerCase();
+        return "masterData.current.name.en-us " + sortingTypeName.toLowerCase();
     }
 
     private String getDateSort(String sortingTypeDate) {
@@ -297,15 +294,16 @@ public class CommerceToolsGiftCertificateRepoImpl implements CommerceToolsGiftCe
                     .value(durationAttribute.getValue())
                     .build());
         }
+        actionsList.add(ProductUpdateAction.publishBuilder().build());
         return actionsList;
     }
 
     private LocalizedString getLocalizedGiftCertificateName(GiftCertificateDTO giftCertificate) {
-        return LocalizedString.ofEnglish(giftCertificate.getName());
+        return LocalizedString.of(Locale.US, giftCertificate.getName());
     }
 
     private LocalizedString getLocalizedGiftCertificateDescription(GiftCertificateDTO giftCertificate) {
-        return LocalizedString.ofEnglish(giftCertificate.getDescription());
+        return LocalizedString.of(Locale.US, giftCertificate.getDescription());
     }
 
     private ProductTypeResourceIdentifier getProductTypeResourceIdentifier() {
@@ -316,7 +314,7 @@ public class CommerceToolsGiftCertificateRepoImpl implements CommerceToolsGiftCe
     }
 
     private LocalizedString getProductSlug(GiftCertificateDTO giftCertificate) {
-        return LocalizedString.ofEnglish(giftCertificate
+        return LocalizedString.of(Locale.US, giftCertificate
                 .getName().replaceAll("\\s", ""));
     }
 

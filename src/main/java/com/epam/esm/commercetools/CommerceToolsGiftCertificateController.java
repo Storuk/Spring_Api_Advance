@@ -39,7 +39,7 @@ public class CommerceToolsGiftCertificateController {
             return ResponseEntity.ok(Map.of("giftCertificate",
                     commerceToolsGiftCertificateService.getGiftCertificateById(id)));
         }
-        throw new InvalidDataException("Invalid Id format. Check your input");
+        throw new InvalidDataException("Invalid Id format:" + id);
     }
 
     @GetMapping
@@ -53,8 +53,11 @@ public class CommerceToolsGiftCertificateController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteGiftCertificate(@PathVariable String id) {
-        commerceToolsGiftCertificateService.deleteGiftCertificate(id);
-        return ResponseEntity.ok(Map.of("status", HttpStatus.OK));
+        if (VerificationOfRequestsData.isStringValuesCorrect(id)) {
+            commerceToolsGiftCertificateService.deleteGiftCertificate(id);
+            return ResponseEntity.ok(Map.of("status", HttpStatus.OK));
+        }
+        throw new InvalidDataException("Invalid Id format:" + id);
     }
 
     @GetMapping("get-gift-certificate-description")
@@ -71,7 +74,7 @@ public class CommerceToolsGiftCertificateController {
     }
 
     @GetMapping("get-sort-name")
-    public ResponseEntity<?> getGiftCertificatesSortedByName(@RequestParam(value = "sortingType", defaultValue = "ASC") String sortingTypeName,
+    public ResponseEntity<?> getGiftCertificatesSortedByName(@RequestParam(value = "sortingTypeName", defaultValue = "DESC") String sortingTypeName,
                                                              @RequestParam(value = "page", defaultValue = "0")
                                                              @Min(value = 0, message = "Page index should be >= 0") int page,
                                                              @RequestParam(value = "size", defaultValue = "20")
@@ -124,8 +127,11 @@ public class CommerceToolsGiftCertificateController {
                                                               @Min(value = 1, message = "Size should be should be >= 1") int size,
                                                               @RequestParam String operator) {
         if (VerificationOfRequestsData.isSetOfStringsCorrect(tagNamesSet)) {
-            return ResponseEntity.ok(Map.of("giftCertificates",
-                    commerceToolsGiftCertificateService.getGiftCertificatesByTagsName(tagNamesSet, page, size, operator)));
+            if(VerificationOfRequestsData.isOperatorCorrect(operator)) {
+                return ResponseEntity.ok(Map.of("giftCertificates",
+                        commerceToolsGiftCertificateService.getGiftCertificatesByTagsName(tagNamesSet, page, size, operator)));
+            }
+            throw new InvalidDataException("Operator is not valid: " + operator);
         }
         throw new InvalidDataException("Some tag names is not valid: " + tagNamesSet);
     }

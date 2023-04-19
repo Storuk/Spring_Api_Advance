@@ -42,7 +42,7 @@ public class CommerceToolsProductToGiftCertificateMapperImpl implements Commerce
         return product.getMasterData()
                 .getStaged()
                 .getName()
-                .get(Locale.ENGLISH);
+                .get(Locale.US);
     }
 
     private int getProductPrice(Product product) {
@@ -61,7 +61,7 @@ public class CommerceToolsProductToGiftCertificateMapperImpl implements Commerce
                         .getMasterData()
                         .getStaged()
                         .getDescription())
-                .get(Locale.ENGLISH);
+                .get(Locale.US);
     }
 
     private Date getProductCreateDate(Product product) {
@@ -89,30 +89,4 @@ public class CommerceToolsProductToGiftCertificateMapperImpl implements Commerce
             return tags;
         }
     }
-
-//    private static List<Attribute> setDurationAndTagsForCrate(GiftCertificateDTO giftCertificate) {
-//        List<Attribute> attributes = new ArrayList<>();
-//        attributes.add(Attribute.builder().name("duration").value(giftCertificate.getDuration()).build());
-//        if (giftCertificate.getTags() != null) {
-//            attributes.add(Attribute.builder().name("tags").value(setTagsAttribute(giftCertificate.getTags())).build());
-//        }
-//        return attributes;
-//    }
-//
-//    private static List<String> setTagsAttribute(Set<TagDTO> tags) {
-//        List<String> tagsName = new ArrayList<>();
-//        for (TagDTO tag : tags) {
-//            tagsName.add(tag.getName());
-//        }
-//        return tagsName;
-//    }
-//    public static void main(String[] args) {
-//        GiftCertificateDTO giftCertificateDTO = GiftCertificateDTO.builder().name("avc").duration(1)
-//                .tags(Set.of(TagDTO.builder().name("tag1").build(), TagDTO.builder().name("tag2").build())).build();
-//        List<Attribute> attributes = setDurationAndTagsForCrate(giftCertificateDTO);
-//
-//        CommerceToolsProductToGiftCertificateMapperImpl commerceToolsProductToGiftCertificateMapper = new CommerceToolsProductToGiftCertificateMapperImpl();
-//
-//        System.out.println(commerceToolsProductToGiftCertificateMapper.getProductTags(attributes));
-//    }
 }
