@@ -23,21 +23,23 @@ public class GetByTagsGraphQlRequest extends CustomGraphQlRequest {
     private static final String OFFSET = "offset";
     private static final String LIMIT = "limit";
     private static final String WHERE = "where";
+    private static GraphQLVariablesMap graphQLVariablesMap;
 
     public GetByTagsGraphQlRequest(PageRequest pageRequest, Set<String> setOfTags, String operator) {
         super(query);
         this.pageRequest = pageRequest;
         this.setOfTags = setOfTags;
         this.operator = operator;
-    }
-
-    @Override
-    public GraphQLVariablesMap getVariables() {
-        return GraphQLVariablesMap.builder()
+        graphQLVariablesMap = GraphQLVariablesMap.builder()
                 .addValue(WHERE, generateTagsVariableRequest(setOfTags, operator))
                 .addValue(OFFSET, pageRequest.getOffset())
                 .addValue(LIMIT, pageRequest.getPageSize())
                 .build();
+    }
+
+    @Override
+    public GraphQLVariablesMap getVariables() {
+        return graphQLVariablesMap;
     }
 
     private String generateTagsVariableRequest(Set<String> setOfTags, String operator) {

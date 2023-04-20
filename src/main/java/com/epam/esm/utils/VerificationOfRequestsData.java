@@ -66,7 +66,7 @@ public class VerificationOfRequestsData {
 
     public static boolean isOperatorCorrect(String operator) {
         return isStringValuesCorrect(operator) &&
-               (operator.equalsIgnoreCase("ASC") || operator.equalsIgnoreCase("DESC"));
+               (operator.equalsIgnoreCase("AND") || operator.equalsIgnoreCase("OR"));
     }
 
     /**
