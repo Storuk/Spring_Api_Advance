@@ -64,6 +64,11 @@ public class VerificationOfRequestsData {
         return s != null && !StringUtils.isBlank(s) && !StringUtils.isNumeric(s);
     }
 
+    public static boolean isOperatorCorrect(String operator) {
+        return isStringValuesCorrect(operator) &&
+               (operator.equalsIgnoreCase("AND") || operator.equalsIgnoreCase("OR"));
+    }
+
     /**
      * Method for checking if set of strings is correct
      *
